@@ -30,13 +30,12 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 - [x] Creating the application -> ng new name_for_project
 - [x] Installing angular material in application -> ng add @angular/material (be in the project directory to run this code) prebuilt theme selected Deep purple/amber, set up global typography (yes), set up browser animations (yes)
 - [x] Create the layout Header, Sidenav, Footer components
-- [x] Go into the project folder and create modules -> ng g m name_of_module
-	It's a normal module because it is going to be reused everywhere.
-	To lazy load a module use this command -> `ng g m movies --route movies --module app.module`
-	After creating modules make sure to remember and import the modules in `app.module.ts`
-- [x] Make sure to go into the component you want and run this command -> `ng g c header` to generate a component of that module.
-	When creating components inside the modules make sure to export the components to gain the ability to use them. Following is an example in the `layout.module.ts`.
-	```typescript
+- [x] Go into the project folder and create modules -> ng g m name_of_module It's a normal module because it is going to be reused everywhere. To lazy load a module use this command -> `ng g m movies --route movies --module app.module` After creating modules make sure to remember and import the modules in `app.module.ts`
+- [x] Make sure to go into the component you want and run this command -> `ng g c header` to generate a component of that module. When creating components inside the modules make sure to export the components to gain the ability to use them. Following is an example in the `layout.module.ts`. 
+
+### This is an example of code for the layout.module.ts file
+
+```typescript
 @NgModule({
 	declarations: [
 		HeaderComponent,
@@ -55,11 +54,13 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ```
 
 - [x] Create a module for movies -> `ng g m movies` in the app folder. Create components that will be displayed in this module. Example: `ng g c all-movies` will generate a component I will use to display all the movies from the api.
+- [x] Add the component to the `app-routing.module.ts` file.
 
-- [x] Add the component to the `app-routing.module.ts` file. Example: ```typescript
+### Example of adding the component to the app-routing.module.ts
+
+```typescript
 	import { AllMoviesComponent } from './movies/all-movies/all-movies.component';
 	const routes: Routes = [
   	{ path: '', component: AllMoviesComponent}
 	];
-	```
-
+```
