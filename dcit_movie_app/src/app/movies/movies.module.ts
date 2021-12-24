@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 
 import { AllMoviesComponent } from './all-movies/all-movies.component';
+import { MatCardModule } from '@angular/material/card';
 
 
 
@@ -13,7 +14,8 @@ import { AllMoviesComponent } from './all-movies/all-movies.component';
   ],
   imports: [
     CommonModule,
-    MatListModule
+    MatListModule,
+    MatCardModule
   ],
   exports: [
     AllMoviesComponent

@@ -14,6 +14,7 @@ import { LayoutModule } from './layout/layout.module';
 import { MatListModule } from '@angular/material/list';
 import { MoviesModule } from './movies/movies.module';
 
+
 @NgModule({
   declarations: [
     AppComponent
@@ -31,7 +32,7 @@ import { MoviesModule } from './movies/movies.module';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatListModule
+    MatListModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

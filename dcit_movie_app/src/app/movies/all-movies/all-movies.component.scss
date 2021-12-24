@@ -1,5 +1,43 @@
-.all-movies{
+.all-movies {
     width: auto;
     height: auto;
     border: 1px solid orange;
+}
+.movie{
+    
+    width: 280px;
+    margin: 10px;
+    height: 430px;
+    overflow: hidden;
+    border-radius: 5px;
+    box-shadow: 4px 3px 8px 0px #6636b8f1;
+    cursor: pointer;
+    transition-duration: 0.3s;
+    &:hover{
+        box-shadow: 4px 3px 8px 0px #6636b8f1;
+        transform: translateX(-3px);
+    }
+    
+}
+.example-card > img {
+    height: 330px;
+}
+.example-card {
+    max-width: 400px;
+    height: 100%;
+}
+
+.example-header-image {
+    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+    background-size: cover;
+}
+.movies{
+    display: flex;
+    flex-wrap: wrap;
+    float: left;
+    max-width: 1200px;
+    width: 280px;
+    margin: 20px 20px;
+    text-align: center;
+    justify-content: center;
 }
