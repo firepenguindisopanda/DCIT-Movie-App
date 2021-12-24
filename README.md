@@ -38,19 +38,19 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 	When creating components inside the modules make sure to export the components to gain the ability to use them. Following is an example in the `layout.module.ts`
 
 ```typescript
-		@NgModule({
-			declarations: [
-				HeaderComponent,
-				FooterComponent,
-				SidenavComponent
-			],
-			imports: [
-				CommonModule
-			],
-			exports: [
-				HeaderComponent,
-				FooterComponent,
-				SidenavComponent
-			]
-		})
+@NgModule({
+	declarations: [
+		HeaderComponent,
+		FooterComponent,
+		SidenavComponent
+	],
+	imports: [
+		CommonModule
+	],
+	exports: [
+		HeaderComponent,
+		FooterComponent,
+		SidenavComponent
+	]
+})
 ```
