@@ -11,6 +11,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { LayoutModule } from './layout/layout.module';
+import { MatListModule } from '@angular/material/list';
+import { MoviesModule } from './movies/movies.module';
 
 @NgModule({
   declarations: [
@@ -22,12 +24,14 @@ import { LayoutModule } from './layout/layout.module';
     BrowserAnimationsModule,
     MatSidenavModule,
     LayoutModule,
+    MoviesModule,
     MatCardModule,
     MatIconModule,
     MatToolbarModule,
     MatButtonModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -25,7 +25,46 @@ export class SidenavComponent implements OnInit {
     'name': 'Kids Next Door'
   }, {
     'name': 'Invader Zim'
-  }];
+  },
+  {
+    'name': 'Pokemon'
+  }, {
+    'name': 'Yu Gi Oh'
+  }, {
+    'name': 'Xaiolin Showdown'
+  }, {
+    'name': 'Courage The Cowardly Dog'
+  }, {
+    'name': 'Spiderman and Friends'
+  }, {
+    'name': 'Avatar the Last Airbender'
+  }, {
+    'name': 'Digimon'
+  }, {
+    'name': 'Kids Next Door'
+  }, {
+    'name': 'Invader Zim'
+  },
+  {
+    'name': 'Pokemon'
+  }, {
+    'name': 'Yu Gi Oh'
+  }, {
+    'name': 'Xaiolin Showdown'
+  }, {
+    'name': 'Courage The Cowardly Dog'
+  }, {
+    'name': 'Spiderman and Friends'
+  }, {
+    'name': 'Avatar the Last Airbender'
+  }, {
+    'name': 'Digimon'
+  }, {
+    'name': 'Kids Next Door'
+  }, {
+    'name': 'Invader Zim'
+  }
+];
   constructor() { }
 
   ngOnInit(): void {

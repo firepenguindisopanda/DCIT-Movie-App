@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatListModule } from '@angular/material/list';
+
 import { AllMoviesComponent } from './all-movies/all-movies.component';
+
 
 
 
@@ -9,7 +12,8 @@ import { AllMoviesComponent } from './all-movies/all-movies.component';
     AllMoviesComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    MatListModule
   ],
   exports: [
     AllMoviesComponent
