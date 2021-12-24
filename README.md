@@ -59,7 +59,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ### Example of adding the component to the app-routing.module.ts
 
 ```typescript
-	import { AllMoviesComponent } from './movies/all-movies/all-movies.component';
 	const routes: Routes = [
   	{ path: '', component: AllMoviesComponent}
 	];
