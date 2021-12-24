@@ -35,3 +35,22 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 	To lazy load a module use this command -> `ng g m movies --route movies --module app.module`
 	After creating modules make sure to remember and import the modules in `app.module.ts`
 6. Make sure to go into the component you want and run this command -> `ng g c header` to generate a component of that module.
+	When creating components inside the modules make sure to export the components to gain the ability to use them. Following is an example in the `layout.module.ts`
+
+```typescript
+		@NgModule({
+			declarations: [
+				HeaderComponent,
+				FooterComponent,
+				SidenavComponent
+			],
+			imports: [
+				CommonModule
+			],
+			exports: [
+				HeaderComponent,
+				FooterComponent,
+				SidenavComponent
+			]
+		})
+```
