@@ -1,0 +1,20 @@
+.example-spacer {
+    flex: 1 1 auto
+}
+.footer{
+    height: auto;
+    background-color: #6636b8fd;
+}
+span{
+    padding: 5px;
+}
+.copyright-footer{
+    height: 100%;
+    padding: 10px;
+}
+.footer-button{
+    &:hover{
+        color: white;
+        background-color: #6636b8fd;
+    }
+}
