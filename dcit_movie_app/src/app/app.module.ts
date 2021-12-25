@@ -13,7 +13,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { LayoutModule } from './layout/layout.module';
 import { MatListModule } from '@angular/material/list';
 import { MoviesModule } from './movies/movies.module';
-
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @NgModule({
   declarations: [
@@ -33,6 +33,7 @@ import { MoviesModule } from './movies/movies.module';
     MatFormFieldModule,
     MatInputModule,
     MatListModule,
+    MatGridListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

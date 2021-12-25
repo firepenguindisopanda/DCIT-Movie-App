@@ -4,6 +4,13 @@
 .header{
     height: auto;
 }
+a{
+    text-decoration: none;
+    color: white;
+    &:visited{
+        color: #ffbf00;
+    }
+}
 .search{
     &-form{
         

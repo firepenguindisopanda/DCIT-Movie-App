@@ -4,21 +4,30 @@ import { MatListModule } from '@angular/material/list';
 
 import { AllMoviesComponent } from './all-movies/all-movies.component';
 import { MatCardModule } from '@angular/material/card';
-
-
+import { ViewMovieDetailComponent } from './view-movie-detail/view-movie-detail.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
   declarations: [
-    AllMoviesComponent
+    AllMoviesComponent,
+    ViewMovieDetailComponent
   ],
   imports: [
     CommonModule,
     MatListModule,
-    MatCardModule
+    MatCardModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatGridListModule,
+    MatIconModule
   ],
   exports: [
-    AllMoviesComponent
+    AllMoviesComponent,
+    ViewMovieDetailComponent
   ]
 })
 export class MoviesModule { }

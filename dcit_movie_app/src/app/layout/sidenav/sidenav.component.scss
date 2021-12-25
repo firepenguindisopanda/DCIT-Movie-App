@@ -2,4 +2,21 @@
     max-width: 250px;
     min-width: 250px;
     width: auto;
+    transition-duration: 0.3s;
+    
+}
+.itemList:hover{
+    color: rgba(156, 21, 156, 0.842);
+    font-size: 20px;
+    transform: translateX(-3px);
+}
+a{
+    text-decoration: none;
+}
+.itemLink{
+    
+    &:hover{
+        
+        color: rgba(156, 21, 156, 0.842);
+    }
 }

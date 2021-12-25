@@ -1,0 +1,36 @@
+.movies{
+    
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px 20px;
+    text-align: center;
+    justify-content: center;
+}
+img{
+    width: 450px;
+}
+.movie{
+    padding: 10px;
+    
+    width: 100%;
+    &-info{
+        
+        padding: 10px;
+        
+        
+    }
+    &-comment{
+        
+        padding: 10px;
+    }
+}
+
+.example-form {
+    min-width: 250px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.example-full-width {
+    width: 100%;
+}
