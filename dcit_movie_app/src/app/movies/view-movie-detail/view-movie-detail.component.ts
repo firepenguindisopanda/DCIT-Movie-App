@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Comment } from '../../model';
 import { MoviesService } from 'src/app/services/movies.service';
 
+
 @Component({
   selector: 'app-view-movie-detail',
   templateUrl: './view-movie-detail.component.html',
@@ -12,10 +13,11 @@ import { MoviesService } from 'src/app/services/movies.service';
 export class ViewMovieDetailComponent implements OnInit {
 
   comment: Comment = {
-    
     username: '',
     text: ''
   };
+  navURL: string = '';
+  data: any = {};
   comments: any = [];
   movieDetails: any = {};
   userId : number = 0;
@@ -46,13 +48,30 @@ export class ViewMovieDetailComponent implements OnInit {
       error: (e) => console.error(e)
     });
   }
-  onSubmit(id: number, form: NgForm){
+  onSubmit(id: number){
+    this.data = {
+      movie_id: id,
+      text: this.comment.text,
+      username: this.comment.username
+    }
+    //console.log(this.data);
     
-    console.log(form);
+    this.movieService.createCommentForMovie(this.data).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.ngOnInit();
+      },
+      error: (e) => console.error(e)
+    });
+    
+    //window.location.reload();
     
   }
-  deleteComment(id: number, movie_id: number): void{
-    
+  deleteComment(id: number): void{
+    this.movieService.deleteComment(id).subscribe((data) => {
+      console.log(`This comment id was deleted: ${id}`);
+      this.ngOnInit();
+    })
   }
 
 }

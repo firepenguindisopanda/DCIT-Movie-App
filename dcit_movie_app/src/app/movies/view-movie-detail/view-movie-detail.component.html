@@ -2,7 +2,7 @@
 <div class="movies">
     <div class="movie">
         <div class="movie-info">
-            <div class="movie-info-details">
+            <div class="movie-info-details" *ngIf="movieDetails">
                 <h1>{{movieDetails.title}}</h1>
                 
             
@@ -33,15 +33,15 @@
             </div>
             
             <div class="comments">
-                <form class="example-form" #commentForm="ngForm" (ngSubmit)="onSubmit(userId,commentForm)">
+                <form class="example-form" #commentForm="ngForm" (ngSubmit)="onSubmit(userId); commentForm.resetForm()">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label class="label">Username</mat-label>
-                        <input matInput placeholder="Ex. Bob the Angular framework builder" name="username" [ngModel]="comment.username"  required >
+                        <input matInput placeholder="Ex. Bob the Angular framework builder" name="username" [(ngModel)]="comment.username"  required >
                     </mat-form-field>
         
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label class="label">Leave a comment</mat-label>
-                        <textarea matInput placeholder="Ex. This movie was..." name="text" [ngModel]="comment.text" required ></textarea>
+                        <textarea matInput placeholder="Ex. This movie was..." name="text" [(ngModel)]="comment.text" required ></textarea>
                     </mat-form-field>
         
                     <div class="example-button-row" *ngIf="!commentForm.valid; then thenBlock else elseBlock"></div>
@@ -63,7 +63,7 @@
             <div class="user-comments">
                 <mat-list role="list" >
                     <mat-list-item role="listitem" *ngFor="let comment of comments">
-                        <span class="comment-info">{{comment.username}}: {{comment.text}}</span> | <button (click)="deleteComment(comment.id, comment.movie_id)" ><mat-icon>delete</mat-icon></button>
+                        <span class="comment-info">{{comment.username}}: {{comment.text}}</span> | <button (click)="deleteComment(comment.id)" ><mat-icon>delete</mat-icon></button>
                     </mat-list-item>
                 </mat-list>
                 
