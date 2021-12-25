@@ -3,20 +3,22 @@
     <div class="movie">
         <div class="movie-info">
             <div class="movie-info-details">
-                <h1>Movie name</h1>
+                <h1>{{movieDetails.title}}</h1>
                 
             
                     
-                    <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+                    <div>
+                        <img mat-card-image src={{movieDetails.poster_url}} alt={{movieDetails.title}} />
+                    </div>
                     <div class="content-desc">
                         <p class="desc">
-                            Release Date: {{userId}}
+                            Release Date: {{movieDetails.release_date}}
                         </p>
                         <p class="desc">
-                            Studio: {{userId}}
+                            Studio: {{movieDetails.studio}}
                         </p>
                         <p class="desc">
-                            Gross: ${{userId}}
+                            Gross: {{movieDetails.gross}}
                         </p>
                     </div>
                     
@@ -29,6 +31,7 @@
             <div>
                 <h1>Comments</h1>
             </div>
+            
             <div class="comments">
                 <form class="example-form" #commentForm="ngForm" (ngSubmit)="onSubmit(userId,commentForm)">
                     <mat-form-field class="example-full-width" appearance="fill">
@@ -55,6 +58,15 @@
                     </ng-template>
                     
                 </form>
+                
+            </div>
+            <div class="user-comments">
+                <mat-list role="list" >
+                    <mat-list-item role="listitem" *ngFor="let comment of comments">
+                        <span class="comment-info">{{comment.username}}: {{comment.text}}</span> | <button (click)="deleteComment(comment.id, comment.movie_id)" ><mat-icon>delete</mat-icon></button>
+                    </mat-list-item>
+                </mat-list>
+                
             </div>
         </div>
         <!--

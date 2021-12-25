@@ -5,8 +5,12 @@
     transition-duration: 0.3s;
     
 }
+.itemList{
+    border-top: .5px solid grey;
+    border-bottom: .5px solid grey;
+}
 .itemList:hover{
-    color: rgba(156, 21, 156, 0.842);
+    background-color: rgba(189, 177, 177, 0.651);
     font-size: 20px;
     transform: translateX(-3px);
 }
@@ -17,6 +21,6 @@ a{
     
     &:hover{
         
-        color: rgba(156, 21, 156, 0.842);
+        color: rgb(73, 4, 73);
     }
 }

@@ -7,7 +7,10 @@
     justify-content: center;
 }
 img{
-    width: 450px;
+    max-width: 100%;
+    height: auto;
+    width: 400px;
+    
 }
 .movie{
     padding: 10px;
@@ -20,9 +23,14 @@ img{
         
     }
     &-comment{
-        
         padding: 10px;
     }
+}
+.comments{
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
 }
 
 .example-form {
@@ -33,4 +41,15 @@ img{
 
 .example-full-width {
     width: 100%;
+}
+.user-comments{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+.comment-info{
+    min-width: 300px;
+    padding: 2px;
+    border-radius: 5px;
+    border-bottom: 1px solid black;
 }

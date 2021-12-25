@@ -1,5 +1,5 @@
 <div class="sidenav">
-    <mat-list role="list" *ngFor="let count of students" class="itemList">
-        <a href="details/{{count.id}}"><mat-list-item role="listitem" class="itemLink"> {{count.name}}</mat-list-item></a>
+    <mat-list role="list" *ngFor="let movie of movieList" class="itemList">
+        <a href="#" [routerLink]="['details', movie.id]"><mat-list-item role="listitem" class="itemLink"> {{movie.title}}</mat-list-item></a>
     </mat-list>
 </div>

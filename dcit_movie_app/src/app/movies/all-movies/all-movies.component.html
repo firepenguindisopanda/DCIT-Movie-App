@@ -1,12 +1,12 @@
-<div class="all-movies movies" *ngFor="let count of students">
+<div class="all-movies movies" *ngFor="let movie of movieList">
     <div class="movie">
 
     
     <mat-card class="example-card ">
         
-        <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+        <img mat-card-image src={{movie.poster_url}} alt={{movie.title}}>
         <mat-card-content>
-            <h1>{{count.name}}</h1>
+            <h1>{{movie.title}}</h1>
         </mat-card-content>
     </mat-card>
     </div>
