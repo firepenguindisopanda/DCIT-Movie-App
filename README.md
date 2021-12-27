@@ -118,5 +118,5 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 - Provide a search button to search for movies by title
 - Provide a sort option to sort movies by gross or by studio
-- Provide a login in sign up option for users.
+- Provide a login in/sign up option for users.
 - Add a vote button. The purpose of this button would be to allow a signed in user to vote on which movie they want to watch on that day. With this functionality the app can be used by a group of users to determine what movie they want to watch for a group movie night. The vote button would be limited to one for one active and verified user account. The vote count for an individual movie would be reset at the end of the day. 
