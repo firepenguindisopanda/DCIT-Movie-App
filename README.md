@@ -11,7 +11,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Project Demonstration
 
-Length of time before repeat: 1 minute
+Length of time before repeat: 53 seconds
 
 ![Project Demonstration](https://github.com/firepenguindisopanda/DCIT-Movie-App/blob/main/readme_assets/website-demonstration.gif)
 
