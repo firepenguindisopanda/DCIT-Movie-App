@@ -26,10 +26,11 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 To get code coverage report run this command `ng test --code-coverage=true`
 Screenshot of Unit Test passing.
-![Alt Image text](https://github.com/firepenguindisopanda/DCIT-Movie-App/blob/main/readme_assets/2021-12-26%2022_30_46-Karma.png)
+![Unit Test Using Karma](https://github.com/firepenguindisopanda/DCIT-Movie-App/blob/main/readme_assets/2021-12-26%2022_30_46-Karma.png)
 
 ## Code Coverage Report
 
+![Code Coverage Image](https://github.com/firepenguindisopanda/DCIT-Movie-App/blob/main/readme_assets/Code-Coverage.png)
 
 ## Running end-to-end tests
 
