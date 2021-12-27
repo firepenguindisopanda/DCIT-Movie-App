@@ -15,6 +15,22 @@ Length of time before repeat: 53 seconds
 
 ![Project Demonstration](https://github.com/firepenguindisopanda/DCIT-Movie-App/blob/main/readme_assets/website-demonstration.gif)
 
+## Folder Structure from src folder
+
+```bash
+├───app
+│   ├───layout
+│   │   ├───footer
+│   │   ├───header
+│   │   └───sidenav
+│   ├───movies
+│   │   ├───all-movies
+│   │   └───view-movie-detail
+│   └───services
+├───assets
+└───environments
+```
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
