@@ -26,7 +26,7 @@ describe('MoviesService', () => {
     expect(moviesService).toBeTruthy();
   });
 
-  it(`should fetch movies as observable`, async(inject([HttpTestingController, MoviesService], (httpClient: HttpTestingController, moviesService: MoviesService) => {
+  it(`should fetch movie with ID 1`, async(inject([HttpTestingController, MoviesService], (httpClient: HttpTestingController, moviesService: MoviesService) => {
     const movieItem = [
       {
         gross: "$714,766,572.00",
