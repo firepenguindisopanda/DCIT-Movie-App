@@ -1,5 +1,12 @@
 # DcitMovieApp
 
+The Project is located inside the folder `dcit_movie_app`
+To view this Angular Project on your local machine:
+
+- open the command prompt inside dcit_movie_app folder
+- run the command `ng serve`
+- Open you're browser and navigate to `http://localhost:4200/`, if Angular didn't open a new tab.
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.1.2.
 
 ## Development server
