@@ -28,6 +28,9 @@ To get code coverage report run this command `ng test --code-coverage=true`
 Screenshot of Unit Test passing.
 ![Alt Image text](https://github.com/firepenguindisopanda/DCIT-Movie-App/blob/main/readme_assets/2021-12-26%2022_30_46-Karma.png)
 
+## Code Coverage Report
+
+
 ## Running end-to-end tests
 
 Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
