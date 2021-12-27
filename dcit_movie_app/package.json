@@ -14,19 +14,20 @@
   "dependencies": {
     "@angular/animations": "~13.1.0",
     "@angular/cdk": "^13.1.1",
+    "@angular/cli": "~13.1.2",
     "@angular/common": "~13.1.0",
     "@angular/compiler": "~13.1.0",
+    "@angular/compiler-cli": "~13.1.0",
     "@angular/core": "~13.1.0",
     "@angular/forms": "~13.1.0",
     "@angular/material": "^13.1.1",
     "@angular/platform-browser": "~13.1.0",
     "@angular/platform-browser-dynamic": "~13.1.0",
     "@angular/router": "~13.1.0",
-    "@angular/cli": "~13.1.2",
-    "@angular/compiler-cli": "~13.1.0",
-    "typescript": "~4.5.2",
+    "node": "^17.3.0",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
+    "typescript": "~4.5.2",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
@@ -44,7 +45,7 @@
     "typescript": "~4.5.2"
   },
   "engines": {
-    "node": "12.18.2",
-    "npm": "6.14.5"
+    "node": "v16.13.1",
+    "npm": "8.1.1"
   }
 }
