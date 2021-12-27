@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Comment } from '../../model';
 import { MoviesService } from 'src/app/services/movies.service';
@@ -16,8 +16,7 @@ export class ViewMovieDetailComponent implements OnInit {
     username: '',
     text: ''
   };
-  comments$: any;
-  observedComments: any;
+  
   data: any = {};
   comments: any = [];
   movieDetails: any = {};

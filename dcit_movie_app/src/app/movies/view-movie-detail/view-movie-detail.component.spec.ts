@@ -1,11 +1,9 @@
 import { HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterModule, Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AllMoviesComponent } from '../all-movies/all-movies.component';
 import { ViewMovieDetailComponent } from './view-movie-detail.component';
-import { NgForm } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { MatButtonModule } from '@angular/material/button';

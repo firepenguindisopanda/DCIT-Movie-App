@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Movie } from 'src/app/model';
 import { MoviesService } from 'src/app/services/movies.service';
 
 @Component({
