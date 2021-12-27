@@ -8,6 +8,8 @@
 - Users can delete comments on any individual movie.
 - Users must provide a username and comment to submit a comment
 
+## Instructions
+
 The Project is located inside the folder `dcit_movie_app`
 To view this Angular Project on your local machine:
 
