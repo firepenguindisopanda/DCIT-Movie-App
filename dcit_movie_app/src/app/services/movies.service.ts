@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,16 +12,16 @@ export class MoviesService {
 
   }
 
-  public getMovies(){
+  public getMovies(): Observable<Object>{
     return this.http.get(this.BASE_URL + 'api/movies');
   }
-  public getMovie(id: any){
+  public getMovie(id: any): Observable<Object>{
     return this.http.get(this.BASE_URL + `api/movies/${id}`);
   }
-  public getCommentsForMovieWithId(id: any){
+  public getCommentsForMovieWithId(id: any): Observable<Object>{
     return this.http.get(this.BASE_URL + `api/movies/${id}/comments`);
   }
-  public createCommentForMovie(data: any){
+  public createCommentForMovie(data: any): Observable<Object>{
     return this.http.post(this.BASE_URL + 'api/comments', data);
   }
   public deleteComment(id: any){

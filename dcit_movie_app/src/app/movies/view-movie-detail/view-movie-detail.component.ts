@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Comment } from '../../model';
 import { MoviesService } from 'src/app/services/movies.service';
+
 
 
 @Component({
@@ -16,7 +16,8 @@ export class ViewMovieDetailComponent implements OnInit {
     username: '',
     text: ''
   };
-  navURL: string = '';
+  comments$: any;
+  observedComments: any;
   data: any = {};
   comments: any = [];
   movieDetails: any = {};
@@ -40,6 +41,7 @@ export class ViewMovieDetailComponent implements OnInit {
       error: (e) => console.error(e)
     });
   }
+
   getComments(id: number): void{
     this.movieService.getCommentsForMovieWithId(id).subscribe({
       next: (data) => {
@@ -54,7 +56,6 @@ export class ViewMovieDetailComponent implements OnInit {
       text: this.comment.text,
       username: this.comment.username
     }
-    //console.log(this.data);
     
     this.movieService.createCommentForMovie(this.data).subscribe({
       next: (res) => {
@@ -63,10 +64,8 @@ export class ViewMovieDetailComponent implements OnInit {
       },
       error: (e) => console.error(e)
     });
-    
-    //window.location.reload();
-    
   }
+  
   deleteComment(id: number): void{
     this.movieService.deleteComment(id).subscribe((data) => {
       console.log(`This comment id was deleted: ${id}`);

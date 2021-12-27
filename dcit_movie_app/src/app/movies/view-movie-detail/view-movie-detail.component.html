@@ -1,12 +1,10 @@
 <mat-card class="example-card ">
-<div class="movies">
-    <div class="movie">
-        <div class="movie-info">
-            <div class="movie-info-details" *ngIf="movieDetails">
-                <h1>{{movieDetails.title}}</h1>
-                
-            
-                    
+    <div class="movies">
+        <div class="movie">
+            <div class="movie-info">
+                <div class="movie-info-details" *ngIf="movieDetails">
+                    <h1>{{movieDetails.title}}</h1>
+
                     <div>
                         <img mat-card-image src={{movieDetails.poster_url}} alt={{movieDetails.title}} />
                     </div>
@@ -21,128 +19,64 @@
                             Gross: {{movieDetails.gross}}
                         </p>
                     </div>
-                    
-                
-                
-            </div>
-        </div>
-        
-        <div class="movie-comment">
-            <div>
-                <h1>Comments</h1>
-            </div>
-            
-            <div class="comments">
-                <form class="example-form" #commentForm="ngForm" (ngSubmit)="onSubmit(userId); commentForm.resetForm()">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label class="label">Username</mat-label>
-                        <input matInput placeholder="Ex. Bob the Angular framework builder" name="username" [(ngModel)]="comment.username"  required >
-                    </mat-form-field>
-        
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label class="label">Leave a comment</mat-label>
-                        <textarea matInput placeholder="Ex. This movie was..." name="text" [(ngModel)]="comment.text" required ></textarea>
-                    </mat-form-field>
-        
-                    <div class="example-button-row" *ngIf="!commentForm.valid; then thenBlock else elseBlock"></div>
-        
-                    <ng-template  #thenBlock>
-                        <div class="example-button-row">
-                            <button mat-raised-button color="primary" type="submit" [disabled]="!commentForm.valid" >Submit</button><p>You need to enter username and comment to make a comment</p>
-                        </div>
-                    </ng-template>
-                    <ng-template #elseBlock >
-                        <div class="example-button-row">
-                            <button mat-raised-button color="primary" type="submit" [disabled]="!commentForm.valid" >Submit</button>
-                        </div>
-                    </ng-template>
-                    
-                </form>
-                
-            </div>
-            <div class="user-comments">
-                <mat-list role="list" >
-                    <mat-list-item role="listitem" *ngFor="let comment of comments">
-                        <span class="comment-info">{{comment.username}}: {{comment.text}}</span> | <button (click)="deleteComment(comment.id)" ><mat-icon>delete</mat-icon></button>
-                    </mat-list-item>
-                </mat-list>
-                
-            </div>
-        </div>
-        <!--
-        <mat-card class="example-card">
-            <div class="card-container">
-                
-                <mat-card-header>
-                    <div mat-card-avatar class="example-header-image"></div>
-                    <mat-card-title>{{userId}}</mat-card-title>
-                </mat-card-header>
-            </div>
-            
-            <div class="card-container">
-                <mat-card-content class="image-content">
-                    <img mat-card-xl-image src="https://google.com" alt="Poster Photo">
-                    <div class="content-desc">
-                        <p class="desc">
-                            Release Date: {{userId}}
-                        </p>
-                        <p class="desc">
-                            Studio: {{userId}}
-                        </p>
-                        <p class="desc">
-                            Gross: ${{userId}}
-                        </p>
-                        <p class="desc">
-                            Rating: {{userId}}
-                        </p>
-                    </div>
-                </mat-card-content>
-            </div>
-        </mat-card>
-        <div class="card-container">
-            <div>
-                <h1>Comments</h1>
-            </div>
-            <div class="comments">
-                <form class="example-form" #commentForm="ngForm" (ngSubmit)="onSubmit(userId,commentForm)">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label class="label">Username</mat-label>
-                        <input matInput placeholder="Ex. Bob the Angular framework builder" name="username" [ngModel]="comment.username"  required >
-                    </mat-form-field>
-        
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label class="label">Leave a comment</mat-label>
-                        <textarea matInput placeholder="Ex. This movie was..." name="text" [ngModel]="comment.text" required ></textarea>
-                    </mat-form-field>
-        
-                    <div class="example-button-row" *ngIf="!commentForm.valid; then thenBlock else elseBlock"></div>
-        
-                    <ng-template  #thenBlock>
-                        <div class="example-button-row">
-                            <button mat-raised-button color="primary" type="submit" [disabled]="!commentForm.valid" >Submit</button><p>You need to enter username and comment to make a comment</p>
-                        </div>
-                    </ng-template>
-                    <ng-template #elseBlock >
-                        <div class="example-button-row">
-                            <button mat-raised-button color="primary" type="submit" [disabled]="!commentForm.valid" >Submit</button>
-                        </div>
-                    </ng-template>
-                    
-                </form>
-                
-                
-                <div>
-                    <mat-list role="list" >
-                        <mat-list-item role="listitem" *ngFor="let comment of comments">
-                            <span class="comment-info">{{comment.username}}: {{comment.text}}</span> | <button (click)="deleteComment(comment.id, comment.movie_id)" ><mat-icon>delete</mat-icon></button>
-                        </mat-list-item>
-                    </mat-list>
-                    
+
                 </div>
             </div>
+
+            <div class="movie-comment">
+                <div>
+                    <h1>Comments</h1>
+                </div>
+
+                <div class="comments">
+                    <form class="example-form" #commentForm="ngForm"
+                        (ngSubmit)="onSubmit(userId); commentForm.resetForm()">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label class="label">Username</mat-label>
+                            <input matInput placeholder="Ex. Bob the Angular framework builder" name="username"
+                                [(ngModel)]="comment.username" required>
+                        </mat-form-field>
+
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label class="label">Leave a comment</mat-label>
+                            <textarea matInput placeholder="Ex. This movie was..." name="text"
+                                [(ngModel)]="comment.text" required></textarea>
+                        </mat-form-field>
+
+                        <div class="example-button-row" *ngIf="!commentForm.valid; then thenBlock else elseBlock"></div>
+
+                        <ng-template #thenBlock>
+                            <div class="example-button-row">
+                                <button mat-raised-button color="primary" type="submit"
+                                    [disabled]="!commentForm.valid">Submit</button>
+                                <p>You need to enter username and comment to make a comment</p>
+                            </div>
+                        </ng-template>
+                        <ng-template #elseBlock>
+                            <div class="example-button-row">
+                                <button mat-raised-button color="primary" type="submit"
+                                    [disabled]="!commentForm.valid">Submit</button>
+                            </div>
+                        </ng-template>
+
+                    </form>
+
+                </div>
+                <div class="user-comments">
+                    <mat-list role="list">
+                        <mat-list-item role="listitem" *ngFor="let comment of comments">
+                            <span class="comment-info">{{comment.username}}: {{comment.text}}</span> | <button mat-raised-button color="primary"
+                                (click)="deleteComment(comment.id)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </mat-list-item>
+                    </mat-list>
+
+                </div>
+            </div>
+            
+
         </div>
-    -->
+
     </div>
-    
-</div>
 </mat-card>

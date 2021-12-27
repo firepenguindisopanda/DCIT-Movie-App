@@ -9,7 +9,7 @@ const routes: Routes = [
   
   { path: '', 
     children: [
-      { path: 'movies/', component: AllMoviesComponent },
+      { path: 'movies', component: AllMoviesComponent },
       { path: 'details/:id', component: ViewMovieDetailComponent },
     ]
   }
