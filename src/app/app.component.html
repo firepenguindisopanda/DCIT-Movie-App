@@ -1,16 +1,4 @@
-<app-header>
-  
-</app-header>
-<mat-drawer-container class="app-container">
-  <mat-drawer mode="side" #sidenav opened>
+<app-search-bar></app-search-bar>
+<router-outlet>
     
-	<app-sidenav></app-sidenav>
-  </mat-drawer>
-  <mat-drawer-content>
-    
-	<router-outlet>
-    
-  </router-outlet>
-  </mat-drawer-content>
-</mat-drawer-container>
-<app-footer></app-footer>
+</router-outlet>
