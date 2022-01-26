@@ -1,5 +1,8 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
+<<<<<<< HEAD
 
+=======
+>>>>>>> a831af3e9ff2287d5a0dd9f3325d95a7b7067c11
 src/app/interceptors
 # compiled output
 /dist
