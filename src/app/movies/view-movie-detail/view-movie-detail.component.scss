@@ -5,11 +5,17 @@
     margin: 20px 20px;
     text-align: center;
     justify-content: center;
+    align-items: center;
+    color:rgb(100, 32, 165);
+    font-size: medium;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+
 }
 img{
     max-width: 100%;
     height: auto;
-    width: 400px;
+    width: 500px;
     
 }
 .movie{
@@ -19,7 +25,12 @@ img{
     &-info{
         
         padding: 10px;
-        
+        &-details{
+            display: grid;
+            
+            justify-content: center;
+            align-items: center;
+        }
         
     }
     &-comment{

@@ -1,14 +1,14 @@
 <div class="all-movies movies" *ngFor="let movie of listMovies$">
     <div class="movie">
-
-    
-    <mat-card class="example-card ">
+        <a href="#" [routerLink]="['details', movie.id]">
+            <mat-card class="example-card ">
         
-        <img mat-card-image src={{movie.poster_url}} alt={{movie.title}}>
-        <mat-card-content>
-            <h1>{{movie.title}}</h1>
-        </mat-card-content>
-    </mat-card>
+                <img mat-card-image src={{movie.poster_url}} alt={{movie.title}}>
+                <mat-card-content>
+                    <h1>{{movie.title}}</h1>
+                </mat-card-content>
+            </mat-card>
+        </a>
     </div>
     
 </div>
