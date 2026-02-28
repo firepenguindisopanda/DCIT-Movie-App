@@ -1,20 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DetailsComponent } from './components/details/details.component';
-import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
+    loadComponent: () => import('./components/home/home.component').then(m => m.HomeComponent),
   },
   {
     path: 'search/:movie-search',
-    component: HomeComponent,
+    loadComponent: () => import('./components/home/home.component').then(m => m.HomeComponent),
   },
   {
     path: 'details/:id',
-    component: DetailsComponent,
+    loadComponent: () => import('./components/details/details.component').then(m => m.DetailsComponent),
   }
 ];
 
