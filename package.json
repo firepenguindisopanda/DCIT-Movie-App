@@ -11,6 +11,9 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
   },
+  "engines": {
+    "node": "22.17.1"
+  },
   "private": true,
   "dependencies": {
     "@angular-devkit/build-angular": "~18.2.21",
