@@ -1,47 +1,157 @@
-<div class="details">
-    <div class="game-banner">
-        <img src="{{ game.background_image }}" alt="background image" class="game-banner-img">
+@if (loading()) {
+  <div class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+} @else if (media()) {
+  <div class="details">
+    <!-- Banner -->
+    <div class="banner">
+      <img [src]="media()!.background_image || media()!.poster_url || 'assets/no-image.png'" 
+           [alt]="media()!.title || media()!.name" 
+           class="banner-img">
+      <div class="banner-overlay"></div>
     </div>
-    <div class="game-content">
-        <div class="details-wrapper">
-            <div class="game-header">
-                <h1 class="game-header-title">
-                    {{ game.name }}
-                </h1>
-                <h2 class="game-header-release-date">
-                    Release: {{ game.released | date }}
-                </h2>
-                <p class="game-header-genres">
-                    <span *ngFor="let genre of game.genres; let last = last">
-                        {{ genre.name }}<span *ngIf="!last">, </span>
-                    </span>
-                </p>
-                <div class="game-gauge">
-                    <mwl-gauge
-                        class="two"
-                        [max]="100"
-                        [dialStartAngle]="180"
-                        [dialEndAngle]="0"
-                        [value]="gameRating"
-                        [animated]="true"
-                        [color]="getColor"
-                        [animationDuration]="2"
-                    >
-                    
-                    </mwl-gauge>
-                    <a 
-                        href="{{ game.metacritic_url }}" 
-                        target="_blank" 
-                        class="game-gauge-label"
-                    >
-                        Metacritic
-                    </a>
-                </div>
+
+    <div class="content">
+      <div class="details-wrapper">
+        <!-- Header -->
+        <div class="header">
+          <div class="header-info">
+            <h1>{{ media()!.title || media()!.name }}</h1>
+            <p class="release-date">
+              {{ media()!.released ? (media()!.released | date:'longDate') : (media()!.year) }}
+            </p>
+            
+            <div class="genres">
+              @for (genre of media()!.genres || []; track genre) {
+                <mat-chip>{{ genre }}</mat-chip>
+              }
             </div>
 
-            <app-game-tabs [game]="game">
+            @if (media()!.studio) {
+              <p class="studio">Studio: {{ media()!.studio }}</p>
+            }
 
-            </app-game-tabs>
+            @if (media()!.worldwide_gross) {
+              <p class="gross">Box Office: {{ media()!.worldwide_gross }}</p>
+            }
+
+            @if (media()!.length) {
+              <p class="length">Runtime: {{ media()!.length }} min</p>
+            }
+
+            @if (media()!.rating) {
+              <p class="age-rating">Rated: {{ media()!.rating }}</p>
+            }
+          </div>
+
+          <div class="header-actions">
+            <!-- Rating Gauge -->
+            <div class="rating-gauge">
+              <mwl-gauge
+                [max]="100"
+                [dialStartAngle]="180"
+                [dialEndAngle]="0"
+                [value]="getRating()"
+                [animated]="true"
+                [color]="getColorForGauge()"
+                [animationDuration]="2"
+              ></mwl-gauge>
+              <span class="gauge-label">
+                {{ media()!.metacritic ? 'Metacritic' : 'Rating' }}
+              </span>
+            </div>
+
+            <!-- Favorite Button -->
+            <button mat-raised-button 
+                    [color]="isFavorite() ? 'warn' : 'primary'"
+                    (click)="toggleFavorite()"
+                    class="favorite-btn">
+              <mat-icon>{{ isFavorite() ? 'favorite' : 'favorite_border' }}</mat-icon>
+              {{ isFavorite() ? 'Remove from Favorites' : 'Add to Favorites' }}
+            </button>
+          </div>
         </div>
+
+        <!-- Ratings Row -->
+        <div class="ratings-row">
+          @if (media()!.imdb_rating) {
+            <div class="rating-box">
+              <span class="label">IMDb</span>
+              <span class="value">{{ media()!.imdb_rating }}/10</span>
+            </div>
+          }
+          @if (media()!.rt_score) {
+            <div class="rating-box">
+              <span class="label">Rotten Tomatoes</span>
+              <span class="value">{{ media()!.rt_score }}%</span>
+            </div>
+          }
+          @if (media()!.metacritic) {
+            <div class="rating-box">
+              <span class="label">Metacritic</span>
+              <span class="value">{{ media()!.metacritic }}</span>
+            </div>
+          }
+        </div>
+
+        <!-- Comments Section -->
+        <div class="comments-section">
+          <h2>Comments ({{ comments().length }})</h2>
+          
+          <!-- Add Comment Form -->
+          @if (isAuthenticated) {
+            <div class="comment-form">
+              <mat-form-field appearance="outline" class="comment-input">
+                <mat-label>Add a comment</mat-label>
+                <textarea matInput 
+                          [(ngModel)]="newComment" 
+                          rows="3"
+                          placeholder="Share your thoughts..."></textarea>
+              </mat-form-field>
+              <button mat-raised-button 
+                      color="primary" 
+                      (click)="submitComment()"
+                      [disabled]="submittingComment() || !newComment().trim()">
+                @if (submittingComment()) {
+                  <mat-spinner diameter="20"></mat-spinner>
+                } @else {
+                  Post Comment
+                }
+              </button>
+            </div>
+          } @else {
+            <p class="login-prompt">
+              <a routerLink="/login" [queryParams]="{returnUrl: '/details/' + mediaType() + '/' + mediaId()}">
+                Sign in
+              </a> to leave a comment
+            </p>
+          }
+
+          <!-- Comments List -->
+          <div class="comments-list">
+            @for (comment of comments(); track comment.id) {
+              <div class="comment">
+                <div class="comment-header">
+                  <span class="comment-email">{{ comment.user_email }}</span>
+                  <span class="comment-date">{{ comment.created_at | date:'medium' }}</span>
+                </div>
+                <p class="comment-content">{{ comment.content }}</p>
+                @if (currentUserId && authService.userEmail() === comment.user_email) {
+                  <button mat-icon-button 
+                          color="warn" 
+                          (click)="deleteComment(comment.id)"
+                          class="delete-btn">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                }
+              </div>
+            } @empty {
+                <p class="no-comments">No comments yet. Be the first to comment!</p>
+              }
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
+}

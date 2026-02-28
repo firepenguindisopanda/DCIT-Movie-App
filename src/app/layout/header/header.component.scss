@@ -1,23 +1,62 @@
-.example-spacer {
-    flex: 1 1 auto
-}
-.header{
+.header {
     height: auto;
 }
-a{
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.toolbar-left {
+    display: flex;
+    align-items: center;
+}
+
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     text-decoration: none;
     color: white;
-    &:visited{
+    
+    mat-icon {
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+    }
+    
+    .app-title {
+        font-size: 20px;
+        font-weight: 500;
+    }
+}
+
+.user-email {
+    font-size: 14px;
+    margin-right: 8px;
+    opacity: 0.9;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+    
+    &:visited {
         color: #ffbf00;
     }
 }
-.search{
-    &-form{
-        
+
+.search {
+    &-form {
         max-width: 500px;
         margin: 0 auto;
     }
-    &-input{
+    &-input {
         margin-left: 10px;
         padding: 10px;
         width: 200px;
@@ -26,7 +65,7 @@ a{
         outline: none;
         border: none;
     }
-    &-right-button{
+    &-right-button {
         border: none;
         outline: none;
         background: #ffbf00;
@@ -38,13 +77,14 @@ a{
         font-weight: 700;
         transition-duration: 0.3s;
         cursor: pointer;
-        &:hover{
+        
+        &:hover {
             color: #ffbf00;
             background-color: white;
             border: 1px solid #3f51b5;
         }
     }
-    &-left-button{
+    &-left-button {
         border: none;
         outline: none;
         background: #ffbf00;
@@ -56,12 +96,11 @@ a{
         font-weight: 700;
         transition-duration: 0.3s;
         cursor: pointer;
-        &:hover{
+        
+        &:hover {
             color: #ffbf00;
             background-color: white;
             border: 1px solid #3f51b5;
         }
     }
-    
-
 }

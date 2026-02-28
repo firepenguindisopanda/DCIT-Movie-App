@@ -1,24 +1,20 @@
 import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { HeaderComponent } from './layout/header/header.component';
+import { SidenavComponent } from './layout/sidenav/sidenav.component';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet, HeaderComponent, SidenavComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.sass']
 })
 export class AppComponent {
-  title = 'Movie-Viewer';
-  cardValue: any = {
-    options: []
-  };
+  title = 'DCIT Movie App';
+  sidenavOpened = true;
 
-  selectOptions: Array<string> = [
-    '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'
-  ];
-
-  selectChange = (event: any) => {
-    const key: string = event.key;
-    this.cardValue[key] = [ ...event.data ];
-
-    console.log(this.cardValue);
-  };
+  toggleSidenav(): void {
+    this.sidenavOpened = !this.sidenavOpened;
+  }
 }

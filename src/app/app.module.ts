@@ -9,6 +9,9 @@ import { GaugeModule } from 'angular-gauge';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -17,19 +20,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
-import { HomeComponent } from './components/home/home.component';
-import {MatToolbarModule} from '@angular/material/toolbar';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { HttpHeadersInterceptor } from './interceptors/http-headers.interceptor';
 import { HttpErrorsInterceptor } from './interceptors/http-errors-interceptor';
-import { DetailsComponent } from './components/details/details.component';
 import { GameTabsComponent } from './components/game-tabs/game-tabs.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
     SearchBarComponent,
-    HomeComponent,
-    DetailsComponent,
     GameTabsComponent
   ],
   imports: [
@@ -46,10 +44,14 @@ import { GameTabsComponent } from './components/game-tabs/game-tabs.component';
     MatFormFieldModule,
     MatIconModule,
     MatTabsModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatProgressSpinnerModule,
     ReactiveFormsModule,
     HttpClientModule,
     MatToolbarModule,
-    GaugeModule.forRoot()
+    GaugeModule.forRoot(),
+    AppComponent
   ],
   providers: [
     {

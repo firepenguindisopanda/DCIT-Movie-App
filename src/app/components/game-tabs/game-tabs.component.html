@@ -1,13 +1,13 @@
 <div class="game-tabs">
     <mat-tab-group mat-align-tabs="start" backgroundColor="primary">
         <mat-tab label="About">
-            <p *ngIf="game.parent_platforms?.length" class="game-tabs-par">
+            <p *ngIf="game.parent_platforms.length" class="game-tabs-par">
                 Platforms:
                 <span *ngFor="let game of game.parent_platforms; let last = last">
                     {{ game.platform.name }} <span *ngIf="!last">,</span>
                 </span>
             </p>
-            <p *ngIf="game.publishers?.length" class="game-tabs-par">
+            <p *ngIf="game.publishers.length" class="game-tabs-par">
                 Publishers:
                 <span *ngFor="let publisher of game.publishers; let last = last">
                     {{ publisher.name }} <span *ngIf="!last">, </span>
@@ -40,12 +40,15 @@
                 </ng-container>
             </p>
         </mat-tab>
-        <mat-tab label="Screenshots" *ngIf="game.screenshots?.length">
+        <mat-tab label="Screenshots" *ngIf="game.screenshots.length">
             <img src="{{ screenshot.image }}" alt="screenshot" class="game-screenshot" *ngFor="let screenshot of game.screenshots">
         </mat-tab>
-        <mat-tab label="Trailers" *ngIf="game.trailers?.length">
+        <mat-tab label="Trailers" *ngIf="game.trailers.length">
             <video class="game-trailer" controls *ngFor="let trailer of game.trailers">
-                <source src="{{ trailer.data?.max }}" type="video/mp4"/>
+                <!-- accessibility: at least one <track> for captions must be provided -->
+                <track kind="captions" srclang="en" label="English" src="" />
+                <!-- data is always defined by the API schema, so no need for optional chaining -->
+                <source src="{{ trailer.data.max }}" type="video/mp4"/>
                 Your browser doesn't support the video tag
             </video>
         </mat-tab>

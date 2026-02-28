@@ -1,55 +1,107 @@
-<div class="filters">
-    <mat-form-field>
-        <mat-label>Sort</mat-label>
-        <mat-select panelClass="sort-select" 
-            [(ngModel)]="sort"
-            (selectionChange)="searchGames(sort)"
-        >
-            <mat-option value="name">Name</mat-option>
-            <mat-option value="name">Released</mat-option>
-            <mat-option value="name">Added</mat-option>
-            <mat-option value="name">Created</mat-option>
-            <mat-option value="name">Rating</mat-option>
-            <mat-option value="name">Metacritic</mat-option>
-        </mat-select>
-    </mat-form-field>
-</div>
-<form class="example-form">
-    <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Select a game</mat-label>
-        <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="myControl"
-            [matAutocomplete]="auto">
-        
-    </mat-form-field>
-    <mat-autocomplete #auto="matAutocomplete">
-        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-            {{option.name}}
-        </mat-option>
-    </mat-autocomplete>
-</form>
+<div class="home-container">
+  <!-- Genre Filter Chips -->
+  <div class="genre-section">
+    <div class="genre-label">{{ activeTab() === 0 ? 'Movie Genres' : 'Game Genres' }}:</div>
+    <mat-chip-listbox>
+      <mat-chip-option 
+        [selected]="!selectedGenre()" 
+        (click)="clearFilter()">
+        All
+      </mat-chip-option>
+      @for (genre of (activeTab() === 0 ? movieGenres() : gameGenres()); track genre) {
+        <mat-chip-option 
+          [selected]="selectedGenre() === genre"
+          (click)="filterByGenre(genre)">
+          {{ genre }}
+        </mat-chip-option>
+      }
+    </mat-chip-listbox>
+  </div>
 
-<div class="games">
-    <ng-container *ngFor="let game of games">
-        <div class="game">
-            <div class="game-thumb-container" (click)="openGameDetails(game.id)">
-                <img 
-                    *ngIf="game.background_image"
-                    src="{{ game.background_image }}"
-                    alt="thumbnail" class="game-thumbnail" />
-                <p *ngIf="!game.background_image">No Image</p>
-            </div>
-            <div class="game-description">
-                <p class="game-name">
-                    {{ game.name }}
-                </p>
-                <p class="game-name">Rating</p>
-                <div class="game-platforms">
-                    <span class="game-platform" >
-                        {{ game.ratings[0].title }}
-                    </span>
-                    
-                </div>
-            </div>
-        </div>
-    </ng-container>
+  <!-- Search -->
+  <form class="search-form">
+    <mat-form-field class="search-full-width" appearance="outline">
+      <mat-label>Search {{ activeTab() === 0 ? 'Movies' : 'Games' }}</mat-label>
+      <input matInput [formControl]="myControl" [matAutocomplete]="auto" 
+             (keyup.enter)="searchMedia(myControl.value || '')">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      @for (option of filteredOptions | async; track option) {
+        <mat-option [value]="option">
+          {{ option.title || option.name }}
+        </mat-option>
+      }
+    </mat-autocomplete>
+  </form>
+
+  <!-- Tabs -->
+  <mat-tab-group [selectedIndex]="activeTab()" (selectedIndexChange)="onTabChange($event)">
+    <mat-tab label="Movies">
+      <ng-template matTabContent>
+        @if (loading()) {
+          <div class="loading-container">
+            <mat-spinner diameter="50"></mat-spinner>
+          </div>
+        } @else {
+          <div class="media-grid">
+            @for (movie of movies(); track movie.id) {
+              <mat-card class="media-card" (click)="openDetails(movie.id)">
+                <img mat-card-image 
+                     [src]="movie.poster_url" 
+                     (error)="onImageError($event)"
+                     [alt]="movie.title">
+                <mat-card-content>
+                  <h3 class="media-title">{{ movie.title }}</h3>
+                  <p class="media-year">{{ movie.year }}</p>
+                  @if (movie.imdb_rating) {
+                    <div class="rating" [style.color]="getRatingColor(movie.imdb_rating * 10)">
+                      <span>★</span> {{ movie.imdb_rating }}/10
+                    </div>
+                  }
+                </mat-card-content>
+              </mat-card>
+            } @empty {
+              <div class="no-results">No movies found</div>
+            }
+          </div>
+        }
+      </ng-template>
+    </mat-tab>
+    
+    <mat-tab label="Games">
+      <ng-template matTabContent>
+        @if (loading()) {
+          <div class="loading-container">
+            <mat-spinner diameter="50"></mat-spinner>
+          </div>
+        } @else {
+          <div class="media-grid">
+            @for (game of games(); track game.id) {
+              <mat-card class="media-card" (click)="openDetails(game.id)">
+                <img mat-card-image 
+                     [src]="game.background_image" 
+                     (error)="onImageError($event)"
+                     [alt]="game.name">
+                <mat-card-content>
+                  <h3 class="media-title">{{ game.name }}</h3>
+                  <p class="media-year">{{ game.released | date:'yyyy' }}</p>
+                  @if (game.metacritic) {
+                    <div class="metacritic-badge" 
+                         [class.high]="game.metacritic >= 75"
+                         [class.medium]="game.metacritic >= 50 && game.metacritic < 75"
+                         [class.low]="game.metacritic < 50">
+                      {{ game.metacritic }}
+                    </div>
+                  }
+                </mat-card-content>
+              </mat-card>
+            } @empty {
+              <div class="no-results">No games found</div>
+            }
+          </div>
+        }
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
 </div>

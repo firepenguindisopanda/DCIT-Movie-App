@@ -1,26 +1,65 @@
-.sidenav{
-    max-width: 250px;
-    min-width: 250px;
-    width: auto;
-    transition-duration: 0.3s;
+.sidenav {
+  max-width: 250px;
+  min-width: 250px;
+  width: auto;
+  padding: 16px 0;
+}
+
+.nav-section {
+  margin-bottom: 24px;
+}
+
+.nav-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+mat-nav-list {
+  a {
+    text-decoration: none;
+    color: #ccc;
     
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    &.active {
+      background-color: rgba(63, 81, 181, 0.2);
+      color: #fff;
+    }
+  }
 }
-.itemList{
-    border-top: .5px solid grey;
-    border-bottom: .5px solid grey;
-}
-.itemList:hover{
+
+.itemList {
+  border-top: 0.5px solid grey;
+  border-bottom: 0.5px solid grey;
+  
+  &:hover {
     background-color: rgba(189, 177, 177, 0.651);
     font-size: 20px;
     transform: translateX(-3px);
+  }
 }
-a{
-    text-decoration: none;
+
+a {
+  text-decoration: none;
 }
-.itemLink{
-    
-    &:hover{
-        
-        color: rgb(73, 4, 73);
-    }
+
+.itemLink {
+  &:hover {
+    color: rgb(73, 4, 73);
+  }
 }

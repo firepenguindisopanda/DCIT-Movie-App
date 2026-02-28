@@ -1,13 +1,38 @@
 <div class="header">
     <mat-toolbar color="primary">
-        <div class="search-form">
-            <div class="search-left-button"><a [routerLink]="'/'" class="mat-icon"><mat-icon>theaters</mat-icon></a></div>
+        <div class="toolbar-left">
+            <a routerLink="/" class="logo-link">
+                <mat-icon>theaters</mat-icon>
+                <span class="app-title">DCIT Movie App</span>
+            </a>
         </div>
-        <span class="example-spacer"></span>
-        <a [routerLink]="'/'"><span>DCIT Movie App</span></a>
-        <span class="example-spacer"></span>
-        <div class="search-form">
-            <div class="search-left-button"><a [routerLink]="'/'" class="mat-icon"><mat-icon>theaters</mat-icon></a></div>
+        
+        <span class="spacer"></span>
+        
+        <div class="toolbar-right">
+            @if (authService.loading()) {
+                <mat-spinner diameter="24"></mat-spinner>
+            } @else if (authService.isAuthenticated()) {
+                <span class="user-email">{{ authService.userEmail() }}</span>
+                <button mat-icon-button [matMenuTriggerFor]="userMenu">
+                    <mat-icon>account_circle</mat-icon>
+                </button>
+                <mat-menu #userMenu="matMenu">
+                    <button mat-menu-item (click)="onSignOut()">
+                        <mat-icon>logout</mat-icon>
+                        <span>Sign Out</span>
+                    </button>
+                </mat-menu>
+            } @else {
+                <a mat-button routerLink="/login">
+                    <mat-icon>login</mat-icon>
+                    Sign In
+                </a>
+                <a mat-button routerLink="/register">
+                    <mat-icon>person_add</mat-icon>
+                    Sign Up
+                </a>
+            }
         </div>
     </mat-toolbar>
 </div>

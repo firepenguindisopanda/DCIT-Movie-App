@@ -22,6 +22,7 @@ export interface Game{
     website: string;
     description: string;
     metacritic: number;
+    rating: number;
     genres: Array<Genre>;
     parent_platforms: Array<ParentPlatforms>;
     publishers: Array<Publishers>;
