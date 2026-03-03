@@ -1,126 +1,471 @@
-.home-container
-  padding: 20px
-  max-width: 1400px
-  margin: 0 auto
+// --- Hero Banner ---
+.hero
+  position: relative
+  height: 70vh
+  min-height: 450px
+  max-height: 650px
+  margin-top: calc(var(--header-height) * -1)
+  cursor: pointer
+  overflow: hidden
+  animation: fadeIn 0.6s ease
 
-.genre-section
-  margin-bottom: 20px
+  .hero-bg
+    width: 100%
+    height: 100%
+    object-fit: cover
+    object-position: center 20%
+    transition: transform 8s ease
   
-  .genre-label
-    color: #666
-    margin-bottom: 8px
-    font-weight: 500
+  &:hover .hero-bg
+    transform: scale(1.03)
 
-mat-chip-listbox
+  .hero-gradient
+    position: absolute
+    inset: 0
+    background: linear-gradient(to right, rgba(20, 20, 20, 0.95) 0%, rgba(20, 20, 20, 0.6) 40%, rgba(20, 20, 20, 0.1) 70%), linear-gradient(to top, var(--bg-surface) 0%, rgba(20, 20, 20, 0.4) 40%, transparent 100%)
+
+  .hero-content
+    position: absolute
+    bottom: 15%
+    left: 24px
+    max-width: 550px
+    z-index: 2
+
+    @media (min-width: 1024px)
+      left: 48px
+      bottom: 20%
+
+.hero-badge
+  display: inline-flex
+  align-items: center
+  gap: 6px
+  padding: 4px 12px
+  background: rgba(229, 9, 20, 0.15)
+  border: 1px solid rgba(229, 9, 20, 0.3)
+  border-radius: var(--radius-full)
+  color: var(--accent-red)
+  font-size: 12px
+  font-weight: 600
+  text-transform: uppercase
+  letter-spacing: 0.06em
+  margin-bottom: 12px
+
+  mat-icon
+    font-size: 16px
+    width: 16px
+    height: 16px
+
+.hero-title
+  font-size: 36px
+  font-weight: 800
+  color: var(--text-primary)
+  line-height: 1.1
+  margin: 0 0 12px
+  letter-spacing: -0.02em
+
+  @media (min-width: 768px)
+    font-size: 48px
+
+.hero-meta
+  display: flex
+  align-items: center
+  gap: 16px
+  margin-bottom: 12px
+  color: var(--text-secondary)
+  font-size: 15px
+  font-weight: 500
+
+.hero-rating
+  display: inline-flex
+  align-items: center
+  gap: 4px
+  color: var(--accent-gold)
+  font-weight: 700
+
+  mat-icon
+    font-size: 18px
+    width: 18px
+    height: 18px
+
+.hero-genres
   display: flex
   flex-wrap: wrap
   gap: 8px
-
-.search-form
-  max-width: 500px
   margin-bottom: 20px
 
-  .search-full-width
-    width: 100%
+.hero-genre
+  padding: 4px 12px
+  background: rgba(255, 255, 255, 0.1)
+  border-radius: var(--radius-full)
+  color: var(--text-secondary)
+  font-size: 13px
+  font-weight: 500
 
+.hero-cta
+  display: inline-flex
+  align-items: center
+  gap: 8px
+  padding: 12px 28px
+  background: var(--accent-red)
+  color: white
+  border: none
+  border-radius: var(--radius-sm)
+  font-size: 15px
+  font-weight: 700
+  cursor: pointer
+  transition: all var(--transition-fast)
+  letter-spacing: 0.01em
+
+  mat-icon
+    font-size: 22px
+    width: 22px
+    height: 22px
+
+  &:hover
+    background: var(--accent-red-hover)
+    transform: translateY(-2px)
+    box-shadow: 0 8px 24px rgba(229, 9, 20, 0.3)
+
+// --- Content Container ---
+.content-container
+  max-width: 1400px
+  margin: 0 auto
+  padding: 0 24px 60px
+
+  @media (min-width: 1024px)
+    padding: 0 48px 80px
+
+// --- Tabs ---
+.media-tabs
+  margin-bottom: 24px
+
+  .tab-label
+    margin-left: 8px
+    font-size: 14px
+
+  ::ng-deep
+    .mat-mdc-tab
+      min-width: 140px
+
+    .mat-mdc-tab .mdc-tab__text-label
+      display: flex
+      align-items: center
+
+      mat-icon
+        font-size: 20px
+        width: 20px
+        height: 20px
+
+// --- Toolbar Row ---
+.toolbar-row
+  display: flex
+  align-items: center
+  gap: 16px
+  margin-bottom: 16px
+
+.search-form
+  position: relative
+  display: flex
+  align-items: center
+  width: 100%
+  max-width: 480px
+  background: var(--bg-elevated)
+  border: 1px solid var(--border-subtle)
+  border-radius: var(--radius-full)
+  padding: 0 16px
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast)
+
+  &:focus-within
+    border-color: var(--accent-red)
+    box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.1)
+
+.search-icon
+  color: var(--text-muted)
+  font-size: 20px
+  width: 20px
+  height: 20px
+  flex-shrink: 0
+
+.search-input
+  flex: 1
+  background: transparent
+  border: none
+  outline: none
+  color: var(--text-primary)
+  font-family: var(--font-primary)
+  font-size: 14px
+  padding: 12px 12px
+  width: 100%
+
+  &::placeholder
+    color: var(--text-muted)
+
+.autocomplete-option
+  display: flex
+  align-items: center
+  gap: 12px
+  padding: 4px 0
+
+  .autocomplete-thumb
+    width: 36px
+    height: 48px
+    object-fit: cover
+    border-radius: var(--radius-xs)
+
+  .autocomplete-title
+    display: block
+    font-size: 14px
+    font-weight: 500
+    color: var(--text-primary)
+
+  .autocomplete-year
+    display: block
+    font-size: 12px
+    color: var(--text-muted)
+
+// --- Genre Row ---
+.genre-row
+  display: flex
+  flex-wrap: wrap
+  gap: 8px
+  margin-bottom: 28px
+  padding-bottom: 8px
+
+.genre-chip
+  padding: 6px 16px
+  background: transparent
+  border: 1px solid var(--border-light)
+  border-radius: var(--radius-full)
+  color: var(--text-secondary)
+  font-family: var(--font-primary)
+  font-size: 13px
+  font-weight: 500
+  cursor: pointer
+  transition: all var(--transition-fast)
+  white-space: nowrap
+
+  &:hover
+    border-color: var(--text-secondary)
+    color: var(--text-primary)
+    background: rgba(255, 255, 255, 0.05)
+
+  &.active
+    background: var(--accent-red)
+    border-color: var(--accent-red)
+    color: white
+
+// --- Loading ---
 .loading-container
   display: flex
   justify-content: center
-  padding: 60px
+  align-items: center
+  padding: 80px
 
+// --- Skeleton Grid ---
+.skeleton-grid
+  display: grid
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr))
+  gap: 20px
+
+  @media (min-width: 768px)
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr))
+    gap: 24px
+
+.skeleton-card
+  opacity: 0
+  animation: cardFadeIn 0.3s ease forwards
+
+.skeleton-image
+  aspect-ratio: 2/3
+  border-radius: var(--radius-md)
+
+.skeleton-info
+  padding: 10px 4px 4px
+
+.skeleton-title
+  height: 16px
+  width: 80%
+  border-radius: var(--radius-xs)
+  margin-bottom: 6px
+
+.skeleton-year
+  height: 13px
+  width: 40%
+  border-radius: var(--radius-xs)
+
+// --- Media Grid ---
 .media-grid
   display: grid
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))
-  gap: 24px
-  padding: 20px 0
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr))
+  gap: 20px
 
+  @media (min-width: 768px)
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr))
+    gap: 24px
+
+.games-grid
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr))
+
+  @media (min-width: 768px)
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
+
+// --- Media Card ---
 .media-card
   cursor: pointer
-  transition: transform 0.2s, box-shadow 0.2s
+  border-radius: var(--radius-md)
   overflow: hidden
-  
-  &:hover
-    transform: translateY(-4px)
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2)
-  
-  img
-    height: 280px
-    object-fit: cover
+  transition: transform var(--transition-base), box-shadow var(--transition-base)
 
-.media-title
-  font-size: 16px
+  &:hover
+    transform: translateY(-6px) scale(1.02)
+    box-shadow: var(--shadow-lg)
+
+    .card-overlay
+      opacity: 1
+
+    .card-image img
+      transform: scale(1.05)
+
+.card-image
+  position: relative
+  overflow: hidden
+  border-radius: var(--radius-md)
+  aspect-ratio: 2/3
+
+  &.landscape
+    aspect-ratio: 16/10
+
+  img
+    width: 100%
+    height: 100%
+    object-fit: cover
+    transition: transform var(--transition-slow)
+
+.card-overlay
+  position: absolute
+  inset: 0
+  background: rgba(0, 0, 0, 0.5)
+  display: flex
+  align-items: center
+  justify-content: center
+  opacity: 0
+  transition: opacity var(--transition-base)
+
+.card-play-btn
+  width: 48px
+  height: 48px
+  border-radius: 50%
+  background: rgba(229, 9, 20, 0.9)
+  border: 2px solid white
+  color: white
+  display: flex
+  align-items: center
+  justify-content: center
+  cursor: pointer
+  transition: all var(--transition-fast)
+
+  mat-icon
+    font-size: 28px
+    width: 28px
+    height: 28px
+
+  &:hover
+    transform: scale(1.1)
+    background: var(--accent-red)
+
+.card-rating
+  position: absolute
+  top: 8px
+  right: 8px
+  display: flex
+  align-items: center
+  gap: 3px
+  padding: 4px 8px
+  background: rgba(0, 0, 0, 0.7)
+  backdrop-filter: blur(4px)
+  border-radius: var(--radius-sm)
+  font-size: 13px
+  font-weight: 700
+
+  mat-icon
+    font-size: 14px
+    width: 14px
+    height: 14px
+
+.card-metacritic
+  position: absolute
+  top: 8px
+  right: 8px
+  padding: 4px 8px
+  border-radius: var(--radius-sm)
+  font-size: 13px
+  font-weight: 800
+  backdrop-filter: blur(4px)
+
+  &.high
+    background: rgba(70, 211, 105, 0.85)
+    color: #000
+
+  &.medium
+    background: rgba(255, 193, 7, 0.85)
+    color: #000
+
+  &.low
+    background: rgba(239, 70, 85, 0.85)
+    color: #fff
+
+.card-info
+  padding: 10px 4px 4px
+
+.card-title
+  font-size: 14px
   font-weight: 600
-  margin: 8px 0 4px
+  color: var(--text-primary)
+  margin: 0 0 2px
   overflow: hidden
   text-overflow: ellipsis
   white-space: nowrap
+  line-height: 1.3
 
-.media-year
-  color: #666
-  font-size: 14px
-  margin: 0
+.card-year
+  font-size: 13px
+  color: var(--text-muted)
+  font-weight: 400
 
-.rating
-  font-weight: 600
-  font-size: 14px
-  margin-top: 8px
-  
-  span
-    font-size: 18px
-
-.metacritic-badge
-  display: inline-block
-  padding: 4px 8px
-  border-radius: 4px
-  font-weight: 700
-  font-size: 14px
-  margin-top: 8px
-  
-  &.high
-    background-color: #66cc33
-    color: #000
-  &.medium
-    background-color: #ffcc00
-    color: #000
-  &.low
-    background-color: #ff0000
-    color: #fff
-
+// --- No Results ---
 .no-results
   grid-column: 1 / -1
-  text-align: center
-  padding: 60px
-  color: #666
-  font-size: 18px
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  padding: 80px 20px
+  color: var(--text-muted)
 
-// Form field styling
-::ng-deep
-  .mat-mdc-form-field-infix
-    background-color: #f5f5f5
+  mat-icon
+    font-size: 48px
+    width: 48px
+    height: 48px
+    margin-bottom: 16px
+    opacity: 0.5
 
-// Filters section
-.filters
-  max-width: 1200px
-  margin: 20px auto
-  padding-left: 20px
+  p
+    font-size: 16px
+    margin-bottom: 16px
 
-  ::ng-deep
-    .mat-form-field-infix
-      background-color: #3f51b5
-    .mat-select-value,
-    .mat-select-arrow,
-    .mat-form-field-hide-placeholder .mat-select-placeholder,
-    .mat-form-field-appearance-legacy .mat-form-field-label
-      color: #fff !important
-      opacity: 1
+.clear-btn
+  padding: 8px 20px
+  background: transparent
+  border: 1px solid var(--border-light)
+  border-radius: var(--radius-full)
+  color: var(--text-secondary)
+  font-family: var(--font-primary)
+  font-size: 14px
+  font-weight: 500
+  cursor: pointer
+  transition: all var(--transition-fast)
 
-    .mat-form-field-infix
-      border-color: #fff !important
-      border-top: none
-      padding-left: 5px !important
-
-    .mat-form-field-appearance-legacy .mat-form-field-label
-      padding-left: 5px
-
-    .mat-form-field-appearance-legacy .mat-form-field-underline
-      background-color: #fff !important
+  &:hover
+    border-color: var(--text-primary)
+    color: var(--text-primary)
+    background: rgba(255, 255, 255, 0.05)

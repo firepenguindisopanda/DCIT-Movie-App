@@ -48,3 +48,5 @@ Thumbs.db
 data-pipeline/node_modules
 data-pipeline/.env
 data-pipeline/data/*
+.env
+src/environments/environment.ts

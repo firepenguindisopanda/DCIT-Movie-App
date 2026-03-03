@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -9,6 +9,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { GaugeModule } from 'angular-gauge';
 import { Subject, takeUntil } from 'rxjs';
 import { SupabaseService } from '../../services/supabase.service';
@@ -54,6 +55,7 @@ interface Comment {
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
     GaugeModule
   ],
   templateUrl: './details.component.html',
@@ -64,6 +66,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   readonly authService = inject(AuthService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private location = inject(Location);
   private destroy$ = new Subject<void>();
 
   mediaType = signal<'movie' | 'game'>('movie');
@@ -82,6 +85,14 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   get currentUserId(): string | null {
     return this.authService.user()?.id || null;
+  }
+
+  get isMovie(): boolean {
+    return this.mediaType() === 'movie';
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
   ngOnInit(): void {
@@ -189,12 +200,22 @@ export class DetailsComponent implements OnInit, OnDestroy {
   getRating(): number {
     const m = this.media();
     if (!m) return 0;
-    return m.metacritic || m.imdb_rating ? (m.imdb_rating || 0) * 10 : 0;
+    if (m.metacritic) return m.metacritic;
+    if (m.imdb_rating) return m.imdb_rating * 10;
+    return 0;
+  }
+
+  getRatingLabel(): string {
+    const rating = this.getRating();
+    if (rating >= 75) return 'Excellent';
+    if (rating >= 60) return 'Good';
+    if (rating >= 40) return 'Mixed';
+    return 'Poor';
   }
 
   getColor(value: number): string {
-    if (value >= 75) return '#5ee432';
-    if (value >= 50) return '#ffa50';
+    if (value >= 75) return '#46d369';
+    if (value >= 50) return '#ffc107';
     if (value >= 30) return '#f7aa38';
     return '#ef4655';
   }
@@ -203,13 +224,16 @@ export class DetailsComponent implements OnInit, OnDestroy {
     return (value: number) => this.getColor(value);
   }
 
-  formatDate(date: string | undefined): string {
-    if (!date) return 'N/A';
-    return new Date(date).toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
+  getPlatformIcon(platform: string): string {
+    const p = platform.toLowerCase();
+    if (p.includes('pc') || p.includes('windows')) return 'computer';
+    if (p.includes('playstation')) return 'sports_esports';
+    if (p.includes('xbox')) return 'gamepad';
+    if (p.includes('nintendo') || p.includes('switch')) return 'videogame_asset';
+    if (p.includes('ios') || p.includes('android') || p.includes('mobile')) return 'phone_iphone';
+    if (p.includes('linux')) return 'terminal';
+    if (p.includes('mac')) return 'laptop_mac';
+    return 'devices';
   }
 
   ngOnDestroy(): void {

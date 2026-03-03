@@ -1,73 +1,109 @@
-.login-container {
+.auth-page {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 64px);
+  min-height: calc(100vh - var(--header-height));
   padding: 24px;
-  background-color: #f5f5f5;
+  background-color: var(--bg-surface);
 }
 
-.login-card {
-  max-width: 400px;
+.auth-card {
+  max-width: 420px;
   width: 100%;
-  padding: 24px;
+  padding: 40px 32px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
 }
 
-mat-card-header {
-  margin-bottom: 24px;
-  
-  mat-card-title {
-    font-size: 24px;
-    font-weight: 500;
+.auth-header {
+  text-align: center;
+  margin-bottom: 32px;
+
+  .auth-logo {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    color: var(--accent-red);
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin: 0;
   }
 }
 
-mat-card-content {
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(229, 9, 20, 0.1);
+  border: 1px solid rgba(229, 9, 20, 0.25);
+  color: #ff6b6f;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+  font-size: 14px;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
   }
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .full-width {
   width: 100%;
-  margin-bottom: 8px;
-}
-
-.error-message {
-  background-color: #ffebee;
-  color: #c62828;
-  padding: 12px;
-  border-radius: 4px;
-  margin-bottom: 16px;
-  font-size: 14px;
 }
 
 .submit-btn {
   height: 48px;
-  font-size: 16px;
-  margin-top: 16px;
-  
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  margin-top: 8px;
+  border-radius: var(--radius-sm) !important;
+  letter-spacing: 0.02em;
+
   mat-spinner {
     display: inline-block;
   }
 }
 
-.register-link {
+.auth-footer {
   text-align: center;
   margin-top: 24px;
-  
+  padding-top: 20px;
+  border-top: 1px solid var(--border-subtle);
+
   p {
     margin: 0;
-    color: #666;
+    color: var(--text-muted);
+    font-size: 14px;
   }
-  
+
   a {
-    color: #1976d2;
+    color: var(--accent-red);
     text-decoration: none;
-    font-weight: 500;
-    
+    font-weight: 600;
+
     &:hover {
       text-decoration: underline;
     }

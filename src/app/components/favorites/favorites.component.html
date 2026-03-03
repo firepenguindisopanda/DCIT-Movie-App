@@ -1,48 +1,73 @@
-<div class="favorites-container">
-  <h1>My Favorites</h1>
+<div class="favorites-page">
+  <div class="favorites-header">
+    <h1>My List</h1>
+    <p class="favorites-subtitle">Your saved movies and games</p>
+  </div>
   
   @if (loading()) {
-    <div class="loading-container">
-      <mat-spinner diameter="50"></mat-spinner>
+    <div class="skeleton-grid">
+      @for (i of [1,2,3,4,5,6]; track i) {
+        <div class="skeleton-card" [style.animation-delay]="(i * 0.05) + 's'">
+          <div class="skeleton-image shimmer"></div>
+          <div class="skeleton-info">
+            <div class="skeleton-title shimmer"></div>
+            <div class="skeleton-year shimmer"></div>
+          </div>
+        </div>
+      }
     </div>
   } @else {
     <mat-tab-group [selectedIndex]="activeTab()" (selectedIndexChange)="onTabChange($event)">
       <!-- Movies Tab -->
-      <mat-tab label="Movies ({{ movieFavorites().length }})">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon>movie</mat-icon>
+          <span class="tab-label">Movies ({{ movieFavorites().length }})</span>
+        </ng-template>
         <ng-template matTabContent>
           @if (movieFavorites().length === 0) {
             <div class="empty-state">
               <mat-icon>favorite_border</mat-icon>
-              <p>No favorite movies yet</p>
-              <a mat-raised-button color="primary" routerLink="/">
+              <h3>No favorite movies yet</h3>
+              <p>Browse and add movies to your list</p>
+              <a routerLink="/" class="browse-btn">
+                <mat-icon>explore</mat-icon>
                 Browse Movies
               </a>
             </div>
           } @else {
             <div class="favorites-grid">
-              @for (fav of movieFavorites(); track fav.id) {
-                <mat-card class="media-card">
-                  <img mat-card-image 
-                       [src]="fav.movie?.poster_url || 'assets/no-image.png'" 
-                       [alt]="fav.movie?.title">
-                  <mat-card-content>
-                    <h3>{{ fav.movie?.title }}</h3>
-                    <p>{{ fav.movie?.year }}</p>
+              @for (fav of movieFavorites(); track fav.id; let i = $index) {
+                <div class="fav-card stagger-in" [style.animation-delay]="(i * 0.05) + 's'">
+                  <div class="fav-image" [routerLink]="['/details', 'movie', fav.movie?.id]">
+                    <img [src]="fav.movie?.poster_url || 'assets/no-image.png'" 
+                         [alt]="fav.movie?.title">
+                    <div class="fav-overlay">
+                      <button class="play-btn">
+                        <mat-icon>play_arrow</mat-icon>
+                      </button>
+                    </div>
                     @if (fav.movie?.imdb_rating) {
-                      <div class="rating" [style.color]="getRatingColor(fav.movie.imdb_rating * 10)">
-                        ★ {{ fav.movie.imdb_rating }}/10
+                      <div class="fav-rating" [style.color]="getRatingColor(fav.movie.imdb_rating * 10)">
+                        <mat-icon>star</mat-icon> {{ fav.movie.imdb_rating }}
                       </div>
                     }
-                  </mat-card-content>
-                  <mat-card-actions>
-                    <button mat-button [routerLink]="['/details', 'movie', fav.movie?.id]">
-                      View Details
+                  </div>
+                  <div class="fav-info">
+                    <h3>{{ fav.movie?.title }}</h3>
+                    <span class="fav-year">{{ fav.movie?.year }}</span>
+                  </div>
+                  <div class="fav-actions">
+                    <a [routerLink]="['/details', 'movie', fav.movie?.id]" class="action-btn view-btn">
+                      <mat-icon>info</mat-icon>
+                      Details
+                    </a>
+                    <button class="action-btn remove-btn" (click)="removeFavorite(fav)">
+                      <mat-icon>delete_outline</mat-icon>
+                      Remove
                     </button>
-                    <button mat-icon-button color="warn" (click)="removeFavorite(fav)">
-                      <mat-icon>delete</mat-icon>
-                    </button>
-                  </mat-card-actions>
-                </mat-card>
+                  </div>
+                </div>
               }
             </div>
           }
@@ -50,44 +75,58 @@
       </mat-tab>
 
       <!-- Games Tab -->
-      <mat-tab label="Games ({{ gameFavorites().length }})">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon>sports_esports</mat-icon>
+          <span class="tab-label">Games ({{ gameFavorites().length }})</span>
+        </ng-template>
         <ng-template matTabContent>
           @if (gameFavorites().length === 0) {
             <div class="empty-state">
               <mat-icon>sports_esports</mat-icon>
-              <p>No favorite games yet</p>
-              <a mat-raised-button color="primary" routerLink="/">
+              <h3>No favorite games yet</h3>
+              <p>Browse and add games to your list</p>
+              <a routerLink="/" class="browse-btn">
+                <mat-icon>explore</mat-icon>
                 Browse Games
               </a>
             </div>
           } @else {
-            <div class="favorites-grid">
-              @for (fav of gameFavorites(); track fav.id) {
-                <mat-card class="media-card">
-                  <img mat-card-image 
-                       [src]="fav.game?.background_image || 'assets/no-image.png'" 
-                       [alt]="fav.game?.name">
-                  <mat-card-content>
-                    <h3>{{ fav.game?.name }}</h3>
-                    <p>{{ fav.game?.released | date:'yyyy' }}</p>
+            <div class="favorites-grid games-grid">
+              @for (fav of gameFavorites(); track fav.id; let i = $index) {
+                <div class="fav-card game-card stagger-in" [style.animation-delay]="(i * 0.05) + 's'">
+                  <div class="fav-image landscape" [routerLink]="['/details', 'game', fav.game?.id]">
+                    <img [src]="fav.game?.background_image || 'assets/no-image.png'" 
+                         [alt]="fav.game?.name">
+                    <div class="fav-overlay">
+                      <button class="play-btn">
+                        <mat-icon>play_arrow</mat-icon>
+                      </button>
+                    </div>
                     @if (fav.game?.metacritic) {
-                      <div class="metacritic-badge" 
+                      <div class="fav-metacritic" 
                            [class.high]="fav.game.metacritic >= 75"
                            [class.medium]="fav.game.metacritic >= 50 && fav.game.metacritic < 75"
                            [class.low]="fav.game.metacritic < 50">
                         {{ fav.game.metacritic }}
                       </div>
                     }
-                  </mat-card-content>
-                  <mat-card-actions>
-                    <button mat-button [routerLink]="['/details', 'game', fav.game?.id]">
-                      View Details
+                  </div>
+                  <div class="fav-info">
+                    <h3>{{ fav.game?.name }}</h3>
+                    <span class="fav-year">{{ fav.game?.released | date:'yyyy' }}</span>
+                  </div>
+                  <div class="fav-actions">
+                    <a [routerLink]="['/details', 'game', fav.game?.id]" class="action-btn view-btn">
+                      <mat-icon>info</mat-icon>
+                      Details
+                    </a>
+                    <button class="action-btn remove-btn" (click)="removeFavorite(fav)">
+                      <mat-icon>delete_outline</mat-icon>
+                      Remove
                     </button>
-                    <button mat-icon-button color="warn" (click)="removeFavorite(fav)">
-                      <mat-icon>delete</mat-icon>
-                    </button>
-                  </mat-card-actions>
-                </mat-card>
+                  </div>
+                </div>
               }
             </div>
           }

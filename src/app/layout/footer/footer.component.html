@@ -1,9 +1,28 @@
-<div class="footer">
-    <mat-toolbar class="copyright-footer">
-        
-        <span class="example-spacer"></span>
-        <mat-icon>copyright</mat-icon><span>DCIT Powered By a Cool <a mat-raised-button href="https://dcitmovieapi.herokuapp.com/" target="_blank" class="footer-button"> DCIT API </a></span>
-        <span class="example-spacer"></span>
-        
-    </mat-toolbar>
-</div>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <mat-icon>theaters</mat-icon>
+        <span class="footer-title">DCIT Entertainment</span>
+      </div>
+      <p class="footer-tagline">Your destination for movies and games</p>
+    </div>
+
+    <div class="footer-links">
+      <div class="footer-section">
+        <h4>Explore</h4>
+        <a routerLink="/">Movies</a>
+        <a routerLink="/">Games</a>
+      </div>
+      <div class="footer-section">
+        <h4>Account</h4>
+        <a routerLink="/favorites">Favorites</a>
+        <a routerLink="/login">Sign In</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>&copy; {{ currentYear }} DCIT Entertainment. All rights reserved.</span>
+  </div>
+</footer>

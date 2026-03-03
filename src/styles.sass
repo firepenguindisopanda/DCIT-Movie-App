@@ -1,12 +1,278 @@
-/* You can add global styles to this file, and also import other style files */
-$primary-color: #151515
-$font-stack: 'Ubuntu', sans-serif
+// ============================================
+// DCIT Entertainment - Global Theme
+// Streaming-platform inspired dark theme
+// ============================================
+
+@use '@angular/material' as mat
+
+// --- Custom Material Dark Theme ---
+$dcit-primary: mat.m2-define-palette(mat.$m2-red-palette, 700, 500, 900)
+$dcit-accent: mat.m2-define-palette(mat.$m2-amber-palette, A200, A100, A400)
+$dcit-warn: mat.m2-define-palette(mat.$m2-red-palette)
+
+$dcit-theme: mat.m2-define-dark-theme((color: (primary: $dcit-primary, accent: $dcit-accent, warn: $dcit-warn), density: 0))
+
+@include mat.all-component-themes($dcit-theme)
+
+// --- CSS Custom Properties (Design Tokens) ---
+\:root
+  // Backgrounds
+  --bg-primary: #0a0a0a
+  --bg-surface: #141414
+  --bg-elevated: #1a1a1a
+  --bg-card: #1c1c1e
+  --bg-card-hover: #252528
+  --bg-overlay: rgba(0, 0, 0, 0.75)
+
+  // Accent Colors
+  --accent-red: #E50914
+  --accent-red-hover: #ff1a25
+  --accent-gold: #F5C518
+  --accent-blue: #4a9eff
+  --accent-green: #46d369
+  --accent-orange: #ff8c00
+
+  // Text
+  --text-primary: #ffffff
+  --text-secondary: #a1a1a6
+  --text-muted: #636366
+  --text-accent: #E50914
+
+  // Borders
+  --border-subtle: rgba(255, 255, 255, 0.08)
+  --border-light: rgba(255, 255, 255, 0.15)
+
+  // Shadows
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3)
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4)
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5)
+  --shadow-glow: 0 0 20px rgba(229, 9, 20, 0.15)
+
+  // Radius
+  --radius-xs: 4px
+  --radius-sm: 6px
+  --radius-md: 8px
+  --radius-lg: 12px
+  --radius-xl: 16px
+  --radius-full: 9999px
+
+  // Transitions
+  --transition-fast: 150ms ease
+  --transition-base: 250ms ease
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1)
+
+  // Spacing
+  --header-height: 64px
+
+  // Font
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif
+
+// --- Global Reset & Base ---
+*
+  margin: 0
+  padding: 0
+  box-sizing: border-box
+
+html
+  scroll-behavior: smooth
+
 body
-    font: 100% font-stack
-    background-color: #151515
-    height: 100%
-    *
-        font-family: 'Ubuntu', sans-serif
-        margin: 0
-        padding: 0
-        box-sizing: border-box
+  font-family: var(--font-primary)
+  background-color: var(--bg-primary)
+  color: var(--text-primary)
+  line-height: 1.5
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+  overflow-x: hidden
+
+// --- Scrollbar Styling ---
+\::-webkit-scrollbar
+  width: 8px
+
+\::-webkit-scrollbar-track
+  background: var(--bg-primary)
+
+\::-webkit-scrollbar-thumb
+  background: #333
+  border-radius: var(--radius-full)
+
+  &:hover
+    background: #555
+
+// --- Angular Material Overrides ---
+
+// Dark form fields
+.mat-mdc-form-field
+  .mdc-text-field--outlined
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing
+      border-color: var(--border-light) !important
+
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled):hover
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing
+      border-color: var(--text-secondary) !important
+
+  .mdc-text-field--outlined.mdc-text-field--focused
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing
+      border-color: var(--accent-red) !important
+
+  .mdc-floating-label
+    color: var(--text-secondary) !important
+
+  .mdc-text-field__input
+    color: var(--text-primary) !important
+    caret-color: var(--accent-red) !important
+
+// Dark cards
+.mat-mdc-card
+  background-color: var(--bg-card) !important
+  border: 1px solid var(--border-subtle)
+  border-radius: var(--radius-lg) !important
+  color: var(--text-primary) !important
+
+// Tab group styling
+.mat-mdc-tab-group
+  .mat-mdc-tab
+    color: var(--text-secondary)
+    font-family: var(--font-primary)
+    font-weight: 500
+    letter-spacing: 0.02em
+    min-width: 120px
+
+    &.mdc-tab--active
+      color: var(--text-primary) !important
+
+  .mdc-tab-indicator__content--underline
+    border-color: var(--accent-red) !important
+    border-width: 3px !important
+    border-radius: 3px 3px 0 0
+
+  .mat-mdc-tab-body-wrapper
+    margin-top: 8px
+
+// Chips
+.mat-mdc-chip
+  font-family: var(--font-primary) !important
+  font-size: 13px !important
+  font-weight: 500 !important
+
+// Primary buttons
+.mat-mdc-raised-button.mat-primary
+  background-color: var(--accent-red) !important
+  color: white !important
+  border-radius: var(--radius-sm) !important
+  font-weight: 600 !important
+  letter-spacing: 0.02em
+  transition: background-color var(--transition-fast), transform var(--transition-fast)
+
+  &:hover
+    background-color: var(--accent-red-hover) !important
+    transform: translateY(-1px)
+
+// Toolbar
+.mat-toolbar.mat-primary
+  background-color: transparent !important
+  color: var(--text-primary)
+
+// Menu
+.mat-mdc-menu-panel
+  background-color: var(--bg-elevated) !important
+  border: 1px solid var(--border-subtle)
+  border-radius: var(--radius-md) !important
+
+  .mat-mdc-menu-item
+    color: var(--text-primary) !important
+
+    &:hover
+      background-color: var(--bg-card-hover) !important
+
+// Spinner
+.mat-mdc-progress-spinner circle
+  stroke: var(--accent-red) !important
+
+// Dialog / overlay
+.cdk-overlay-dark-backdrop
+  background: rgba(0, 0, 0, 0.7)
+
+// Autocomplete
+.mat-mdc-autocomplete-panel
+  background-color: var(--bg-elevated) !important
+  border: 1px solid var(--border-subtle)
+
+  .mat-mdc-option
+    color: var(--text-primary) !important
+
+    &:hover, &.mat-mdc-option-active
+      background-color: var(--bg-card-hover) !important
+
+// --- Utility Classes ---
+.text-accent
+  color: var(--accent-red)
+
+.text-gold
+  color: var(--accent-gold)
+
+.text-muted
+  color: var(--text-muted)
+
+// --- Animations ---
+@keyframes fadeInUp
+  from
+    opacity: 0
+    transform: translateY(20px)
+  to
+    opacity: 1
+    transform: translateY(0)
+
+@keyframes fadeIn
+  from
+    opacity: 0
+  to
+    opacity: 1
+
+@keyframes scaleIn
+  from
+    opacity: 0
+    transform: scale(0.95)
+  to
+    opacity: 1
+    transform: scale(1)
+
+.animate-fade-in-up
+  animation: fadeInUp 0.5s ease forwards
+
+.animate-fade-in
+  animation: fadeIn 0.4s ease forwards
+
+.animate-scale-in
+  animation: scaleIn 0.3s ease forwards
+
+// --- Skeleton / Shimmer ---
+@keyframes shimmer
+  0%
+    background-position: -400px 0
+  100%
+    background-position: 400px 0
+
+.shimmer
+  background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-card-hover) 50%, var(--bg-elevated) 75%)
+  background-size: 800px 100%
+  animation: shimmer 1.5s infinite linear
+
+// --- Stagger fade-in for cards ---
+@keyframes cardFadeIn
+  from
+    opacity: 0
+    transform: translateY(16px)
+  to
+    opacity: 1
+    transform: translateY(0)
+
+.stagger-in
+  opacity: 0
+  animation: cardFadeIn 0.4s ease forwards

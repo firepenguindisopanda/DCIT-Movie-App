@@ -1,15 +1,26 @@
 .app-container
   display: flex
   flex-direction: column
-  height: 100vh
+  min-height: 100vh
+  background-color: var(--bg-primary)
 
 .app-content
   display: flex
   flex: 1
-  overflow: hidden
 
 .main-content
   flex: 1
   overflow-y: auto
-  background-color: #121212
+  background-color: var(--bg-surface)
   width: 100%
+  padding-top: var(--header-height)
+
+  // Page transition: fade in routed components
+  ::ng-deep router-outlet + *
+    animation: pageFadeIn 0.35s ease both
+
+@keyframes pageFadeIn
+  from
+    opacity: 0
+  to
+    opacity: 1

@@ -1,107 +1,221 @@
-<div class="home-container">
-  <!-- Genre Filter Chips -->
-  <div class="genre-section">
-    <div class="genre-label">{{ activeTab() === 0 ? 'Movie Genres' : 'Game Genres' }}:</div>
-    <mat-chip-listbox>
-      <mat-chip-option 
-        [selected]="!selectedGenre()" 
-        (click)="clearFilter()">
+<div class="home-page">
+  <!-- Hero Banner -->
+  @if (!loading()) {
+    @if (activeTab() === 0 && featuredMovie(); as featured) {
+      <div class="hero" (click)="openFeaturedDetails()">
+        <img [src]="featured.poster_url || featured.background_image" 
+             [alt]="featured.title" 
+             class="hero-bg">
+        <div class="hero-gradient"></div>
+        <div class="hero-content">
+          <span class="hero-badge">
+            <mat-icon>star</mat-icon> Featured Movie
+          </span>
+          <h1 class="hero-title">{{ featured.title }}</h1>
+          <div class="hero-meta">
+            @if (featured.year) {
+              <span>{{ featured.year }}</span>
+            }
+            @if (featured.imdb_rating) {
+              <span class="hero-rating">
+                <mat-icon>star</mat-icon> {{ featured.imdb_rating }}/10
+              </span>
+            }
+          </div>
+          <div class="hero-genres">
+            @for (genre of featured.genres?.slice(0, 3) || []; track genre) {
+              <span class="hero-genre">{{ genre }}</span>
+            }
+          </div>
+          <button class="hero-cta" (click)="openFeaturedDetails()">
+            <mat-icon>play_arrow</mat-icon>
+            View Details
+          </button>
+        </div>
+      </div>
+    }
+    @if (activeTab() === 1 && featuredGame(); as featured) {
+      <div class="hero" (click)="openFeaturedDetails()">
+        <img [src]="featured.background_image" 
+             [alt]="featured.name" 
+             class="hero-bg">
+        <div class="hero-gradient"></div>
+        <div class="hero-content">
+          <span class="hero-badge">
+            <mat-icon>sports_esports</mat-icon> Featured Game
+          </span>
+          <h1 class="hero-title">{{ featured.name }}</h1>
+          <div class="hero-meta">
+            @if (featured.released) {
+              <span>{{ featured.released | date:'yyyy' }}</span>
+            }
+            @if (featured.metacritic) {
+              <span class="hero-rating" [style.color]="getRatingColor(featured.metacritic)">
+                {{ featured.metacritic }} Metacritic
+              </span>
+            }
+          </div>
+          <div class="hero-genres">
+            @for (genre of featured.genres?.slice(0, 3) || []; track genre) {
+              <span class="hero-genre">{{ genre }}</span>
+            }
+          </div>
+          <button class="hero-cta" (click)="openFeaturedDetails()">
+            <mat-icon>play_arrow</mat-icon>
+            View Details
+          </button>
+        </div>
+      </div>
+    }
+  }
+
+  <div class="content-container">
+    <!-- Tabs -->
+    <mat-tab-group [selectedIndex]="activeTab()" (selectedIndexChange)="onTabChange($event)" class="media-tabs">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon>movie</mat-icon>
+          <span class="tab-label">Movies</span>
+        </ng-template>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon>sports_esports</mat-icon>
+          <span class="tab-label">Games</span>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+
+    <!-- Toolbar: Search + Genre Filters -->
+    <div class="toolbar-row">
+      <form class="search-form" (submit)="$event.preventDefault(); searchMedia(myControl.value || '')">
+        <mat-icon class="search-icon">search</mat-icon>
+        <input [formControl]="myControl" 
+               [matAutocomplete]="auto"
+               (keyup.enter)="searchMedia(myControl.value || '')"
+               class="search-input"
+               [placeholder]="'Search ' + (activeTab() === 0 ? 'movies' : 'games') + '...'">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" class="search-autocomplete">
+          @for (option of filteredOptions | async; track option) {
+            <mat-option [value]="option" (onSelectionChange)="openDetails(option.id)">
+              <div class="autocomplete-option">
+                <img [src]="option.poster_url || option.background_image || 'https://via.placeholder.com/40x60'" 
+                     class="autocomplete-thumb">
+                <div>
+                  <span class="autocomplete-title">{{ option.title || option.name }}</span>
+                  <span class="autocomplete-year">{{ option.year || (option.released | date:'yyyy') }}</span>
+                </div>
+              </div>
+            </mat-option>
+          }
+        </mat-autocomplete>
+      </form>
+    </div>
+
+    <!-- Genre Chips -->
+    <div class="genre-row">
+      <button class="genre-chip" 
+              [class.active]="!selectedGenre()" 
+              (click)="clearFilter()">
         All
-      </mat-chip-option>
+      </button>
       @for (genre of (activeTab() === 0 ? movieGenres() : gameGenres()); track genre) {
-        <mat-chip-option 
-          [selected]="selectedGenre() === genre"
-          (click)="filterByGenre(genre)">
+        <button class="genre-chip" 
+                [class.active]="selectedGenre() === genre"
+                (click)="filterByGenre(genre)">
           {{ genre }}
-        </mat-chip-option>
+        </button>
       }
-    </mat-chip-listbox>
+    </div>
+
+    <!-- Content -->
+    @if (loading()) {
+      <div class="skeleton-grid">
+        @for (i of [1,2,3,4,5,6,7,8,9,10]; track i) {
+          <div class="skeleton-card" [style.animation-delay]="(i * 0.05) + 's'">
+            <div class="skeleton-image shimmer"></div>
+            <div class="skeleton-info">
+              <div class="skeleton-title shimmer"></div>
+              <div class="skeleton-year shimmer"></div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <!-- Movies Grid -->
+      @if (activeTab() === 0) {
+        <div class="media-grid">
+          @for (movie of movies(); track movie.id; let i = $index) {
+            <div class="media-card stagger-in" [style.animation-delay]="(i * 0.04) + 's'" (click)="openDetails(movie.id)">
+              <div class="card-image">
+                <img [src]="movie.poster_url" 
+                     (error)="onImageError($event)"
+                     [alt]="movie.title"
+                     loading="lazy">
+                <div class="card-overlay">
+                  <button class="card-play-btn">
+                    <mat-icon>play_arrow</mat-icon>
+                  </button>
+                </div>
+                @if (movie.imdb_rating) {
+                  <div class="card-rating" [style.color]="getRatingColor(movie.imdb_rating * 10)">
+                    <mat-icon>star</mat-icon> {{ movie.imdb_rating }}
+                  </div>
+                }
+              </div>
+              <div class="card-info">
+                <h3 class="card-title">{{ movie.title }}</h3>
+                <span class="card-year">{{ movie.year }}</span>
+              </div>
+            </div>
+          } @empty {
+            <div class="no-results">
+              <mat-icon>search_off</mat-icon>
+              <p>No movies found</p>
+              <button class="clear-btn" (click)="clearFilter()">Clear filters</button>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Games Grid -->
+      @if (activeTab() === 1) {
+        <div class="media-grid games-grid">
+          @for (game of games(); track game.id; let i = $index) {
+            <div class="media-card game-card stagger-in" [style.animation-delay]="(i * 0.04) + 's'" (click)="openDetails(game.id)">
+              <div class="card-image landscape">
+                <img [src]="game.background_image" 
+                     (error)="onImageError($event)"
+                     [alt]="game.name"
+                     loading="lazy">
+                <div class="card-overlay">
+                  <button class="card-play-btn">
+                    <mat-icon>play_arrow</mat-icon>
+                  </button>
+                </div>
+                @if (game.metacritic) {
+                  <div class="card-metacritic" 
+                       [class.high]="game.metacritic >= 75"
+                       [class.medium]="game.metacritic >= 50 && game.metacritic < 75"
+                       [class.low]="game.metacritic < 50">
+                    {{ game.metacritic }}
+                  </div>
+                }
+              </div>
+              <div class="card-info">
+                <h3 class="card-title">{{ game.name }}</h3>
+                <span class="card-year">{{ game.released | date:'yyyy' }}</span>
+              </div>
+            </div>
+          } @empty {
+            <div class="no-results">
+              <mat-icon>search_off</mat-icon>
+              <p>No games found</p>
+              <button class="clear-btn" (click)="clearFilter()">Clear filters</button>
+            </div>
+          }
+        </div>
+      }
+    }
   </div>
-
-  <!-- Search -->
-  <form class="search-form">
-    <mat-form-field class="search-full-width" appearance="outline">
-      <mat-label>Search {{ activeTab() === 0 ? 'Movies' : 'Games' }}</mat-label>
-      <input matInput [formControl]="myControl" [matAutocomplete]="auto" 
-             (keyup.enter)="searchMedia(myControl.value || '')">
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-      @for (option of filteredOptions | async; track option) {
-        <mat-option [value]="option">
-          {{ option.title || option.name }}
-        </mat-option>
-      }
-    </mat-autocomplete>
-  </form>
-
-  <!-- Tabs -->
-  <mat-tab-group [selectedIndex]="activeTab()" (selectedIndexChange)="onTabChange($event)">
-    <mat-tab label="Movies">
-      <ng-template matTabContent>
-        @if (loading()) {
-          <div class="loading-container">
-            <mat-spinner diameter="50"></mat-spinner>
-          </div>
-        } @else {
-          <div class="media-grid">
-            @for (movie of movies(); track movie.id) {
-              <mat-card class="media-card" (click)="openDetails(movie.id)">
-                <img mat-card-image 
-                     [src]="movie.poster_url" 
-                     (error)="onImageError($event)"
-                     [alt]="movie.title">
-                <mat-card-content>
-                  <h3 class="media-title">{{ movie.title }}</h3>
-                  <p class="media-year">{{ movie.year }}</p>
-                  @if (movie.imdb_rating) {
-                    <div class="rating" [style.color]="getRatingColor(movie.imdb_rating * 10)">
-                      <span>★</span> {{ movie.imdb_rating }}/10
-                    </div>
-                  }
-                </mat-card-content>
-              </mat-card>
-            } @empty {
-              <div class="no-results">No movies found</div>
-            }
-          </div>
-        }
-      </ng-template>
-    </mat-tab>
-    
-    <mat-tab label="Games">
-      <ng-template matTabContent>
-        @if (loading()) {
-          <div class="loading-container">
-            <mat-spinner diameter="50"></mat-spinner>
-          </div>
-        } @else {
-          <div class="media-grid">
-            @for (game of games(); track game.id) {
-              <mat-card class="media-card" (click)="openDetails(game.id)">
-                <img mat-card-image 
-                     [src]="game.background_image" 
-                     (error)="onImageError($event)"
-                     [alt]="game.name">
-                <mat-card-content>
-                  <h3 class="media-title">{{ game.name }}</h3>
-                  <p class="media-year">{{ game.released | date:'yyyy' }}</p>
-                  @if (game.metacritic) {
-                    <div class="metacritic-badge" 
-                         [class.high]="game.metacritic >= 75"
-                         [class.medium]="game.metacritic >= 50 && game.metacritic < 75"
-                         [class.low]="game.metacritic < 50">
-                      {{ game.metacritic }}
-                    </div>
-                  }
-                </mat-card-content>
-              </mat-card>
-            } @empty {
-              <div class="no-results">No games found</div>
-            }
-          </div>
-        }
-      </ng-template>
-    </mat-tab>
-  </mat-tab-group>
 </div>

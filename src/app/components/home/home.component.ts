@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -63,6 +63,24 @@ export class HomeComponent implements OnInit, OnDestroy {
   loading = signal<boolean>(true);
   activeTab = signal<number>(0);
 
+  // Featured item for the hero banner
+  featuredMovie = computed(() => {
+    const items = this.movies();
+    if (items.length === 0) return null;
+    // Pick a highly-rated movie for the hero
+    const rated = items.filter(m => m.imdb_rating && m.imdb_rating >= 7 && m.poster_url);
+    if (rated.length > 0) return rated[Math.floor(Math.random() * Math.min(rated.length, 5))];
+    return items[0];
+  });
+
+  featuredGame = computed(() => {
+    const items = this.games();
+    if (items.length === 0) return null;
+    const rated = items.filter(g => g.metacritic && g.metacritic >= 75 && g.background_image);
+    if (rated.length > 0) return rated[Math.floor(Math.random() * Math.min(rated.length, 5))];
+    return items[0];
+  });
+
   myControl = new FormControl();
   filteredOptions!: Observable<MediaItem[]>;
 
@@ -77,7 +95,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => (typeof value === 'string' ? value : value?.title || value?.name || '')),
-      map(name => name ? this._filter(name) : this.currentItems.slice())
+      map(name => name ? this._filter(name) : this.currentItems.slice(0, 10))
     );
 
     this.activatedRoute.params.pipe(takeUntil(this.destroy$)).subscribe((params: Params) => {
@@ -90,15 +108,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   async loadGenres() {
-    console.log('Loading genres from Supabase...');
     try {
       const [movieGenresData, gameGenresData] = await Promise.all([
         this.supabase.getGenres(),
         this.supabase.getGameGenres()
       ]);
-      
-      console.log('Movie genres:', movieGenresData);
-      console.log('Game genres:', gameGenresData);
       
       if (movieGenresData.data) {
         this.movieGenres.set(movieGenresData.data.map(g => g.name));
@@ -113,7 +127,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   async loadData() {
     this.loading.set(true);
-    console.log('Loading movies and games from Supabase...');
     
     try {
       const [moviesData, gamesData] = await Promise.all([
@@ -121,18 +134,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.supabase.getGames()
       ]);
       
-      console.log('Movies response:', moviesData);
-      console.log('Games response:', gamesData);
-      console.log('First movie:', moviesData.data?.[0]);
-      console.log('First game:', gamesData.data?.[0]);
-      
       if (moviesData.data) {
         this.movies.set(moviesData.data);
-        console.log('Movies loaded:', moviesData.data.length);
       }
       if (gamesData.data) {
         this.games.set(gamesData.data);
-        console.log('Games loaded:', gamesData.data.length);
       }
     } catch (err) {
       console.error('Error loading data:', err);
@@ -190,12 +196,20 @@ export class HomeComponent implements OnInit, OnDestroy {
     const filterValue = value.toLowerCase();
     return this.currentItems.filter(item => 
       (item.title || item.name || '').toLowerCase().includes(filterValue)
-    );
+    ).slice(0, 10);
   }
 
   openDetails(id: number): void {
     const type = this.activeTab() === 0 ? 'movie' : 'game';
     this.router.navigate(['details', type, id]);
+  }
+
+  openFeaturedDetails(): void {
+    const featured = this.activeTab() === 0 ? this.featuredMovie() : this.featuredGame();
+    if (featured) {
+      const type = this.activeTab() === 0 ? 'movie' : 'game';
+      this.router.navigate(['details', type, featured.id]);
+    }
   }
 
   clearFilter(): void {
@@ -205,8 +219,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getRatingColor(value: number): string {
-    if (value >= 75) return '#5ee432';
-    if (value >= 50) return '#ffa50';
+    if (value >= 75) return '#46d369';
+    if (value >= 50) return '#ffc107';
     if (value >= 30) return '#f7aa38';
     return '#ef4655';
   }

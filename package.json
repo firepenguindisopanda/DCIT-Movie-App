@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 4200",
-    "build": "ng build",
+    "build": "node scripts/replace-env.js && ng build",
+    "prebuild": "node scripts/replace-env.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "e2e": "ng e2e",
@@ -43,6 +44,7 @@
     "@types/jasmine": "~4.0.0",
     "@types/node": "^18.0.0",
     "cypress": "latest",
+    "dotenv": "^17.3.1",
     "jasmine-core": "~4.0.1",
     "karma": "~6.3.17",
     "karma-chrome-launcher": "~3.1.1",
