@@ -83,6 +83,66 @@
               </div>
             </div>
 
+            <!-- Overview / Description -->
+            @if (media()!.overview) {
+              <div class="overview-section">
+                <h3 class="section-label">Overview</h3>
+                <p class="overview-text">{{ media()!.overview }}</p>
+              </div>
+            }
+
+            <!-- Movie Cast (from TMDB) -->
+            @if (isMovie && media()!.cast && media()!.cast!.length > 0) {
+              <div class="cast-section">
+                <h3 class="section-label">Cast</h3>
+                <div class="cast-grid">
+                  @for (actor of media()!.cast!.slice(0, 10); track actor.id) {
+                    <div class="cast-item">
+                      <div class="cast-photo">
+                        @if (actor.profile_path) {
+                          <img [src]="actor.profile_path" [alt]="actor.name">
+                        } @else {
+                          <div class="cast-photo-placeholder">
+                            <mat-icon>person</mat-icon>
+                          </div>
+                        }
+                      </div>
+                      <div class="cast-info">
+                        <span class="cast-name">{{ actor.name }}</span>
+                        <span class="cast-character">{{ actor.character }}</span>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- Movie Crew (from TMDB) -->
+            @if (isMovie && media()!.crew && media()!.crew!.length > 0) {
+              <div class="crew-section">
+                <h3 class="section-label">Crew</h3>
+                <div class="crew-grid">
+                  @for (member of getKeyCrew(); track member.id + member.job) {
+                    <div class="crew-item">
+                      <div class="crew-photo">
+                        @if (member.profile_path) {
+                          <img [src]="member.profile_path" [alt]="member.name">
+                        } @else {
+                          <div class="crew-photo-placeholder">
+                            <mat-icon>person</mat-icon>
+                          </div>
+                        }
+                      </div>
+                      <div class="crew-info">
+                        <span class="crew-name">{{ member.name }}</span>
+                        <span class="crew-job">{{ member.job }}</span>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
             <!-- Rating Gauge & Favorite -->
             <div class="action-row">
               <div class="gauge-container">
@@ -198,6 +258,83 @@
             }
           </div>
         </div>
+
+        <!-- Game Description (from RAWG) -->
+        @if (!isMovie && media()!.description) {
+          <div class="overview-section">
+            <h3 class="section-label">About</h3>
+            <p class="overview-text" [innerHTML]="media()!.description"></p>
+          </div>
+        }
+
+        <!-- Game Screenshots -->
+        @if (!isMovie && media()!.screenshots && media()!.screenshots!.length > 0) {
+          <div class="screenshots-section">
+            <h3 class="section-label">Screenshots</h3>
+            <div class="screenshots-grid">
+              @for (screenshot of media()!.screenshots; track $index) {
+                <div class="screenshot-item">
+                  <img [src]="screenshot.image" [alt]="'Screenshot'" loading="lazy">
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Game Trailers -->
+        @if (!isMovie && media()!.trailers && media()!.trailers!.length > 0) {
+          <div class="trailers-section">
+            <h3 class="section-label">Trailers & Videos</h3>
+            <div class="trailers-grid">
+              @for (trailer of media()!.trailers; track trailer.id) {
+                <div class="trailer-item">
+                  <a [href]="'https://www.youtube.com/watch?v=' + trailer.data.max" target="_blank" rel="noopener">
+                    <div class="trailer-thumbnail">
+                      <img [src]="trailer.preview" [alt]="trailer.name">
+                      <div class="play-overlay">
+                        <mat-icon>play_circle</mat-icon>
+                      </div>
+                    </div>
+                    <span class="trailer-name">{{ trailer.name }}</span>
+                  </a>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Game Info (Developers, Website) -->
+        @if (!isMovie && (media()!.developers?.length || media()!.website)) {
+          <div class="info-cards">
+            @if (media()!.developers && media()!.developers!.length > 0) {
+              <div class="info-card">
+                <mat-icon>code</mat-icon>
+                <div>
+                  <span class="info-label">Developer</span>
+                  <span class="info-value">{{ media()!.developers![0] }}</span>
+                </div>
+              </div>
+            }
+            @if (media()!.publishers && media()!.publishers!.length > 0) {
+              <div class="info-card">
+                <mat-icon>business</mat-icon>
+                <div>
+                  <span class="info-label">Publisher</span>
+                  <span class="info-value">{{ media()!.publishers![0] }}</span>
+                </div>
+              </div>
+            }
+            @if (media()!.website) {
+              <div class="info-card">
+                <mat-icon>language</mat-icon>
+                <div>
+                  <span class="info-label">Website</span>
+                  <a [href]="media()!.website" target="_blank" rel="noopener" class="info-link">Visit Website</a>
+                </div>
+              </div>
+            }
+          </div>
+        }
 
         <!-- Comments Section -->
         <div class="comments-section">

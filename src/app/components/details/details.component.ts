@@ -13,6 +13,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { GaugeModule } from 'angular-gauge';
 import { Subject, takeUntil } from 'rxjs';
 import { SupabaseService } from '../../services/supabase.service';
+import { HttpService } from '../../services/http.service';
+import { TmdbService, TMDBCast, TMDBCrew } from '../../services/tmdb.service';
 import { AuthService } from '../../services/auth.service';
 
 interface MediaDetail {
@@ -40,6 +42,31 @@ interface MediaDetail {
   status?: string;
   genres?: string[];
   platforms?: string[];
+  
+  // Game-specific fields from RAWG
+  description?: string;
+  website?: string;
+  developers?: string[];
+  publishers?: string[];
+  screenshots?: GameScreenshot[];
+  trailers?: GameTrailer[];
+
+  // Movie-specific fields from TMDB
+  cast?: TMDBCast[];
+  crew?: TMDBCrew[];
+}
+
+interface GameScreenshot {
+  image: string;
+}
+
+interface GameTrailer {
+  id: number;
+  name: string;
+  preview: string;
+  data: {
+    max: string;
+  };
 }
 
 interface Comment {
@@ -71,6 +98,8 @@ interface Comment {
 })
 export class DetailsComponent implements OnInit, OnDestroy {
   private supabase = inject(SupabaseService);
+  private httpService = inject(HttpService);
+  private tmdbService = inject(TmdbService);
   readonly authService = inject(AuthService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -120,12 +149,53 @@ export class DetailsComponent implements OnInit, OnDestroy {
       if (this.mediaType() === 'movie') {
         result = await this.supabase.getMovieById(this.mediaId());
         if (result.data) {
-          this.media.set(result.data as MediaDetail);
+          const movieData = result.data as MediaDetail;
+          
+          // Fetch cast & crew from TMDB
+          try {
+            const tmdbCredits = await this.tmdbService.getMovieCredits(this.mediaId()).toPromise();
+            if (tmdbCredits) {
+              this.media.set({
+                ...movieData,
+                cast: tmdbCredits.cast,
+                crew: tmdbCredits.crew
+              } as MediaDetail);
+            } else {
+              this.media.set(movieData);
+            }
+          } catch (tmdbError) {
+            console.error('Error loading TMDB credits:', tmdbError);
+            this.media.set(movieData);
+          }
         }
       } else {
+        // For games, fetch from Supabase first, then enrich with RAWG API data
         result = await this.supabase.getGameById(this.mediaId());
         if (result.data) {
-          this.media.set(result.data as MediaDetail);
+          const gameData = result.data as MediaDetail;
+          
+          // Fetch additional details from RAWG API
+          try {
+            const rawgResult = await this.httpService.getGameDetails(this.mediaId().toString()).toPromise();
+            if (rawgResult) {
+              // Merge RAWG data into game data
+              this.media.set({
+                ...gameData,
+                description: (rawgResult as any).description,
+                website: (rawgResult as any).website,
+                developers: (rawgResult as any).developers?.map((d: any) => d.name),
+                publishers: (rawgResult as any).publishers?.map((p: any) => p.name),
+                screenshots: (rawgResult as any).screenshots,
+                trailers: (rawgResult as any).trailers
+              } as MediaDetail);
+            } else {
+              this.media.set(gameData);
+            }
+          } catch (rawgError) {
+            console.error('Error loading RAWG data:', rawgError);
+            // Use basic game data if RAWG fails
+            this.media.set(gameData);
+          }
         }
       }
 
@@ -243,6 +313,25 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   getColorForGauge(): (value: number) => string {
     return (value: number) => this.getColor(value);
+  }
+
+  // Get key crew members (Director, Producer, Writer, etc.)
+  getKeyCrew(): any[] {
+    const crew = this.media()?.crew || [];
+    const keyJobs = ['Director', 'Producer', 'Screenplay', 'Writer', 'Story', 'Executive Producer'];
+    
+    const keyCrew = crew
+      .filter((c: any) => keyJobs.includes(c.job))
+      .slice(0, 8);
+    
+    // Remove duplicates by name+job
+    const seen = new Set();
+    return keyCrew.filter((c: any) => {
+      const key = `${c.name}-${c.job}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
   }
 
   getPlatformIcon(platform: string): string {
