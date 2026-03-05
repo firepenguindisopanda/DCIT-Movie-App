@@ -44,6 +44,56 @@ This application depends on several API keys and URLs, which **must not** be com
 
    The GitHub workflow should export them before running `npm run build`.
 
+### Manual Wrangler deployment
+If you prefer to deploy by hand instead of using the provided GitHub Action, follow these steps:
+
+1. Install Wrangler globally (if you haven’t already):
+   ```bash
+   npm install -g wrangler
+   ```
+
+2. Obtain a Cloudflare API token with **Pages:Edit** permission.
+   * Visit https://dash.cloudflare.com/profile/api-tokens
+   * Create a token using the “Cloudflare Pages – Edit” template or a
+     custom token granting the same scope.
+   * Copy the token; you’ll need it in the next step.
+
+3. Configure your environment variables locally (for building) and for
+   wrangler:
+   ```bash
+   export RAWG_API_KEY=…
+   export SUPABASE_URL=…
+   export SUPABASE_KEY=…
+   export TMDB_API_KEY=…
+   export CLOUDFLARE_ACCOUNT_ID=<your-account-id>
+   export CLOUDFLARE_API_TOKEN=<the-token-you-just-created>
+   ```
+   (On Windows use `set` or configure via PowerShell `$env:`.)
+
+4. Build the application:
+   ```bash
+   npm ci
+   npm run build
+   ```
+   The `npm run build` step uses `scripts/replace-env.js` to inject the
+   API keys into `environment.prod.ts` before calling `ng build`.
+
+5. Deploy using wrangler:
+   ```bash
+   wrangler pages deploy dist/movie-viewer \
+     --project-name movie-game-viewer
+   ```
+   Wrangler will read `CLOUDFLARE_ACCOUNT_ID` and
+   `CLOUDFLARE_API_TOKEN` from the environment; if those are missing the
+   command will fail with an error similar to the one seen in your
+   workflow log.
+
+6. Optionally, you can pass `--branch <name>` to deploy to a preview
+   branch.
+
+> When using the GitHub Action, the same variables are supplied via
+> secrets; the manual process is equivalent but run on your own machine.
+
 3. When running locally `ng serve` will use your `environment.ts`. On the server, `npm run build` executes `node scripts/replace-env.js` which replaces the placeholders in `environment.prod.ts` with the secrets you provided.
 
 4. **Rotate or revoke any keys that were accidentally committed**. See the Git history for past values.
