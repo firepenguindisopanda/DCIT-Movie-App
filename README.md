@@ -12,6 +12,15 @@
 
 ## Instructions
 
+### Prerequisites
+Before you begin, make sure you have the following installed on your system:
+
+- [Git](https://git-scm.com/)
+- [Node.js](https://nodejs.org/) (v18+ recommended)
+- [npm](https://www.npmjs.com/) (bundled with Node)
+- Angular CLI (`npm install -g @angular/cli`)
+- (optional) [Wrangler](https://developers.cloudflare.com/workers/cli-wrangler/install) for manual deployments
+
 The Project is located inside the folder `dcit_movie_app`
 To view this Angular Project on your local machine:
 
