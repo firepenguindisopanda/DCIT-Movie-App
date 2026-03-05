@@ -64,11 +64,14 @@
                 @if (media()!.released) {
                   <span class="meta-item">{{ media()!.released | date:'yyyy' }}</span>
                 }
-                @if (media()!.rating && isMovie) {
-                  <span class="meta-badge">{{ media()!.rating }}</span>
+                @if (media()!.release_date && isMovie) {
+                  <span class="meta-item">{{ media()!.release_date | date:'mediumDate' }}</span>
                 }
-                @if (media()!.length) {
-                  <span class="meta-item">{{ media()!.length }} min</span>
+                @if (media()!.runtime && isMovie) {
+                  <span class="meta-item">{{ media()!.runtime }} min</span>
+                }
+                @if (media()!.status && isMovie) {
+                  <span class="meta-badge">{{ media()!.status }}</span>
                 }
               </div>
 
@@ -111,21 +114,29 @@
 
             <!-- Info Cards -->
             <div class="info-cards">
-              @if (media()!.studio) {
-                <div class="info-card">
-                  <mat-icon>business</mat-icon>
+              @if (media()!.tagline && isMovie) {
+                <div class="info-card tagline">
                   <div>
-                    <span class="info-label">Studio</span>
-                    <span class="info-value">{{ media()!.studio }}</span>
+                    <span class="info-label">Tagline</span>
+                    <span class="info-value">"{{ media()!.tagline }}"</span>
                   </div>
                 </div>
               }
-              @if (media()!.worldwide_gross) {
+            @if (media()!.budget && (media()!.budget ?? 0) > 0 && isMovie) {
+                <div class="info-card">
+                  <mat-icon>account_balance</mat-icon>
+                  <div>
+                    <span class="info-label">Budget</span>
+                    <span class="info-value">{{ media()!.budget | currency:'USD':'symbol':'1.0-0' }}</span>
+                  </div>
+                </div>
+              }
+              @if (media()!.revenue && (media()!.revenue ?? 0) > 0 && isMovie) {
                 <div class="info-card">
                   <mat-icon>payments</mat-icon>
                   <div>
                     <span class="info-label">Box Office</span>
-                    <span class="info-value">{{ media()!.worldwide_gross }}</span>
+                    <span class="info-value">{{ media()!.revenue | currency:'USD':'symbol':'1.0-0' }}</span>
                   </div>
                 </div>
               }
@@ -152,34 +163,22 @@
         <div class="ratings-section">
           <h3 class="section-label">Ratings</h3>
           <div class="ratings-grid">
-            @if (media()!.imdb_rating) {
-              <div class="rating-card imdb">
+            @if (media()!.vote_average || media()!.imdb_rating) {
+              <div class="rating-card tmdb">
                 <div class="rating-source">
-                  <span class="rating-logo">IMDb</span>
+                  <span class="rating-logo">TMDB</span>
                 </div>
                 <div class="rating-score">
-                  <span class="score-value">{{ media()!.imdb_rating }}</span>
+                  <span class="score-value">{{ (media()!.vote_average ?? media()!.imdb_rating) | number:'1.1-1' }}</span>
                   <span class="score-max">/10</span>
                 </div>
                 <div class="score-bar">
-                  <div class="score-fill" [style.width.%]="(media()!.imdb_rating || 0) * 10" 
-                       [style.background-color]="getColor((media()!.imdb_rating || 0) * 10)"></div>
+                  <div class="score-fill" [style.width.%]="((media()!.vote_average ?? media()!.imdb_rating) || 0) * 10" 
+                       [style.background-color]="getColor(((media()!.vote_average ?? media()!.imdb_rating) || 0) * 10)"></div>
                 </div>
-              </div>
-            }
-            @if (media()!.rt_score) {
-              <div class="rating-card rt">
-                <div class="rating-source">
-                  <span class="rating-logo">RT</span>
-                </div>
-                <div class="rating-score">
-                  <span class="score-value">{{ media()!.rt_score }}</span>
-                  <span class="score-max">%</span>
-                </div>
-                <div class="score-bar">
-                  <div class="score-fill" [style.width.%]="media()!.rt_score" 
-                       [style.background-color]="getColor(media()!.rt_score || 0)"></div>
-                </div>
+                @if (media()!.vote_count) {
+                  <span class="vote-count">{{ media()!.vote_count | number }} votes</span>
+                }
               </div>
             }
             @if (media()!.metacritic) {

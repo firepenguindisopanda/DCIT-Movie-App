@@ -16,16 +16,22 @@ import { SupabaseService } from '../../services/supabase.service';
 
 interface MediaItem {
   id: number;
+  tmdb_id?: number;  // TMDB movie ID
   title?: string;
   name?: string;
   year?: number;
   released?: string;
   poster_url?: string;
+  backdrop_url?: string;
   background_image?: string;
   imdb_rating?: number;
+  vote_average?: number;
   rating?: number;
   metacritic?: number;
   genres?: string[];
+  overview?: string;
+  runtime?: number;
+  tagline?: string;
 }
 
 @Component({
@@ -67,8 +73,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   featuredMovie = computed(() => {
     const items = this.movies();
     if (items.length === 0) return null;
-    // Pick a highly-rated movie for the hero
-    const rated = items.filter(m => m.imdb_rating && m.imdb_rating >= 7 && m.poster_url);
+    // Pick a highly-rated movie for the hero (use vote_average for TMDB or imdb_rating fallback)
+    const rated = items.filter(m => {
+      const rating = m.vote_average ?? m.imdb_rating;
+      const hasImage = m.poster_url || m.backdrop_url;
+      return rating !== undefined && rating >= 7 && hasImage;
+    });
     if (rated.length > 0) return rated[Math.floor(Math.random() * Math.min(rated.length, 5))];
     return items[0];
   });
@@ -204,11 +214,27 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.router.navigate(['details', type, id]);
   }
 
+  // Helper to get the correct ID for navigation (tmdb_id for movies, id for games)
+  getMediaId(item: MediaItem): number {
+    return item.tmdb_id ?? item.id;
+  }
+
+  // Helper to get rating (vote_average for TMDB, imdb_rating fallback)
+  getRating(item: MediaItem): number | undefined {
+    return item.vote_average ?? item.imdb_rating;
+  }
+
+  // Helper to get hero image (backdrop_url for movies, background_image for games)
+  getHeroImage(item: MediaItem): string | undefined {
+    return item.backdrop_url ?? item.background_image ?? item.poster_url;
+  }
+
   openFeaturedDetails(): void {
     const featured = this.activeTab() === 0 ? this.featuredMovie() : this.featuredGame();
     if (featured) {
       const type = this.activeTab() === 0 ? 'movie' : 'game';
-      this.router.navigate(['details', type, featured.id]);
+      const id = this.getMediaId(featured);
+      this.router.navigate(['details', type, id]);
     }
   }
 
@@ -227,7 +253,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   onImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    img.src = 'https://via.placeholder.com/300x450?text=No+Image';
+    img.src = 'assets/no-image.png';
   }
 
   ngOnDestroy(): void {

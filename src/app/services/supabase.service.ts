@@ -51,7 +51,7 @@ export class SupabaseService {
   }
 
   async getMovieById(id: number) {
-    return this.supabase.from('movies').select('*').eq('id', id).single();
+    return this.supabase.from('movies').select('*').eq('tmdb_id', id).single();
   }
 
   async getMoviesByGenre(genre: string) {
@@ -63,7 +63,7 @@ export class SupabaseService {
   }
 
   async getGenres() {
-    return this.supabase.from('genres').select('*').order('name');
+    return this.supabase.from('movie_genres').select('*').order('name');
   }
   async getGames() {
     return this.supabase.from('games').select('*');

@@ -17,19 +17,27 @@ import { AuthService } from '../../services/auth.service';
 
 interface MediaDetail {
   id: number;
+  tmdb_id?: number;
   title?: string;
   name?: string;
   year?: number;
   released?: string;
+  release_date?: string;
   poster_url?: string;
+  backdrop_url?: string;
   background_image?: string;
+  overview?: string;
   imdb_rating?: number;
+  vote_average?: number;
+  vote_count?: number;
   rating?: number;
   metacritic?: number;
-  rt_score?: number;
-  worldwide_gross?: string;
-  studio?: string;
-  length?: number;
+  // Removed: rt_score, worldwide_gross, studio (not available from TMDB)
+  runtime?: number;
+  tagline?: string;
+  budget?: number;
+  revenue?: number;
+  status?: string;
   genres?: string[];
   platforms?: string[];
 }
@@ -200,16 +208,29 @@ export class DetailsComponent implements OnInit, OnDestroy {
   getRating(): number {
     const m = this.media();
     if (!m) return 0;
+    // For games, prefer metacritic
     if (m.metacritic) return m.metacritic;
+    // For movies, use vote_average (TMDB) or imdb_rating fallback
+    if (m.vote_average) return m.vote_average * 10;
     if (m.imdb_rating) return m.imdb_rating * 10;
     return 0;
   }
 
   getRatingLabel(): string {
-    const rating = this.getRating();
-    if (rating >= 75) return 'Excellent';
-    if (rating >= 60) return 'Good';
-    if (rating >= 40) return 'Mixed';
+    const m = this.media();
+    if (!m) return '';
+    // For games with metacritic score
+    if (m.metacritic) {
+      if (m.metacritic >= 75) return 'Excellent';
+      if (m.metacritic >= 50) return 'Good';
+      if (m.metacritic >= 30) return 'Mixed';
+      return 'Poor';
+    }
+    // For movies with vote_average
+    const rating = m.vote_average ?? m.imdb_rating ?? 0;
+    if (rating >= 7) return 'Excellent';
+    if (rating >= 5) return 'Good';
+    if (rating >= 3) return 'Mixed';
     return 'Poor';
   }
 

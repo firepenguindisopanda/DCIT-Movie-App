@@ -3,7 +3,7 @@
   @if (!loading()) {
     @if (activeTab() === 0 && featuredMovie(); as featured) {
       <div class="hero" (click)="openFeaturedDetails()">
-        <img [src]="featured.poster_url || featured.background_image" 
+        <img [src]="getHeroImage(featured)" 
              [alt]="featured.title" 
              class="hero-bg">
         <div class="hero-gradient"></div>
@@ -16,9 +16,9 @@
             @if (featured.year) {
               <span>{{ featured.year }}</span>
             }
-            @if (featured.imdb_rating) {
+            @if (getRating(featured); as rating) {
               <span class="hero-rating">
-                <mat-icon>star</mat-icon> {{ featured.imdb_rating }}/10
+                <mat-icon>star</mat-icon> {{ rating | number:'1.1-1' }}/10
               </span>
             }
           </div>
@@ -97,9 +97,9 @@
                [placeholder]="'Search ' + (activeTab() === 0 ? 'movies' : 'games') + '...'">
         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" class="search-autocomplete">
           @for (option of filteredOptions | async; track option) {
-            <mat-option [value]="option" (onSelectionChange)="openDetails(option.id)">
+            <mat-option [value]="option" (onSelectionChange)="openDetails(getMediaId(option))">
               <div class="autocomplete-option">
-                <img [src]="option.poster_url || option.background_image || 'https://via.placeholder.com/40x60'" 
+                <img [src]="option.poster_url || option.backdrop_url || option.background_image || 'assets/no-image.png'" 
                      class="autocomplete-thumb">
                 <div>
                   <span class="autocomplete-title">{{ option.title || option.name }}</span>
@@ -146,7 +146,7 @@
       @if (activeTab() === 0) {
         <div class="media-grid">
           @for (movie of movies(); track movie.id; let i = $index) {
-            <div class="media-card stagger-in" [style.animation-delay]="(i * 0.04) + 's'" (click)="openDetails(movie.id)">
+            <div class="media-card stagger-in" [style.animation-delay]="(i * 0.04) + 's'" (click)="openDetails(getMediaId(movie))">
               <div class="card-image">
                 <img [src]="movie.poster_url" 
                      (error)="onImageError($event)"

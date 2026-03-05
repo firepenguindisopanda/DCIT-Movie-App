@@ -12,8 +12,8 @@
     "pipeline": "npm run fetch:movies && npm run fetch:games && npm run transform:movies && npm run transform:games"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.39.0",
-    "axios": "^1.6.0",
+    "@supabase/supabase-js": "^2.98.0",
+    "axios": "^1.13.6",
     "dotenv": "^16.6.1"
   }
 }
