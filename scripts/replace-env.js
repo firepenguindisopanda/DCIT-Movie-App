@@ -8,7 +8,9 @@ let content = fs.readFileSync(envFile, 'utf8');
 const replacements = {
   'YOUR_RAWG_API_KEY': process.env.RAWG_API_KEY || '',
   'YOUR_SUPABASE_URL': process.env.SUPABASE_URL || '',
-  'YOUR_SUPABASE_KEY': process.env.SUPABASE_KEY || ''
+  'YOUR_SUPABASE_KEY': process.env.SUPABASE_KEY || '',
+  // TMDB configuration (key is the only secret; base URLs are constant)
+  'YOUR_TMDB_API_KEY': process.env.TMDB_API_KEY || ''
 };
 
 let modified = false;

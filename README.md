@@ -23,6 +23,33 @@ To view this Angular Project on your local machine:
 
 
 
+### Environment configuration
+
+This application depends on several API keys and URLs, which **must not** be committed to the repo. Instead, an ignored `src/environments/environment.ts` file is used for local development and the `replace-env.js` script injects values during CI builds.
+
+1. Copy `src/environments/environment.example.ts` to `src/environments/environment.ts` and fill in the placeholders:
+   ```ts
+   RAWG_API_KEY='…'
+   SUPABASE_URL='…'
+   SUPABASE_KEY='…'
+   TMDB_API_KEY='…'
+   ```
+   `environment.ts` is listed in `.gitignore` so it will not be pushed.
+
+2. Add the corresponding values to a `.env` file (ignored as well) or set them as GitHub Actions secrets. The build script reads the following names:
+   * `RAWG_API_KEY`
+   * `SUPABASE_URL`
+   * `SUPABASE_KEY`
+   * `TMDB_API_KEY`
+
+   The GitHub workflow should export them before running `npm run build`.
+
+3. When running locally `ng serve` will use your `environment.ts`. On the server, `npm run build` executes `node scripts/replace-env.js` which replaces the placeholders in `environment.prod.ts` with the secrets you provided.
+
+4. **Rotate or revoke any keys that were accidentally committed**. See the Git history for past values.
+
+---
+
 ### Future Features that can be implemented
 
 - Provide a search button to search for movies by title
