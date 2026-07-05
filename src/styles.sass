@@ -1,0 +1,306 @@
+// ============================================
+// DCIT Entertainment - Global Theme
+// Streaming-platform inspired dark theme
+// ============================================
+
+@use '@angular/material' as mat
+
+// --- UWI Brand Color Palettes ---
+$_navy-map: (50: #eef2f7, 100: #d5deeb, 200: #b9c9dd, 300: #9db3cf, 400: #88a3c5, 500: #003366, 600: #002e5e, 700: #002753, 800: #002049, 900: #001438, contrast: (50: rgba(0,0,0,0.87), 100: rgba(0,0,0,0.87), 200: rgba(0,0,0,0.87), 300: rgba(0,0,0,0.87), 400: white, 500: white, 600: white, 700: white, 800: white, 900: white))
+$_gold-map: (50: #fffbea, 100: #fff5c5, 200: #ffef8b, 300: #ffe84d, 400: #ffc72c, 500: #ffc72c, 600: #f5b800, 700: #e0a800, 800: #cc9400, 900: #b38000, contrast: (50: rgba(0,0,0,0.87), 100: rgba(0,0,0,0.87), 200: rgba(0,0,0,0.87), 300: rgba(0,0,0,0.87), 400: rgba(0,0,0,0.87), 500: rgba(0,0,0,0.87), 600: rgba(0,0,0,0.87), 700: rgba(0,0,0,0.87), 800: white, 900: white))
+$_crimson-map: (50: #fde8eb, 100: #f9c5cd, 200: #f49eab, 300: #ef7789, 400: #eb5a70, 500: #c8102e, 600: #b00e28, 700: #960c22, 800: #7d0a1d, 900: #550614, contrast: (50: rgba(0,0,0,0.87), 100: rgba(0,0,0,0.87), 200: rgba(0,0,0,0.87), 300: white, 400: white, 500: white, 600: white, 700: white, 800: white, 900: white))
+
+$uwi-navy: mat.m2-define-palette($_navy-map)
+$uwi-gold: mat.m2-define-palette($_gold-map)
+$uwi-crimson: mat.m2-define-palette($_crimson-map)
+
+// --- Light Academic Theme ---
+$_theme-config: (color: (primary: $uwi-navy, accent: $uwi-gold, warn: $uwi-crimson), density: 0)
+$dcit-theme: mat.m2-define-light-theme($_theme-config)
+
+@include mat.core()
+@include mat.all-component-themes($dcit-theme)
+
+// --- CSS Custom Properties (Design Tokens) ---
+\:root
+  // Backgrounds
+  --bg-primary: #F8F9FA
+  --bg-surface: #FFFFFF
+  --bg-elevated: #FFFFFF
+  --bg-card: #FFFFFF
+  --bg-card-hover: #F1F1F1
+  --bg-overlay: rgba(0, 51, 102, 0.6)
+
+  // Accent Colors (UWI Brand)
+  --accent-red: #C8102E
+  --accent-red-hover: #a00d25
+  --accent-gold: #FFC72C
+  --accent-gold-hover: #f5b800
+  --accent-blue: #003366
+  --accent-blue-hover: #002753
+  --accent-green: #10b981
+  --accent-orange: #f59e0b
+
+  // Text
+  --text-primary: #003366
+  --text-secondary: #53565A
+  --text-muted: #9CA3AF
+  --text-accent: #C8102E
+  --text-white: #FFFFFF
+
+  // Borders
+  --border-subtle: #E5E7EB
+  --border-light: #D1D5DB
+  --border-focus: #003366
+
+  // Shadows
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1)
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1)
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1)
+  --shadow-glow: 0 0 20px rgba(0, 51, 102, 0.1)
+
+  // Radius
+  --radius-xs: 4px
+  --radius-sm: 6px
+  --radius-md: 8px
+  --radius-lg: 12px
+  --radius-xl: 16px
+  --radius-full: 9999px
+
+  // Transitions
+  --transition-fast: 150ms ease
+  --transition-base: 250ms ease
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1)
+
+  // Spacing
+  --header-height: 64px
+
+  // Font
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif
+
+// --- Global Reset & Base ---
+*
+  margin: 0
+  padding: 0
+  box-sizing: border-box
+
+html
+  scroll-behavior: smooth
+
+body
+  font-family: var(--font-primary)
+  background-color: var(--bg-primary)
+  color: var(--text-secondary)
+  line-height: 1.5
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+  overflow-x: hidden
+
+// --- Scrollbar Styling ---
+\::-webkit-scrollbar
+  width: 8px
+
+\::-webkit-scrollbar-track
+  background: var(--bg-primary)
+
+\::-webkit-scrollbar-thumb
+  background: #333
+  border-radius: var(--radius-full)
+
+  &:hover
+    background: #555
+
+// --- Angular Material Overrides (Light Academic Theme) ---
+
+// Form fields
+.mat-mdc-form-field
+  .mdc-text-field--outlined
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing
+      border-color: var(--border-light) !important
+
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled):hover
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing
+      border-color: var(--text-secondary) !important
+
+  .mdc-text-field--outlined.mdc-text-field--focused
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing
+      border-color: var(--accent-blue) !important
+
+  .mdc-floating-label
+    color: var(--text-muted) !important
+
+  .mdc-text-field__input
+    color: var(--text-primary) !important
+    caret-color: var(--accent-blue) !important
+
+// Cards
+.mat-mdc-card
+  background-color: var(--bg-card) !important
+  border: 1px solid var(--border-subtle)
+  border-radius: var(--radius-lg) !important
+  color: var(--text-primary) !important
+
+// Tab group styling
+.mat-mdc-tab-group
+  .mat-mdc-tab
+    color: var(--text-muted)
+    font-family: var(--font-primary)
+    font-weight: 500
+    letter-spacing: 0.02em
+    min-width: 120px
+
+    &.mdc-tab--active
+      color: var(--text-primary) !important
+
+  .mdc-tab-indicator__content--underline
+    border-color: var(--accent-blue) !important
+    border-width: 3px !important
+    border-radius: 3px 3px 0 0
+
+  .mat-mdc-tab-body-wrapper
+    margin-top: 8px
+
+// Chips
+.mat-mdc-chip
+  font-family: var(--font-primary) !important
+  font-size: 13px !important
+  font-weight: 500 !important
+
+// Primary buttons (Navy)
+.mat-mdc-raised-button.mat-primary
+  background-color: var(--accent-blue) !important
+  color: white !important
+  border-radius: var(--radius-sm) !important
+  font-weight: 600 !important
+  letter-spacing: 0.02em
+  transition: background-color var(--transition-fast), transform var(--transition-fast)
+
+  &:hover
+    background-color: var(--accent-blue-hover) !important
+    transform: translateY(-1px)
+
+// Accent buttons (Gold)
+.mat-mdc-raised-button.mat-accent
+  background-color: var(--accent-gold) !important
+  color: #000 !important
+  border-radius: var(--radius-sm) !important
+  font-weight: 600 !important
+
+  &:hover
+    background-color: var(--accent-gold-hover) !important
+
+// Warn buttons (Crimson)
+.mat-mdc-raised-button.mat-warn
+  background-color: var(--accent-red) !important
+  color: white !important
+
+  &:hover
+    background-color: var(--accent-red-hover) !important
+
+// Toolbar
+.mat-toolbar.mat-primary
+  background-color: transparent !important
+  color: var(--text-white)
+
+// Menu (light)
+.mat-mdc-menu-panel
+  background-color: var(--bg-surface) !important
+  border: 1px solid var(--border-subtle)
+  border-radius: var(--radius-md) !important
+
+  .mat-mdc-menu-item
+    color: var(--text-secondary) !important
+
+    &:hover
+      background-color: var(--bg-card-hover) !important
+
+// Spinner
+.mat-mdc-progress-spinner circle
+  stroke: var(--accent-blue) !important
+
+.cdk-overlay-dark-backdrop
+  background: rgba(0, 0, 0, 0.5)
+
+// Autocomplete panel (light)
+.mat-mdc-autocomplete-panel
+  background-color: var(--bg-surface) !important
+  border: 1px solid var(--border-subtle)
+
+  .mat-mdc-option
+    color: var(--text-secondary) !important
+
+    &:hover, &.mat-mdc-option-active
+      background-color: var(--bg-card-hover) !important
+
+// --- Utility Classes ---
+.text-accent
+  color: var(--accent-red)
+
+.text-gold
+  color: var(--accent-gold)
+
+.text-muted
+  color: var(--text-muted)
+
+// --- Animations ---
+@keyframes fadeInUp
+  from
+    opacity: 0
+    transform: translateY(20px)
+  to
+    opacity: 1
+    transform: translateY(0)
+
+@keyframes fadeIn
+  from
+    opacity: 0
+  to
+    opacity: 1
+
+@keyframes scaleIn
+  from
+    opacity: 0
+    transform: scale(0.95)
+  to
+    opacity: 1
+    transform: scale(1)
+
+.animate-fade-in-up
+  animation: fadeInUp 0.5s ease forwards
+
+.animate-fade-in
+  animation: fadeIn 0.4s ease forwards
+
+.animate-scale-in
+  animation: scaleIn 0.3s ease forwards
+
+// --- Skeleton / Shimmer ---
+@keyframes shimmer
+  0%
+    background-position: -400px 0
+  100%
+    background-position: 400px 0
+
+.shimmer
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%)
+  background-size: 800px 100%
+  animation: shimmer 1.5s infinite linear
+
+// --- Stagger fade-in for cards ---
+@keyframes cardFadeIn
+  from
+    opacity: 0
+    transform: translateY(16px)
+  to
+    opacity: 1
+    transform: translateY(0)
+
+.stagger-in
+  opacity: 0
+  animation: cardFadeIn 0.4s ease forwards

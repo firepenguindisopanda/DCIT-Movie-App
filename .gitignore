@@ -1,5 +1,5 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
-src/app/interceptors
+
 # compiled output
 /dist
 /tmp
@@ -44,3 +44,10 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+data-pipeline/node_modules
+data-pipeline/.env
+data-pipeline/data/*
+.env
+src/environments/environment.ts
+src/environments/environment.prod.ts

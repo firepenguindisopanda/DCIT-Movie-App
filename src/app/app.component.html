@@ -1,16 +1,11 @@
-<app-header>
+<div class="app-container">
+  <app-header></app-header>
   
-</app-header>
-<mat-drawer-container class="app-container">
-  <mat-drawer mode="side" #sidenav opened>
-    
-	<app-sidenav></app-sidenav>
-  </mat-drawer>
-  <mat-drawer-content>
-    
-	<router-outlet>
-    
-  </router-outlet>
-  </mat-drawer-content>
-</mat-drawer-container>
-<app-footer></app-footer>
+  <div class="app-content">
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
+  <app-footer></app-footer>
+</div>

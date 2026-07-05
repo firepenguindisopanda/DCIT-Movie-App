@@ -10,7 +10,6 @@ import { FormsModule } from '@angular/forms';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -27,8 +26,7 @@ import { RouterModule } from '@angular/router';
     MatGridListModule,
     MatIconModule,
     MatInputModule,
-    MatButtonModule,
-    RouterModule
+    MatButtonModule
   ],
   exports: [
     AllMoviesComponent,

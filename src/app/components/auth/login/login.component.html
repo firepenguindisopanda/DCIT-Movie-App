@@ -1,0 +1,62 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <mat-icon class="auth-logo">theaters</mat-icon>
+      <h1>Welcome Back</h1>
+      <p>Sign in to your DCIT Entertainment account</p>
+    </div>
+
+    @if (authService.error()) {
+      <div class="error-message">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ authService.error() }}</span>
+      </div>
+    }
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" placeholder="your@email.com">
+        <mat-icon matSuffix>email</mat-icon>
+        @if (email?.hasError('required')) {
+          <mat-error>Email is required</mat-error>
+        }
+        @if (email?.hasError('email')) {
+          <mat-error>Please enter a valid email</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" 
+               [type]="hidePassword() ? 'password' : 'text'">
+        <button mat-icon-button matSuffix type="button"
+                (click)="togglePasswordVisibility()">
+          <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (password?.hasError('required')) {
+          <mat-error>Password is required</mat-error>
+        }
+        @if (password?.hasError('minlength')) {
+          <mat-error>Password must be at least 6 characters</mat-error>
+        }
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" 
+              class="full-width submit-btn"
+              [disabled]="loginForm.invalid || authService.loading()">
+        @if (authService.loading()) {
+          <mat-spinner diameter="20"></mat-spinner>
+        } @else {
+          Sign In
+        }
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Don't have an account? 
+        <a routerLink="/register" [queryParams]="{returnUrl: returnUrl}">Sign up</a>
+      </p>
+    </div>
+  </div>
+</div>

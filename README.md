@@ -1,3 +1,5 @@
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/firepenguindisopanda/DCIT-Movie-App/tree/search-feature)
+
 # DcitMovieApp
 
 ## Purpose of the Application
@@ -10,6 +12,15 @@
 
 ## Instructions
 
+### Prerequisites
+Before you begin, make sure you have the following installed on your system:
+
+- [Git](https://git-scm.com/)
+- [Node.js](https://nodejs.org/) (v18+ recommended)
+- [npm](https://www.npmjs.com/) (bundled with Node)
+- Angular CLI (`npm install -g @angular/cli`)
+- (optional) [Wrangler](https://developers.cloudflare.com/workers/cli-wrangler/install) for manual deployments
+
 The Project is located inside the folder `dcit_movie_app`
 To view this Angular Project on your local machine:
 
@@ -19,100 +30,88 @@ To view this Angular Project on your local machine:
 - Then run the command `ng serve`.
 - Open you're browser and navigate to `http://localhost:4200/`, if Angular didn't open a new tab.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.1.2.
 
-## Project Demonstration
 
-Length of time before repeat: 53 seconds
+### Setup
 
-![Project Demonstration](https://github.com/firepenguindisopanda/DCIT-Movie-App/blob/main/readme_assets/website-demonstration.gif)
-
-## Folder Structure from src folder
-
+#### 1. Clone and install
 ```bash
-├───app
-│   ├───layout
-│   │   ├───footer
-│   │   ├───header
-│   │   └───sidenav
-│   ├───movies
-│   │   ├───all-movies
-│   │   └───view-movie-detail
-│   └───services
-├───assets
-└───environments
+git clone <repo-url>
+cd DCIT-Movie-App
+npm install
 ```
 
-## Development server
+#### 2. Configure environment variables
+This app depends on several API keys (RAWG, TMDB, Supabase). These **must not** be committed to the repo.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-To get code coverage report run this command `ng test --code-coverage=true`
-Screenshot of Unit Test passing.
-![Unit Test Using Karma](https://github.com/firepenguindisopanda/DCIT-Movie-App/blob/main/readme_assets/2021-12-26%2022_30_46-Karma.png)
-
-## Code Coverage Report
-
-![Code Coverage Image](https://github.com/firepenguindisopanda/DCIT-Movie-App/blob/main/readme_assets/Code-Coverage.png)
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
-
-## Understanding Angular and workflow to follow for other projects.
-
-- [x] Installing angular cli
-- [x] Creating the application -> ng new name_for_project
-- [x] Installing angular material in application -> ng add @angular/material (be in the project directory to run this code) prebuilt theme selected Deep purple/amber, set up global typography (yes), set up browser animations (yes)
-- [x] Create the layout Header, Sidenav, Footer components
-- [x] Go into the project folder and create modules -> ng g m name_of_module It's a normal module because it is going to be reused everywhere. To lazy load a module use this command -> `ng g m movies --route movies --module app.module` After creating modules make sure to remember and import the modules in `app.module.ts`
-- [x] Make sure to go into the component you want and run this command -> `ng g c header` to generate a component of that module. When creating components inside the modules make sure to export the components to gain the ability to use them. Following is an example in the `layout.module.ts`.
-
-### This is an example of code for the layout.module.ts file
-
-```typescript
-@NgModule({
-	declarations: [
-		HeaderComponent,
-		FooterComponent,
-		SidenavComponent
-	],
-	imports: [
-		CommonModule
-	],
-	exports: [
-		HeaderComponent,
-		FooterComponent,
-		SidenavComponent
-	]
-})
+Copy `src/environments/environment.example.ts` to `src/environments/environment.ts`:
+```bash
+cp src/environments/environment.example.ts src/environments/environment.ts
 ```
 
-- [x] Create a module for movies -> `ng g m movies` in the app folder. Create components that will be displayed in this module. Example: `ng g c all-movies` will generate a component I will use to display all the movies from the api.
-- [x] Add the component to the `app-routing.module.ts` file.
+Then open `src/environments/environment.ts` and replace each `YOUR_...` placeholder with your actual keys:
 
-### Example of adding the component to the app-routing.module.ts
+| Variable | Where to get it |
+|---|---|
+| `RAWG_API_KEY` | [rawg.io/apidocs](https://rawg.io/apidocs) |
+| `SUPABASE_URL` | Your Supabase project dashboard → Settings → API |
+| `SUPABASE_KEY` | Your Supabase project dashboard → Settings → API (anon public key) |
+| `TMDB_API_KEY` | [themoviedb.org/settings/api](https://www.themoviedb.org/settings/api) |
 
-```typescript
-	const routes: Routes = [
-  	{ path: '', component: AllMoviesComponent}
-	];
+> `environment.ts` is listed in `.gitignore` so it will **not** be committed.
+
+#### 3. Run locally
+```bash
+ng serve
 ```
+
+Open `http://localhost:4200/` in your browser.
+
+---
+
+### Deployment
+
+#### CI/CD (recommended)
+Set the following secrets in your GitHub repository:
+- `RAWG_API_KEY`
+- `SUPABASE_URL`
+- `SUPABASE_KEY`
+- `TMDB_API_KEY`
+
+The included GitHub Action workflow reads them and injects them via `scripts/replace-env.js` during `npm run build`.
+
+#### Manual Wrangler deployment
+1. Install Wrangler globally:
+   ```bash
+   npm install -g wrangler
+   ```
+
+2. Create a Cloudflare API token with **Pages:Edit** permission at https://dash.cloudflare.com/profile/api-tokens.
+
+3. Set environment variables:
+   ```bash
+   export RAWG_API_KEY=…
+   export SUPABASE_URL=…
+   export SUPABASE_KEY=…
+   export TMDB_API_KEY=…
+   export CLOUDFLARE_ACCOUNT_ID=<your-account-id>
+   export CLOUDFLARE_API_TOKEN=<your-token>
+   ```
+   (On Windows use `set` or `$env:` in PowerShell.)
+
+4. Build and deploy:
+   ```bash
+   npm ci
+   npm run build
+   wrangler pages deploy dist/movie-viewer --project-name movie-game-viewer
+   ```
+
+---
+
+### ⚠️ Security notice
+If you accidentally committed API keys to Git history, **rotate/revoke them immediately** from the respective dashboards, then scrub the history with `git filter-branch` or `bfg-repo-cleaner`.
+
+---
 
 ### Future Features that can be implemented
 

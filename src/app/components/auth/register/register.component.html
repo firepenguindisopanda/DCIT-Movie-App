@@ -1,0 +1,85 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <mat-icon class="auth-logo">theaters</mat-icon>
+      <h1>Create Account</h1>
+      <p>Join DCIT Entertainment and start exploring</p>
+    </div>
+
+    @if (authService.error()) {
+      <div class="error-message">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ authService.error() }}</span>
+      </div>
+    }
+
+    @if (successMessage()) {
+      <div class="success-message">
+        <mat-icon>check_circle_outline</mat-icon>
+        <span>{{ successMessage() }}</span>
+      </div>
+    }
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" placeholder="your@email.com">
+        <mat-icon matSuffix>email</mat-icon>
+        @if (email?.hasError('required')) {
+          <mat-error>Email is required</mat-error>
+        }
+        @if (email?.hasError('email')) {
+          <mat-error>Please enter a valid email</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" 
+               [type]="hidePassword() ? 'password' : 'text'">
+        <button mat-icon-button matSuffix type="button"
+                (click)="togglePasswordVisibility('password')">
+          <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (password?.hasError('required')) {
+          <mat-error>Password is required</mat-error>
+        }
+        @if (password?.hasError('minlength')) {
+          <mat-error>Password must be at least 6 characters</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Confirm Password</mat-label>
+        <input matInput formControlName="confirmPassword" 
+               [type]="hideConfirmPassword() ? 'password' : 'text'">
+        <button mat-icon-button matSuffix type="button"
+                (click)="togglePasswordVisibility('confirm')">
+          <mat-icon>{{ hideConfirmPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (confirmPassword?.hasError('required')) {
+          <mat-error>Please confirm your password</mat-error>
+        }
+        @if (confirmPassword?.hasError('passwordMismatch')) {
+          <mat-error>Passwords do not match</mat-error>
+        }
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" 
+              class="full-width submit-btn"
+              [disabled]="registerForm.invalid || authService.loading()">
+        @if (authService.loading()) {
+          <mat-spinner diameter="20"></mat-spinner>
+        } @else {
+          Create Account
+        }
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Already have an account? 
+        <a routerLink="/login" [queryParams]="{returnUrl: returnUrl}">Sign in</a>
+      </p>
+    </div>
+  </div>
+</div>

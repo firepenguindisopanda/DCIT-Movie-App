@@ -1,0 +1,23 @@
+{
+  "name": "data-pipeline",
+  "version": "1.0.0",
+  "description": "Data engineering pipeline for DCIT Movie App",
+  "main": "index.js",
+  "scripts": {
+    "fetch:movies": "node scripts/fetch-movies.js",
+    "fetch:games": "node scripts/fetch-games.js",
+    "transform:movies": "node scripts/transform-movies.js",
+    "transform:games": "node scripts/transform-games.js",
+    "seed:all": "node scripts/seed-supabase.js",
+    "fetch:tmdb-all": "node scripts/fetch-tmdb-all.js",
+    "fetch:games-all": "node scripts/fetch-games-all.js",
+    "pipeline": "npm run fetch:movies && npm run fetch:games && npm run transform:movies && npm run transform:games",
+    "pipeline:tmdb": "node scripts/fetch-tmdb-all.js && node scripts/transform-tmdb-movies.js && node scripts/seed-tmdb-supabase.js",
+    "pipeline:games": "node scripts/fetch-games-all.js && node scripts/transform-games.js && node scripts/seed-supabase.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.98.0",
+    "axios": "^1.13.6",
+    "dotenv": "^16.6.1"
+  }
+}

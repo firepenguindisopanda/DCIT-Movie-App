@@ -1,13 +1,51 @@
-<div class="header">
-    <mat-toolbar color="primary">
-        <div class="search-form">
-            <div class="search-left-button"><a [routerLink]="'/'" class="mat-icon"><mat-icon>theaters</mat-icon></a></div>
-        </div>
-        <span class="example-spacer"></span>
-        <a [routerLink]="'/'"><span>DCIT Movie App</span></a>
-        <span class="example-spacer"></span>
-        <div class="search-form">
-            <div class="search-left-button"><a [routerLink]="'/'" class="mat-icon"><mat-icon>theaters</mat-icon></a></div>
-        </div>
-    </mat-toolbar>
-</div>
+<header class="header" [class.scrolled]="isScrolled()">
+  <nav class="nav-container">
+    <div class="nav-left">
+      <a routerLink="/" class="logo-link">
+        <mat-icon class="logo-icon">theaters</mat-icon>
+        <span class="logo-text">DCIT</span>
+      </a>
+
+      <div class="nav-links">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">
+          <mat-icon>home</mat-icon>
+          <span>Home</span>
+        </a>
+        @if (authService.isAuthenticated()) {
+          <a routerLink="/favorites" routerLinkActive="active" class="nav-link">
+            <mat-icon>favorite</mat-icon>
+            <span>My List</span>
+          </a>
+        }
+      </div>
+    </div>
+    
+    <div class="nav-right">
+      @if (authService.loading()) {
+        <mat-spinner diameter="24"></mat-spinner>
+      } @else if (authService.isAuthenticated()) {
+        <button class="user-btn" [matMenuTriggerFor]="userMenu">
+          <div class="user-avatar">
+            <mat-icon>person</mat-icon>
+          </div>
+          <span class="user-email">{{ authService.userEmail() }}</span>
+          <mat-icon class="dropdown-icon">expand_more</mat-icon>
+        </button>
+        <mat-menu #userMenu="matMenu" class="user-menu">
+          <button mat-menu-item routerLink="/favorites">
+            <mat-icon>favorite</mat-icon>
+            <span>My Favorites</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="onSignOut()">
+            <mat-icon>logout</mat-icon>
+            <span>Sign Out</span>
+          </button>
+        </mat-menu>
+      } @else {
+        <a routerLink="/login" class="auth-btn auth-btn-ghost">Sign In</a>
+        <a routerLink="/register" class="auth-btn auth-btn-primary">Sign Up</a>
+      }
+    </div>
+  </nav>
+</header>

@@ -1,0 +1,17 @@
+<mat-toolbar>
+    <div class="logo">
+        <span>{{text}}</span>
+    </div>
+    <span class="example-spacer"></span>
+    <span>Movie Picker</span>
+    <span class="example-spacer"></span>
+    <form class="search-form" #form="ngForm" (ngSubmit)="onSubmit(form)">
+        <input type="text"
+            class="search-input"
+            name="search"
+            ngModel
+            placeholder="Search for Movie by title"
+        />
+        <button class="search-button">Search</button>
+    </form>
+</mat-toolbar>

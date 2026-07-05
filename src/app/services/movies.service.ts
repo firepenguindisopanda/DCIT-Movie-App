@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 export class MoviesService {
 
   BASE_URL: string = "https://dcitmovieapi.herokuapp.com/";
-  
+  SUB_BASE_URL: string = "";
   constructor(private http: HttpClient){
 
   }
