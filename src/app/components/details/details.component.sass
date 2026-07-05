@@ -105,7 +105,7 @@
   .hero-gradient
     position: absolute
     inset: 0
-    background: linear-gradient(to top, var(--bg-surface) 0%, rgba(20, 20, 20, 0.8) 30%, rgba(20, 20, 20, 0.4) 60%, rgba(20, 20, 20, 0.2) 100%)
+    background: linear-gradient(to top, var(--bg-surface) 0%, rgba(0, 51, 102, 0.75) 30%, rgba(0, 51, 102, 0.35) 60%, rgba(0, 51, 102, 0.15) 100%)
 
 .back-btn
   position: absolute
@@ -195,7 +195,7 @@
 .media-title
   font-size: 36px
   font-weight: 800
-  color: var(--text-primary)
+  color: #FFFFFF
   line-height: 1.15
   margin: 0 0 12px
   letter-spacing: -0.02em
@@ -211,7 +211,7 @@
   margin-bottom: 16px
 
 .meta-item
-  color: var(--text-secondary)
+  color: rgba(255, 255, 255, 0.8)
   font-size: 15px
   font-weight: 500
 
@@ -225,7 +225,7 @@
   background: rgba(255, 255, 255, 0.1)
   border: 1px solid rgba(255, 255, 255, 0.2)
   border-radius: var(--radius-xs)
-  color: var(--text-secondary)
+  color: rgba(255, 255, 255, 0.8)
   font-size: 13px
   font-weight: 600
 
@@ -237,10 +237,10 @@
 .genre-pill
   display: inline-flex
   padding: 6px 14px
-  background: rgba(229, 9, 20, 0.12)
-  border: 1px solid rgba(229, 9, 20, 0.25)
+  background: rgba(200, 16, 46, 0.1)
+  border: 1px solid rgba(200, 16, 46, 0.2)
   border-radius: var(--radius-full)
-  color: #ff6b6f
+  color: var(--accent-red)
   font-size: 13px
   font-weight: 500
   letter-spacing: 0.01em
@@ -285,6 +285,7 @@
     font-size: 28px
     font-weight: 800
     line-height: 1
+    color: #FFFFFF
 
   .gauge-label
     font-size: 13px
@@ -296,10 +297,10 @@
   align-items: center
   gap: 8px
   padding: 10px 24px
-  border: 2px solid var(--border-light)
+  border: 2px solid rgba(255, 255, 255, 0.25)
   border-radius: var(--radius-sm)
   background: transparent
-  color: var(--text-primary)
+  color: #FFFFFF
   font-size: 14px
   font-weight: 600
   cursor: pointer
@@ -311,16 +312,16 @@
     height: 22px
 
   &:hover
-    border-color: var(--text-primary)
-    background: rgba(255, 255, 255, 0.05)
+    border-color: rgba(255, 255, 255, 0.5)
+    background: rgba(255, 255, 255, 0.08)
 
   &.is-favorite
     border-color: var(--accent-red)
-    background: rgba(229, 9, 20, 0.1)
+    background: rgba(200, 16, 46, 0.15)
     color: var(--accent-red)
 
     &:hover
-      background: rgba(229, 9, 20, 0.2)
+      background: rgba(200, 16, 46, 0.25)
 
 // --- Info Cards ---
 .info-cards
@@ -504,7 +505,7 @@
   width: 40px
   height: 40px
   border-radius: 50%
-  background: linear-gradient(135deg, var(--accent-red), #b20710)
+  background: linear-gradient(135deg, var(--accent-blue), #001a33)
   display: flex
   align-items: center
   justify-content: center
@@ -531,8 +532,8 @@
   align-items: center
   gap: 6px
   padding: 8px 20px
-  background: var(--accent-red)
-  color: white
+  background: var(--accent-gold)
+  color: #003366
   border: none
   border-radius: var(--radius-sm)
   font-size: 14px
@@ -546,7 +547,7 @@
     height: 18px
 
   &:hover:not(:disabled)
-    background: var(--accent-red-hover)
+    background: var(--accent-gold-hover)
     transform: translateY(-1px)
 
   &:disabled
@@ -576,11 +577,12 @@
     font-size: 14px
 
   a
-    color: var(--accent-red)
+    color: var(--accent-blue)
     text-decoration: none
     font-weight: 600
 
     &:hover
+      color: var(--accent-blue-hover)
       text-decoration: underline
 
 // Comment Items
@@ -598,7 +600,7 @@
   transition: background-color var(--transition-fast)
 
   &:hover
-    background: rgba(255, 255, 255, 0.03)
+    background: var(--bg-card-hover)
 
     .delete-comment-btn
       opacity: 1
@@ -664,7 +666,7 @@
     height: 18px
 
   &:hover
-    background: rgba(229, 9, 20, 0.15)
+    background: rgba(200, 16, 46, 0.1)
     color: var(--accent-red)
 
 .no-comments

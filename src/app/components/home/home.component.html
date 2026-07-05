@@ -86,7 +86,7 @@
       </mat-tab>
     </mat-tab-group>
 
-    <!-- Toolbar: Search + Genre Filters -->
+    <!-- Toolbar: Search -->
     <div class="toolbar-row">
       <form class="search-form" (submit)="$event.preventDefault(); searchMedia(myControl.value || '')">
         <mat-icon class="search-icon">search</mat-icon>
@@ -128,6 +128,46 @@
       }
     </div>
 
+    <!-- Filter Controls -->
+    <div class="filter-row">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="sort-select">
+        <mat-label>Sort by</mat-label>
+        <mat-select [value]="sortBy()" (valueChange)="sortBy.set($event)">
+          <mat-option value="popularity">Popularity</mat-option>
+          <mat-option value="rating">Rating</mat-option>
+          <mat-option value="release_date">Release Date</mat-option>
+          <mat-option value="title">Title A-Z</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="year-input">
+        <mat-label>Year from</mat-label>
+        <input matInput type="number" placeholder="e.g. 1990"
+               [value]="yearFrom() ?? ''"
+               (input)="yearFrom.set(parseNum($any($event.target).value))"
+               min="1900" max="2030">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="year-input">
+        <mat-label>Year to</mat-label>
+        <input matInput type="number" placeholder="e.g. 2024"
+               [value]="yearTo() ?? ''"
+               (input)="yearTo.set(parseNum($any($event.target).value))"
+               min="1900" max="2030">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="rating-input">
+        <mat-label>{{ activeTab() === 0 ? 'Min rating' : 'Min metacritic' }}</mat-label>
+        <input matInput type="number"
+               [placeholder]="activeTab() === 0 ? 'e.g. 7' : 'e.g. 70'"
+               [step]="activeTab() === 0 ? '0.5' : '1'"
+               [min]="activeTab() === 0 ? 0 : 0"
+               [max]="activeTab() === 0 ? 10 : 100"
+               [value]="minRating() ?? ''"
+               (input)="minRating.set(parseNum($any($event.target).value))">
+      </mat-form-field>
+    </div>
+
     <!-- Content -->
     @if (loading()) {
       <div class="skeleton-grid">
@@ -145,7 +185,7 @@
       <!-- Movies Grid -->
       @if (activeTab() === 0) {
         <div class="media-grid">
-          @for (movie of movies(); track movie.id; let i = $index) {
+          @for (movie of filteredMovies(); track movie.id; let i = $index) {
             <div class="media-card stagger-in" [style.animation-delay]="(i * 0.04) + 's'" (click)="openDetails(getMediaId(movie))">
               <div class="card-image">
                 <img [src]="movie.poster_url" 
@@ -181,7 +221,7 @@
       <!-- Games Grid -->
       @if (activeTab() === 1) {
         <div class="media-grid games-grid">
-          @for (game of games(); track game.id; let i = $index) {
+          @for (game of filteredGames(); track game.id; let i = $index) {
             <div class="media-card game-card stagger-in" [style.animation-delay]="(i * 0.04) + 's'" (click)="openDetails(game.id)">
               <div class="card-image landscape">
                 <img [src]="game.background_image" 

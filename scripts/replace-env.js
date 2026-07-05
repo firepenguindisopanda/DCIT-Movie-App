@@ -2,28 +2,38 @@ require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 
-const envFile = path.join(__dirname, '../src/environments/environment.prod.ts');
-let content = fs.readFileSync(envFile, 'utf8');
+const envFiles = [
+  path.join(__dirname, '../src/environments/environment.ts'),
+  path.join(__dirname, '../src/environments/environment.prod.ts')
+];
 
 const replacements = {
   'YOUR_RAWG_API_KEY': process.env.RAWG_API_KEY || '',
   'YOUR_SUPABASE_URL': process.env.SUPABASE_URL || '',
   'YOUR_SUPABASE_KEY': process.env.SUPABASE_KEY || '',
-  // TMDB configuration (key is the only secret; base URLs are constant)
   'YOUR_TMDB_API_KEY': process.env.TMDB_API_KEY || ''
 };
 
-let modified = false;
-for (const [placeholder, value] of Object.entries(replacements)) {
-  if (value) {
-    content = content.replace(`'${placeholder}'`, `'${value}'`);
-    modified = true;
+let anyModified = false;
+
+for (const envFile of envFiles) {
+  let content = fs.readFileSync(envFile, 'utf8');
+  let modified = false;
+
+  for (const [placeholder, value] of Object.entries(replacements)) {
+    if (value) {
+      content = content.replace(`'${placeholder}'`, `'${value}'`);
+      modified = true;
+    }
+  }
+
+  if (modified) {
+    fs.writeFileSync(envFile, content);
+    console.log(`Injected env vars into ${path.basename(envFile)}`);
+    anyModified = true;
   }
 }
 
-if (modified) {
-  fs.writeFileSync(envFile, content);
-  console.log('Environment variables injected successfully');
-} else {
+if (!anyModified) {
   console.log('No environment variables found, using placeholder values');
 }

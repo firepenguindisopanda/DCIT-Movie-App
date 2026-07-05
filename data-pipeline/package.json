@@ -9,7 +9,11 @@
     "transform:movies": "node scripts/transform-movies.js",
     "transform:games": "node scripts/transform-games.js",
     "seed:all": "node scripts/seed-supabase.js",
-    "pipeline": "npm run fetch:movies && npm run fetch:games && npm run transform:movies && npm run transform:games"
+    "fetch:tmdb-all": "node scripts/fetch-tmdb-all.js",
+    "fetch:games-all": "node scripts/fetch-games-all.js",
+    "pipeline": "npm run fetch:movies && npm run fetch:games && npm run transform:movies && npm run transform:games",
+    "pipeline:tmdb": "node scripts/fetch-tmdb-all.js && node scripts/transform-tmdb-movies.js && node scripts/seed-tmdb-supabase.js",
+    "pipeline:games": "node scripts/fetch-games-all.js && node scripts/transform-games.js && node scripts/seed-supabase.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.98.0",

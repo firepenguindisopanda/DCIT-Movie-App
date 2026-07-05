@@ -288,15 +288,19 @@
             <div class="trailers-grid">
               @for (trailer of media()!.trailers; track trailer.id) {
                 <div class="trailer-item">
-                  <a [href]="'https://www.youtube.com/watch?v=' + trailer.data.max" target="_blank" rel="noopener">
-                    <div class="trailer-thumbnail">
+                  <div class="trailer-thumbnail" (click)="playingTrailerId.set(trailer.id)">
+                    @if (playingTrailerId() === trailer.id) {
+                      <video controls autoplay class="trailer-video" (ended)="playingTrailerId.set(null)">
+                        <source [src]="trailer.data.max" type="video/mp4">
+                      </video>
+                    } @else {
                       <img [src]="trailer.preview" [alt]="trailer.name">
                       <div class="play-overlay">
                         <mat-icon>play_circle</mat-icon>
                       </div>
-                    </div>
-                    <span class="trailer-name">{{ trailer.name }}</span>
-                  </a>
+                    }
+                  </div>
+                  <span class="trailer-name">{{ trailer.name }}</span>
                 </div>
               }
             </div>

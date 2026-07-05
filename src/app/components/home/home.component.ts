@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
@@ -10,13 +10,14 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Observable, map, startWith, Subject, takeUntil } from 'rxjs';
 import { SupabaseService } from '../../services/supabase.service';
 
 interface MediaItem {
   id: number;
-  tmdb_id?: number;  // TMDB movie ID
+  tmdb_id?: number;
   title?: string;
   name?: string;
   year?: number;
@@ -26,6 +27,7 @@ interface MediaItem {
   background_image?: string;
   imdb_rating?: number;
   vote_average?: number;
+  popularity?: number;
   rating?: number;
   metacritic?: number;
   genres?: string[];
@@ -40,6 +42,7 @@ interface MediaItem {
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     MatTabsModule,
     MatCardModule,
     MatButtonModule,
@@ -48,6 +51,7 @@ interface MediaItem {
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatAutocompleteModule
   ],
   templateUrl: './home.component.html',
@@ -68,6 +72,84 @@ export class HomeComponent implements OnInit, OnDestroy {
   searchQuery = signal<string>('');
   loading = signal<boolean>(true);
   activeTab = signal<number>(0);
+
+  sortBy = signal<'popularity' | 'rating' | 'release_date' | 'title'>('popularity');
+  yearFrom = signal<number | null>(null);
+  yearTo = signal<number | null>(null);
+  minRating = signal<number | null>(null);
+
+  filteredMovies = computed(() => {
+    let items = this.movies();
+    const minR = this.minRating();
+    const yFrom = this.yearFrom();
+    const yTo = this.yearTo();
+    const sort = this.sortBy();
+
+    if (minR !== null) {
+      items = items.filter(m => (m.vote_average ?? 0) >= minR);
+    }
+    if (yFrom !== null) {
+      items = items.filter(m => m.year !== undefined && m.year !== null && m.year >= yFrom);
+    }
+    if (yTo !== null) {
+      items = items.filter(m => m.year !== undefined && m.year !== null && m.year <= yTo);
+    }
+
+    return [...items].sort((a, b) => {
+      switch (sort) {
+        case 'rating':
+          return (b.vote_average ?? 0) - (a.vote_average ?? 0);
+        case 'release_date':
+          return (b.year ?? 0) - (a.year ?? 0);
+        case 'title':
+          return (a.title ?? '').localeCompare(b.title ?? '');
+        default:
+          return (b.popularity ?? 0) - (a.popularity ?? 0);
+      }
+    });
+  });
+
+  filteredGames = computed(() => {
+    let items = this.games();
+    const minR = this.minRating();
+    const yFrom = this.yearFrom();
+    const yTo = this.yearTo();
+    const sort = this.sortBy();
+
+    if (minR !== null) {
+      items = items.filter(g => (g.metacritic ?? 0) >= minR);
+    }
+    if (yFrom !== null) {
+      items = items.filter(g => {
+        if (!g.released) return false;
+        const year = new Date(g.released).getFullYear();
+        return !isNaN(year) && year >= yFrom;
+      });
+    }
+    if (yTo !== null) {
+      items = items.filter(g => {
+        if (!g.released) return false;
+        const year = new Date(g.released).getFullYear();
+        return !isNaN(year) && year <= yTo;
+      });
+    }
+
+    return [...items].sort((a, b) => {
+      switch (sort) {
+        case 'rating':
+          return (b.metacritic ?? 0) - (a.metacritic ?? 0);
+        case 'release_date': {
+          const yearA = a.released ? new Date(a.released).getFullYear() : 0;
+          const yearB = b.released ? new Date(b.released).getFullYear() : 0;
+          return yearB - yearA;
+        }
+        case 'title':
+          return (a.name ?? '').localeCompare(b.name ?? '');
+        default:
+          return (b.popularity ?? b.metacritic ?? 0) - (a.popularity ?? a.metacritic ?? 0);
+      }
+    });
+  });
 
   // Featured item for the hero banner
   featuredMovie = computed(() => {
@@ -241,6 +323,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   clearFilter(): void {
     this.selectedGenre.set(null);
     this.searchQuery.set('');
+    this.sortBy.set('popularity');
+    this.yearFrom.set(null);
+    this.yearTo.set(null);
+    this.minRating.set(null);
+    this.loadData();
+  }
+
+  onFilterChange(): void {
+    this.selectedGenre.set(null);
+    this.searchQuery.set('');
     this.loadData();
   }
 
@@ -249,6 +341,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (value >= 50) return '#ffc107';
     if (value >= 30) return '#f7aa38';
     return '#ef4655';
+  }
+
+  parseNum(value: string): number | null {
+    const n = Number(value);
+    return isNaN(n) ? null : n;
   }
 
   onImageError(event: Event): void {

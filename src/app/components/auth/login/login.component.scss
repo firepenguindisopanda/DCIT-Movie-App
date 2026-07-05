@@ -25,7 +25,7 @@
     font-size: 40px;
     width: 40px;
     height: 40px;
-    color: var(--accent-red);
+    color: var(--accent-blue);
     margin-bottom: 16px;
   }
 
@@ -48,9 +48,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: rgba(229, 9, 20, 0.1);
-  border: 1px solid rgba(229, 9, 20, 0.25);
-  color: #ff6b6f;
+  background-color: rgba(200, 16, 46, 0.08);
+  border: 1px solid rgba(200, 16, 46, 0.2);
+  color: var(--accent-red);
   padding: 12px 16px;
   border-radius: var(--radius-md);
   margin-bottom: 20px;
@@ -100,11 +100,12 @@
   }
 
   a {
-    color: var(--accent-red);
+    color: var(--accent-blue);
     text-decoration: none;
     font-weight: 600;
 
     &:hover {
+      color: var(--accent-blue-hover);
       text-decoration: underline;
     }
   }

@@ -5,14 +5,12 @@
   right: 0;
   z-index: 1000;
   height: var(--header-height);
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.0));
-  transition: background var(--transition-base);
+  background: #003366;
+  transition: box-shadow var(--transition-base);
 
   &.scrolled {
-    background: rgba(10, 10, 10, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border-subtle);
+    background: #002753;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -41,7 +39,7 @@
   align-items: center;
   gap: 8px;
   text-decoration: none;
-  color: var(--text-primary);
+  color: #FFFFFF;
   transition: opacity var(--transition-fast);
 
   &:hover {
@@ -49,7 +47,7 @@
   }
 
   .logo-icon {
-    color: var(--accent-red);
+    color: #FFC72C;
     font-size: 32px;
     width: 32px;
     height: 32px;
@@ -59,7 +57,7 @@
     font-size: 22px;
     font-weight: 800;
     letter-spacing: -0.02em;
-    color: var(--text-primary);
+    color: #FFFFFF;
   }
 }
 
@@ -80,7 +78,7 @@
   padding: 8px 14px;
   border-radius: var(--radius-sm);
   text-decoration: none;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.75);
   font-size: 14px;
   font-weight: 500;
   transition: color var(--transition-fast), background-color var(--transition-fast);
@@ -92,12 +90,12 @@
   }
 
   &:hover {
-    color: var(--text-primary);
-    background-color: rgba(255, 255, 255, 0.08);
+    color: #FFFFFF;
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
   &.active {
-    color: var(--text-primary);
+    color: #FFC72C;
     background-color: rgba(255, 255, 255, 0.1);
   }
 }
@@ -113,16 +111,16 @@
   align-items: center;
   gap: 8px;
   background: none;
-  border: 1px solid var(--border-subtle);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-full);
   padding: 4px 12px 4px 4px;
   cursor: pointer;
-  color: var(--text-primary);
+  color: #FFFFFF;
   transition: border-color var(--transition-fast), background-color var(--transition-fast);
 
   &:hover {
-    border-color: var(--border-light);
-    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.08);
   }
 }
 
@@ -130,7 +128,7 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-red), #b20710);
+  background: #C8102E;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -160,7 +158,7 @@
   font-size: 18px !important;
   width: 18px !important;
   height: 18px !important;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .auth-btn {
@@ -177,26 +175,27 @@
 }
 
 .auth-btn-ghost {
-  color: var(--text-primary);
+  color: #FFFFFF;
   background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 
   &:hover {
-    color: var(--text-primary);
-    background-color: rgba(255, 255, 255, 0.08);
+    color: #FFFFFF;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
   }
 }
 
 .auth-btn-primary {
-  color: white;
-  background-color: var(--accent-red);
+  color: #003366;
+  background-color: #FFC72C;
 
   &:hover {
-    background-color: var(--accent-red-hover);
+    background-color: #f5b800;
     transform: translateY(-1px);
   }
 }
 
-// Mobile adjustments
 @media (max-width: 480px) {
   .nav-container {
     padding: 0 16px;

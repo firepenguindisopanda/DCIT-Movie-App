@@ -5,48 +5,59 @@
 
 @use '@angular/material' as mat
 
-// --- Custom Material Dark Theme ---
-$dcit-primary: mat.m2-define-palette(mat.$m2-red-palette, 700, 500, 900)
-$dcit-accent: mat.m2-define-palette(mat.$m2-amber-palette, A200, A100, A400)
-$dcit-warn: mat.m2-define-palette(mat.$m2-red-palette)
+// --- UWI Brand Color Palettes ---
+$_navy-map: (50: #eef2f7, 100: #d5deeb, 200: #b9c9dd, 300: #9db3cf, 400: #88a3c5, 500: #003366, 600: #002e5e, 700: #002753, 800: #002049, 900: #001438, contrast: (50: rgba(0,0,0,0.87), 100: rgba(0,0,0,0.87), 200: rgba(0,0,0,0.87), 300: rgba(0,0,0,0.87), 400: white, 500: white, 600: white, 700: white, 800: white, 900: white))
+$_gold-map: (50: #fffbea, 100: #fff5c5, 200: #ffef8b, 300: #ffe84d, 400: #ffc72c, 500: #ffc72c, 600: #f5b800, 700: #e0a800, 800: #cc9400, 900: #b38000, contrast: (50: rgba(0,0,0,0.87), 100: rgba(0,0,0,0.87), 200: rgba(0,0,0,0.87), 300: rgba(0,0,0,0.87), 400: rgba(0,0,0,0.87), 500: rgba(0,0,0,0.87), 600: rgba(0,0,0,0.87), 700: rgba(0,0,0,0.87), 800: white, 900: white))
+$_crimson-map: (50: #fde8eb, 100: #f9c5cd, 200: #f49eab, 300: #ef7789, 400: #eb5a70, 500: #c8102e, 600: #b00e28, 700: #960c22, 800: #7d0a1d, 900: #550614, contrast: (50: rgba(0,0,0,0.87), 100: rgba(0,0,0,0.87), 200: rgba(0,0,0,0.87), 300: white, 400: white, 500: white, 600: white, 700: white, 800: white, 900: white))
 
-$dcit-theme: mat.m2-define-dark-theme((color: (primary: $dcit-primary, accent: $dcit-accent, warn: $dcit-warn), density: 0))
+$uwi-navy: mat.m2-define-palette($_navy-map)
+$uwi-gold: mat.m2-define-palette($_gold-map)
+$uwi-crimson: mat.m2-define-palette($_crimson-map)
 
+// --- Light Academic Theme ---
+$_theme-config: (color: (primary: $uwi-navy, accent: $uwi-gold, warn: $uwi-crimson), density: 0)
+$dcit-theme: mat.m2-define-light-theme($_theme-config)
+
+@include mat.core()
 @include mat.all-component-themes($dcit-theme)
 
 // --- CSS Custom Properties (Design Tokens) ---
 \:root
   // Backgrounds
-  --bg-primary: #0a0a0a
-  --bg-surface: #141414
-  --bg-elevated: #1a1a1a
-  --bg-card: #1c1c1e
-  --bg-card-hover: #252528
-  --bg-overlay: rgba(0, 0, 0, 0.75)
+  --bg-primary: #F8F9FA
+  --bg-surface: #FFFFFF
+  --bg-elevated: #FFFFFF
+  --bg-card: #FFFFFF
+  --bg-card-hover: #F1F1F1
+  --bg-overlay: rgba(0, 51, 102, 0.6)
 
-  // Accent Colors
-  --accent-red: #E50914
-  --accent-red-hover: #ff1a25
-  --accent-gold: #F5C518
-  --accent-blue: #4a9eff
-  --accent-green: #46d369
-  --accent-orange: #ff8c00
+  // Accent Colors (UWI Brand)
+  --accent-red: #C8102E
+  --accent-red-hover: #a00d25
+  --accent-gold: #FFC72C
+  --accent-gold-hover: #f5b800
+  --accent-blue: #003366
+  --accent-blue-hover: #002753
+  --accent-green: #10b981
+  --accent-orange: #f59e0b
 
   // Text
-  --text-primary: #ffffff
-  --text-secondary: #a1a1a6
-  --text-muted: #636366
-  --text-accent: #E50914
+  --text-primary: #003366
+  --text-secondary: #53565A
+  --text-muted: #9CA3AF
+  --text-accent: #C8102E
+  --text-white: #FFFFFF
 
   // Borders
-  --border-subtle: rgba(255, 255, 255, 0.08)
-  --border-light: rgba(255, 255, 255, 0.15)
+  --border-subtle: #E5E7EB
+  --border-light: #D1D5DB
+  --border-focus: #003366
 
   // Shadows
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3)
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4)
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5)
-  --shadow-glow: 0 0 20px rgba(229, 9, 20, 0.15)
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1)
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1)
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1)
+  --shadow-glow: 0 0 20px rgba(0, 51, 102, 0.1)
 
   // Radius
   --radius-xs: 4px
@@ -79,7 +90,7 @@ html
 body
   font-family: var(--font-primary)
   background-color: var(--bg-primary)
-  color: var(--text-primary)
+  color: var(--text-secondary)
   line-height: 1.5
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
@@ -99,9 +110,9 @@ body
   &:hover
     background: #555
 
-// --- Angular Material Overrides ---
+// --- Angular Material Overrides (Light Academic Theme) ---
 
-// Dark form fields
+// Form fields
 .mat-mdc-form-field
   .mdc-text-field--outlined
     .mdc-notched-outline__leading,
@@ -119,16 +130,16 @@ body
     .mdc-notched-outline__leading,
     .mdc-notched-outline__notch,
     .mdc-notched-outline__trailing
-      border-color: var(--accent-red) !important
+      border-color: var(--accent-blue) !important
 
   .mdc-floating-label
-    color: var(--text-secondary) !important
+    color: var(--text-muted) !important
 
   .mdc-text-field__input
     color: var(--text-primary) !important
-    caret-color: var(--accent-red) !important
+    caret-color: var(--accent-blue) !important
 
-// Dark cards
+// Cards
 .mat-mdc-card
   background-color: var(--bg-card) !important
   border: 1px solid var(--border-subtle)
@@ -138,7 +149,7 @@ body
 // Tab group styling
 .mat-mdc-tab-group
   .mat-mdc-tab
-    color: var(--text-secondary)
+    color: var(--text-muted)
     font-family: var(--font-primary)
     font-weight: 500
     letter-spacing: 0.02em
@@ -148,7 +159,7 @@ body
       color: var(--text-primary) !important
 
   .mdc-tab-indicator__content--underline
-    border-color: var(--accent-red) !important
+    border-color: var(--accent-blue) !important
     border-width: 3px !important
     border-radius: 3px 3px 0 0
 
@@ -161,9 +172,9 @@ body
   font-size: 13px !important
   font-weight: 500 !important
 
-// Primary buttons
+// Primary buttons (Navy)
 .mat-mdc-raised-button.mat-primary
-  background-color: var(--accent-red) !important
+  background-color: var(--accent-blue) !important
   color: white !important
   border-radius: var(--radius-sm) !important
   font-weight: 600 !important
@@ -171,41 +182,58 @@ body
   transition: background-color var(--transition-fast), transform var(--transition-fast)
 
   &:hover
-    background-color: var(--accent-red-hover) !important
+    background-color: var(--accent-blue-hover) !important
     transform: translateY(-1px)
+
+// Accent buttons (Gold)
+.mat-mdc-raised-button.mat-accent
+  background-color: var(--accent-gold) !important
+  color: #000 !important
+  border-radius: var(--radius-sm) !important
+  font-weight: 600 !important
+
+  &:hover
+    background-color: var(--accent-gold-hover) !important
+
+// Warn buttons (Crimson)
+.mat-mdc-raised-button.mat-warn
+  background-color: var(--accent-red) !important
+  color: white !important
+
+  &:hover
+    background-color: var(--accent-red-hover) !important
 
 // Toolbar
 .mat-toolbar.mat-primary
   background-color: transparent !important
-  color: var(--text-primary)
+  color: var(--text-white)
 
-// Menu
+// Menu (light)
 .mat-mdc-menu-panel
-  background-color: var(--bg-elevated) !important
+  background-color: var(--bg-surface) !important
   border: 1px solid var(--border-subtle)
   border-radius: var(--radius-md) !important
 
   .mat-mdc-menu-item
-    color: var(--text-primary) !important
+    color: var(--text-secondary) !important
 
     &:hover
       background-color: var(--bg-card-hover) !important
 
 // Spinner
 .mat-mdc-progress-spinner circle
-  stroke: var(--accent-red) !important
+  stroke: var(--accent-blue) !important
 
-// Dialog / overlay
 .cdk-overlay-dark-backdrop
-  background: rgba(0, 0, 0, 0.7)
+  background: rgba(0, 0, 0, 0.5)
 
-// Autocomplete
+// Autocomplete panel (light)
 .mat-mdc-autocomplete-panel
-  background-color: var(--bg-elevated) !important
+  background-color: var(--bg-surface) !important
   border: 1px solid var(--border-subtle)
 
   .mat-mdc-option
-    color: var(--text-primary) !important
+    color: var(--text-secondary) !important
 
     &:hover, &.mat-mdc-option-active
       background-color: var(--bg-card-hover) !important
@@ -260,7 +288,7 @@ body
     background-position: 400px 0
 
 .shimmer
-  background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-card-hover) 50%, var(--bg-elevated) 75%)
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%)
   background-size: 800px 100%
   animation: shimmer 1.5s infinite linear
 

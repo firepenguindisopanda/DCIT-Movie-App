@@ -14,9 +14,10 @@ export class SupabaseService {
       environment.supabaseKey,
       {
         auth: {
-          persistSession: false, // Disable to avoid Navigator LockManager error
-          autoRefreshToken: false,
-          detectSessionInUrl: false
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true,
+          storage: localStorage
         }
       }
     );

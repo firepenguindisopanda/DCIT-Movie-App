@@ -115,6 +115,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   comments = signal<Comment[]>([]);
   newComment = signal<string>('');
   submittingComment = signal<boolean>(false);
+  playingTrailerId = signal<number | null>(null);
 
   get isAuthenticated(): boolean {
     return this.authService.isAuthenticated();

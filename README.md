@@ -32,80 +32,84 @@ To view this Angular Project on your local machine:
 
 
 
-### Environment configuration
+### Setup
 
-This application depends on several API keys and URLs, which **must not** be committed to the repo. Instead, an ignored `src/environments/environment.ts` file is used for local development and the `replace-env.js` script injects values during CI builds.
+#### 1. Clone and install
+```bash
+git clone <repo-url>
+cd DCIT-Movie-App
+npm install
+```
 
-1. Copy `src/environments/environment.example.ts` to `src/environments/environment.ts` and fill in the placeholders:
-   ```ts
-   RAWG_API_KEY='…'
-   SUPABASE_URL='…'
-   SUPABASE_KEY='…'
-   TMDB_API_KEY='…'
-   ```
-   `environment.ts` is listed in `.gitignore` so it will not be pushed.
+#### 2. Configure environment variables
+This app depends on several API keys (RAWG, TMDB, Supabase). These **must not** be committed to the repo.
 
-2. Add the corresponding values to a `.env` file (ignored as well) or set them as GitHub Actions secrets. The build script reads the following names:
-   * `RAWG_API_KEY`
-   * `SUPABASE_URL`
-   * `SUPABASE_KEY`
-   * `TMDB_API_KEY`
+Copy `src/environments/environment.example.ts` to `src/environments/environment.ts`:
+```bash
+cp src/environments/environment.example.ts src/environments/environment.ts
+```
 
-   The GitHub workflow should export them before running `npm run build`.
+Then open `src/environments/environment.ts` and replace each `YOUR_...` placeholder with your actual keys:
 
-### Manual Wrangler deployment
-If you prefer to deploy by hand instead of using the provided GitHub Action, follow these steps:
+| Variable | Where to get it |
+|---|---|
+| `RAWG_API_KEY` | [rawg.io/apidocs](https://rawg.io/apidocs) |
+| `SUPABASE_URL` | Your Supabase project dashboard → Settings → API |
+| `SUPABASE_KEY` | Your Supabase project dashboard → Settings → API (anon public key) |
+| `TMDB_API_KEY` | [themoviedb.org/settings/api](https://www.themoviedb.org/settings/api) |
 
-1. Install Wrangler globally (if you haven’t already):
+> `environment.ts` is listed in `.gitignore` so it will **not** be committed.
+
+#### 3. Run locally
+```bash
+ng serve
+```
+
+Open `http://localhost:4200/` in your browser.
+
+---
+
+### Deployment
+
+#### CI/CD (recommended)
+Set the following secrets in your GitHub repository:
+- `RAWG_API_KEY`
+- `SUPABASE_URL`
+- `SUPABASE_KEY`
+- `TMDB_API_KEY`
+
+The included GitHub Action workflow reads them and injects them via `scripts/replace-env.js` during `npm run build`.
+
+#### Manual Wrangler deployment
+1. Install Wrangler globally:
    ```bash
    npm install -g wrangler
    ```
 
-2. Obtain a Cloudflare API token with **Pages:Edit** permission.
-   * Visit https://dash.cloudflare.com/profile/api-tokens
-   * Create a token using the “Cloudflare Pages – Edit” template or a
-     custom token granting the same scope.
-   * Copy the token; you’ll need it in the next step.
+2. Create a Cloudflare API token with **Pages:Edit** permission at https://dash.cloudflare.com/profile/api-tokens.
 
-3. Configure your environment variables locally (for building) and for
-   wrangler:
+3. Set environment variables:
    ```bash
    export RAWG_API_KEY=…
    export SUPABASE_URL=…
    export SUPABASE_KEY=…
    export TMDB_API_KEY=…
    export CLOUDFLARE_ACCOUNT_ID=<your-account-id>
-   export CLOUDFLARE_API_TOKEN=<the-token-you-just-created>
+   export CLOUDFLARE_API_TOKEN=<your-token>
    ```
-   (On Windows use `set` or configure via PowerShell `$env:`.)
+   (On Windows use `set` or `$env:` in PowerShell.)
 
-4. Build the application:
+4. Build and deploy:
    ```bash
    npm ci
    npm run build
+   wrangler pages deploy dist/movie-viewer --project-name movie-game-viewer
    ```
-   The `npm run build` step uses `scripts/replace-env.js` to inject the
-   API keys into `environment.prod.ts` before calling `ng build`.
 
-5. Deploy using wrangler:
-   ```bash
-   wrangler pages deploy dist/movie-viewer \
-     --project-name movie-game-viewer
-   ```
-   Wrangler will read `CLOUDFLARE_ACCOUNT_ID` and
-   `CLOUDFLARE_API_TOKEN` from the environment; if those are missing the
-   command will fail with an error similar to the one seen in your
-   workflow log.
+---
 
-6. Optionally, you can pass `--branch <name>` to deploy to a preview
-   branch.
-
-> When using the GitHub Action, the same variables are supplied via
-> secrets; the manual process is equivalent but run on your own machine.
-
-3. When running locally `ng serve` will use your `environment.ts`. On the server, `npm run build` executes `node scripts/replace-env.js` which replaces the placeholders in `environment.prod.ts` with the secrets you provided.
-
-4. **Rotate or revoke any keys that were accidentally committed**. See the Git history for past values.
+### ⚠️ Security notice
+If you accidentally committed API keys to Git history, **rotate/revoke them immediately** from the respective dashboards, then scrub the history with `git filter-branch` or `bfg-repo-cleaner`.
 
 ---
 

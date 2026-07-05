@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4200",
+    "start": "node scripts/replace-env.js && ng serve --port 4200",
     "build": "node scripts/replace-env.js && ng build",
     "prebuild": "node scripts/replace-env.js",
     "watch": "ng build --watch --configuration development",
