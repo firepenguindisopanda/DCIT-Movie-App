@@ -13,10 +13,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    # The API keys are stored as *environment* secrets on "dcit-movie-app".
+    # Without this line they resolve to empty strings and the build silently
+    # ships placeholder keys.
+    environment: dcit-movie-app
+
     strategy:
       matrix:
-        # Angular 19 accepts ^18.19.1 || ^20.11.1 || ^22.0.0.
-        # 22.x matches the version pinned in package.json engines.
+        # Angular 20 accepts ^20.19.0 || ^22.12.0 || ^24.0.0.
         node-version: ['22.x']
 
     steps:
@@ -31,9 +35,8 @@ jobs:
       # ci installs from the lockfile, so builds are reproducible.
       - run: npm ci
 
-      # The build injects API keys via scripts/replace-env.js. Without secrets
-      # configured the placeholders remain, which still compiles - this job
-      # verifies the code builds, it does not produce a deployable artifact.
+      # scripts/replace-env.js generates the gitignored environment files from
+      # environment.example.ts and injects these values.
       - name: Build
         run: npm run build
         env:

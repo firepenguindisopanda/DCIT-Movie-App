@@ -77,7 +77,8 @@ export class SupabaseService {
   }
 
   async getMovieById(id: number) {
-    return this.supabase.from('movies').select('*').eq('tmdb_id', id).single();
+    // maybeSingle: an unknown id should yield null, not a 406.
+    return this.supabase.from('movies').select('*').eq('tmdb_id', id).maybeSingle();
   }
 
   async getMoviesByGenre(genre: string) {
@@ -102,7 +103,7 @@ export class SupabaseService {
   }
 
   async getGameById(id: number) {
-    return this.supabase.from('games').select('*').eq('id', id).single();
+    return this.supabase.from('games').select('*').eq('id', id).maybeSingle();
   }
 
   async getGamesByGenre(genre: string) {
@@ -146,7 +147,8 @@ export class SupabaseService {
       .eq('user_id', userId)
       .eq('media_type', mediaType)
       .eq('media_id', mediaId)
-      .single();
+      // Not being a favourite is the common case, so it must not read as an error.
+      .maybeSingle();
   }
 
   async addComment(userId: string, userEmail: string, mediaType: 'movie' | 'game', mediaId: number, content: string) {
