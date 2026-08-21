@@ -31,7 +31,8 @@
   margin-bottom: 8px;
 
   mat-icon {
-    color: var(--accent-gold);
+    // Brand gold is only legible on the navy header; the footer sits on --bg-primary.
+    color: var(--accent-blue);
     font-size: 28px;
     width: 28px;
     height: 28px;

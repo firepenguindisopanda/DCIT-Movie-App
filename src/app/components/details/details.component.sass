@@ -115,12 +115,12 @@
   align-items: center
   gap: 6px
   padding: 8px 16px 8px 10px
-  background: rgba(0, 0, 0, 0.5)
+  background: rgba(0, 0, 0, 0.6)
   backdrop-filter: blur(10px)
   -webkit-backdrop-filter: blur(10px)
   border: 1px solid rgba(255, 255, 255, 0.15)
   border-radius: var(--radius-full)
-  color: var(--text-primary)
+  color: #FFFFFF
   font-size: 14px
   font-weight: 500
   cursor: pointer
@@ -143,16 +143,21 @@
 .content-wrapper
   position: relative
   margin-top: -200px
+  padding: 0 16px
   z-index: 5
   animation: fadeInUp 0.5s ease 0.2s both
 
 .content-inner
   max-width: 1100px
   margin: 0 auto
-  padding: 0 24px 60px
+  padding: 32px 24px 60px
+  background: var(--bg-surface)
+  border: 1px solid var(--border-subtle)
+  border-radius: var(--radius-xl)
+  box-shadow: var(--shadow-lg)
 
   @media (min-width: 1024px)
-    padding: 0 48px 80px
+    padding: 40px 48px 80px
 
 // --- Detail Layout (Two Column) ---
 .detail-layout
@@ -195,7 +200,7 @@
 .media-title
   font-size: 36px
   font-weight: 800
-  color: #FFFFFF
+  color: var(--text-primary)
   line-height: 1.15
   margin: 0 0 12px
   letter-spacing: -0.02em
@@ -211,7 +216,7 @@
   margin-bottom: 16px
 
 .meta-item
-  color: rgba(255, 255, 255, 0.8)
+  color: var(--text-secondary)
   font-size: 15px
   font-weight: 500
 
@@ -222,10 +227,10 @@
   display: inline-flex
   align-items: center
   padding: 2px 10px
-  background: rgba(255, 255, 255, 0.1)
-  border: 1px solid rgba(255, 255, 255, 0.2)
+  background: rgba(0, 51, 102, 0.06)
+  border: 1px solid rgba(0, 51, 102, 0.18)
   border-radius: var(--radius-xs)
-  color: rgba(255, 255, 255, 0.8)
+  color: var(--text-primary)
   font-size: 13px
   font-weight: 600
 
@@ -273,7 +278,7 @@
       stroke-dasharray: none
       stroke-width: 10
     .value-text
-      fill: #fff
+      fill: var(--text-primary)
       font-weight: 700
       font-size: 18px
 
@@ -285,11 +290,11 @@
     font-size: 28px
     font-weight: 800
     line-height: 1
-    color: #FFFFFF
+    color: var(--text-primary)
 
   .gauge-label
     font-size: 13px
-    color: var(--text-muted)
+    color: var(--text-secondary)
     font-weight: 500
 
 .favorite-btn
@@ -297,10 +302,10 @@
   align-items: center
   gap: 8px
   padding: 10px 24px
-  border: 2px solid rgba(255, 255, 255, 0.25)
+  border: 2px solid rgba(0, 51, 102, 0.3)
   border-radius: var(--radius-sm)
   background: transparent
-  color: #FFFFFF
+  color: var(--text-primary)
   font-size: 14px
   font-weight: 600
   cursor: pointer
@@ -312,8 +317,8 @@
     height: 22px
 
   &:hover
-    border-color: rgba(255, 255, 255, 0.5)
-    background: rgba(255, 255, 255, 0.08)
+    border-color: var(--accent-blue)
+    background: rgba(0, 51, 102, 0.07)
 
   &.is-favorite
     border-color: var(--accent-red)
@@ -476,12 +481,12 @@
 
   .score-max
     font-size: 16px
-    color: var(--text-muted)
+    color: var(--text-secondary)
     font-weight: 500
 
 .score-bar
   height: 4px
-  background: rgba(255, 255, 255, 0.08)
+  background: rgba(0, 51, 102, 0.12)
   border-radius: var(--radius-full)
   overflow: hidden
 

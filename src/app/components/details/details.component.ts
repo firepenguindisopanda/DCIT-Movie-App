@@ -20,6 +20,7 @@ import { AuthService } from '../../services/auth.service';
 interface MediaDetail {
   id: number;
   tmdb_id?: number;
+  rawg_id?: number;
   title?: string;
   name?: string;
   year?: number;
@@ -175,9 +176,14 @@ export class DetailsComponent implements OnInit, OnDestroy {
         if (result.data) {
           const gameData = result.data as MediaDetail;
           
-          // Fetch additional details from RAWG API
+          // Fetch additional details from RAWG API.
+          // NOTE: the route id is the Supabase row id, which is NOT the RAWG id.
+          // Always enrich using gameData.rawg_id or we render another game's data.
           try {
-            const rawgResult = await this.httpService.getGameDetails(this.mediaId().toString()).toPromise();
+            const rawgId = gameData.rawg_id;
+            const rawgResult = rawgId
+              ? await this.httpService.getGameDetails(rawgId.toString()).toPromise()
+              : null;
             if (rawgResult) {
               // Merge RAWG data into game data
               this.media.set({
@@ -310,6 +316,15 @@ export class DetailsComponent implements OnInit, OnDestroy {
     if (value >= 50) return '#ffc107';
     if (value >= 30) return '#f7aa38';
     return '#ef4655';
+  }
+
+  // getColor() stays vivid for gauges and score bars, where saturation reads well.
+  // Text needs darker variants to clear WCAG AA against the light surface.
+  getTextColor(value: number): string {
+    if (value >= 75) return '#157347';
+    if (value >= 50) return '#9A6700';
+    if (value >= 30) return '#B45309';
+    return '#C8102E';
   }
 
   getColorForGauge(): (value: number) => string {
