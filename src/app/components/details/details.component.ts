@@ -78,24 +78,23 @@ interface Comment {
 }
 
 @Component({
-  selector: 'app-details',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterLink,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatChipsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
-    MatTooltipModule,
-    GaugeModule
-  ],
-  templateUrl: './details.component.html',
-  styleUrls: ['./details.component.sass']
+    selector: 'app-details',
+    imports: [
+        CommonModule,
+        FormsModule,
+        RouterLink,
+        MatCardModule,
+        MatButtonModule,
+        MatIconModule,
+        MatChipsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatProgressSpinnerModule,
+        MatTooltipModule,
+        GaugeModule
+    ],
+    templateUrl: './details.component.html',
+    styleUrls: ['./details.component.sass']
 })
 export class DetailsComponent implements OnInit, OnDestroy {
   private supabase = inject(SupabaseService);

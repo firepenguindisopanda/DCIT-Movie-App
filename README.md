@@ -16,9 +16,10 @@
 Before you begin, make sure you have the following installed on your system:
 
 - [Git](https://git-scm.com/)
-- [Node.js](https://nodejs.org/) (v18+ recommended)
+- [Node.js](https://nodejs.org/) **22.x** — `package.json` pins `22.17.1`. Angular 19
+  accepts `^18.19.1 || ^20.11.1 || ^22.0.0`; newer majors (24, 26) are rejected by the CLI.
 - [npm](https://www.npmjs.com/) (bundled with Node)
-- Angular CLI (`npm install -g @angular/cli`)
+- Angular CLI 19 (`npm install -g @angular/cli@19`) — or just use the local one via `npx ng`
 - (optional) [Wrangler](https://developers.cloudflare.com/workers/cli-wrangler/install) for manual deployments
 
 The Project is located inside the folder `dcit_movie_app`
@@ -27,7 +28,7 @@ To view this Angular Project on your local machine:
 - Either git clone this repository or download the zip file.
 - Open the command prompt inside dcit-Movie-App folder.
 - Run the command `npm install`.
-- Then run the command `ng serve`.
+- Then run the command `npm start` (this injects your `.env` keys, then serves).
 - Open you're browser and navigate to `http://localhost:4200/`, if Angular didn't open a new tab.
 
 
@@ -66,6 +67,46 @@ ng serve
 ```
 
 Open `http://localhost:4200/` in your browser.
+
+---
+
+### Movie Night (group voting)
+
+Groups argue about what to watch. This turns that into a vote, across **both**
+catalogs — the question is "movie or game tonight?", not just "which movie".
+
+**How it works**
+1. Sign in and open **Movie Night** (`/sessions`).
+2. Create a session — name it, optionally set a closing time.
+3. Add candidates from either catalog. Anyone signed in can suggest.
+4. Share the 6-character code (or the copied link). The session page is public,
+   so people can read it before signing in; voting requires an account.
+5. Everyone gets **one vote**, changeable until closing. Tallies update live via
+   Supabase Realtime.
+6. The host closes voting and the winner locks in. Ties resolve to whichever
+   candidate was suggested first.
+
+**"In the same mood" suggestions**
+
+The session page suggests picks from the *opposite* medium to what is already on
+the list. TMDB and RAWG genres are not the same vocabulary — TMDB is thematic
+(Crime, Romance, War), RAWG is structural (Platformer, Shooter, Strategy), and
+only Action, Adventure and Family appear in both. So a genre-name join finds
+almost nothing.
+
+Instead both vocabularies are projected onto seven shared "moods" (high-octane,
+epic quest, mind-bender, lighthearted, dark & tense, story-driven, competitive)
+and matched by cosine similarity in that space, blended with a quality signal.
+See `src/app/services/cross-media.service.ts`.
+
+Known limits, by design:
+- RAWG genres carry **no horror or sci-fi signal**, so a horror film returns few
+  or no game matches rather than confidently wrong ones. Storing RAWG `tags`
+  in the games table would fix this — that's a data-pipeline change.
+- Matching reads genres only. It captures mood, not plot.
+
+**Setup:** run `supabase-schema-v4.sql` in the Supabase SQL editor. It is additive
+and re-runnable — it does not touch existing tables.
 
 ---
 

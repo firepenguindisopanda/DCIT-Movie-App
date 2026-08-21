@@ -1,0 +1,162 @@
+<div class="sessions-page">
+  <div class="page-inner">
+
+    <header class="page-header">
+      <h1 class="page-title">Movie Night</h1>
+      <p class="page-subtitle">
+        Can't agree on what to watch or play? Put the options up, share the code, let everyone vote.
+      </p>
+    </header>
+
+    <!-- Create / Join -->
+    <div class="action-grid">
+      <section class="panel create-panel">
+        <h2 class="panel-title">
+          <mat-icon>add_circle</mat-icon>
+          Start a session
+        </h2>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>What's the occasion?</mat-label>
+          <input matInput
+                 [ngModel]="newTitle()"
+                 (ngModelChange)="newTitle.set($event)"
+                 (keyup.enter)="create()"
+                 placeholder="Friday Movie Night"
+                 maxlength="120">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Voting closes (optional)</mat-label>
+          <input matInput
+                 type="datetime-local"
+                 [ngModel]="deadline()"
+                 (ngModelChange)="deadline.set($event)">
+        </mat-form-field>
+
+        @if (createError()) {
+          <p class="form-error" role="alert">
+            <mat-icon>error_outline</mat-icon>
+            {{ createError() }}
+          </p>
+        }
+
+        <button class="btn btn-primary" (click)="create()" [disabled]="creating()">
+          @if (creating()) {
+            <mat-spinner diameter="18"></mat-spinner>
+          } @else {
+            <mat-icon>how_to_vote</mat-icon>
+          }
+          Create session
+        </button>
+      </section>
+
+      <section class="panel join-panel">
+        <h2 class="panel-title">
+          <mat-icon>login</mat-icon>
+          Join with a code
+        </h2>
+        <p class="panel-hint">Someone shared a 6-character code with you? Enter it here.</p>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Session code</mat-label>
+          <input matInput
+                 [ngModel]="joinCode()"
+                 (ngModelChange)="joinCode.set($event.toUpperCase())"
+                 (keyup.enter)="join()"
+                 placeholder="K3F9QP"
+                 maxlength="8"
+                 class="code-input">
+        </mat-form-field>
+
+        @if (joinError()) {
+          <p class="form-error" role="alert">
+            <mat-icon>error_outline</mat-icon>
+            {{ joinError() }}
+          </p>
+        }
+
+        <button class="btn btn-outline" (click)="join()" [disabled]="joining() || !joinCode().trim()">
+          @if (joining()) {
+            <mat-spinner diameter="18"></mat-spinner>
+          } @else {
+            <mat-icon>arrow_forward</mat-icon>
+          }
+          Join
+        </button>
+      </section>
+    </div>
+
+    <!-- My sessions -->
+    @if (loading()) {
+      <div class="loading-state">
+        <mat-spinner diameter="36"></mat-spinner>
+      </div>
+    } @else {
+      @if (openSessions().length > 0) {
+        <section class="session-group">
+          <h2 class="group-title">Open for voting</h2>
+          <div class="session-list">
+            @for (session of openSessions(); track session.id) {
+              <a class="session-card" [routerLink]="['/sessions', session.code]">
+                <div class="session-main">
+                  <span class="session-name">{{ session.title }}</span>
+                  <span class="session-meta">
+                    @if (isHost(session)) {
+                      <span class="host-badge">You're hosting</span>
+                    } @else {
+                      <span>Hosted by {{ session.host_email }}</span>
+                    }
+                    <span class="dot">·</span>
+                    <span>Created {{ session.created_at | date:'MMM d' }}</span>
+                    @if (session.closes_at) {
+                      <span class="dot">·</span>
+                      <span>Closes {{ session.closes_at | date:'MMM d, h:mm a' }}</span>
+                    }
+                  </span>
+                </div>
+                <div class="session-side">
+                  <span class="session-code">{{ session.code }}</span>
+                  <mat-icon>chevron_right</mat-icon>
+                </div>
+              </a>
+            }
+          </div>
+        </section>
+      }
+
+      @if (closedSessions().length > 0) {
+        <section class="session-group">
+          <h2 class="group-title">Decided</h2>
+          <div class="session-list">
+            @for (session of closedSessions(); track session.id) {
+              <a class="session-card is-closed" [routerLink]="['/sessions', session.code]">
+                <div class="session-main">
+                  <span class="session-name">{{ session.title }}</span>
+                  <span class="session-meta">
+                    <span class="closed-badge">Closed</span>
+                    <span class="dot">·</span>
+                    <span>{{ session.created_at | date:'MMM d, y' }}</span>
+                  </span>
+                </div>
+                <div class="session-side">
+                  <span class="session-code">{{ session.code }}</span>
+                  <mat-icon>chevron_right</mat-icon>
+                </div>
+              </a>
+            }
+          </div>
+        </section>
+      }
+
+      @if (sessions().length === 0) {
+        <div class="empty-state">
+          <mat-icon>groups</mat-icon>
+          <h3>No sessions yet</h3>
+          <p>Create one above, or join with a code someone sent you.</p>
+        </div>
+      }
+    }
+
+  </div>
+</div>

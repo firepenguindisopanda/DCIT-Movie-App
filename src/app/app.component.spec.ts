@@ -1,31 +1,30 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 import { AppComponent } from './app.component';
-import { SearchBarComponent } from './components/search-bar/search-bar.component';
+import { AuthService } from './services/auth.service';
+import { SupabaseService } from './services/supabase.service';
+import { authServiceStub, supabaseServiceStub } from './testing/stubs';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent,
-        SearchBarComponent
-      ],
+      // AppComponent is standalone, so it is imported rather than declared.
+      imports: [AppComponent],
+      providers: [
+        provideRouter([]),
+        { provide: AuthService, useValue: authServiceStub },
+        { provide: SupabaseService, useValue: supabaseServiceStub }
+      ]
     }).compileComponents();
   });
 
   it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it(`should have as title 'Movie-Viewer'`, () => {
+  it(`should have as title 'DCIT Entertainment'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('Movie-Viewer');
+    expect(fixture.componentInstance.title).toEqual('DCIT Entertainment');
   });
-  
 });

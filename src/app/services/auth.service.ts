@@ -28,11 +28,25 @@ export class AuthService {
   readonly isAuthenticated = computed(() => !!this._user());
   readonly userEmail = computed(() => this._user()?.email ?? null);
 
+  /**
+   * Resolves once the initial session check has finished.
+   *
+   * Route guards need this: on a cold load or refresh they run before Supabase
+   * has restored the session, and without waiting they see loading() === true
+   * and treat it as "signed out".
+   */
+  private readonly ready: Promise<void>;
+
   constructor() {
-    this.initAuth();
+    this.ready = this.initAuth();
   }
 
-  private async initAuth() {
+  /** Awaits the initial session check. Resolves immediately once settled. */
+  whenReady(): Promise<void> {
+    return this.ready;
+  }
+
+  private async initAuth(): Promise<void> {
     try {
       // Check current session only once
       const { data: { session }, error } = await this.supabase.client.auth.getSession();

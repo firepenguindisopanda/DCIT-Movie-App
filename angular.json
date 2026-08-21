@@ -23,7 +23,9 @@
             "outputPath": "dist/movie-viewer",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "sass",
             "assets": [
@@ -72,10 +74,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "Movie-Viewer:build:production"
+              "buildTarget": "Movie-Viewer:build:production"
             },
             "development": {
-              "browserTarget": "Movie-Viewer:build:development"
+              "buildTarget": "Movie-Viewer:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -83,14 +85,16 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Movie-Viewer:build"
+            "buildTarget": "Movie-Viewer:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "sass",

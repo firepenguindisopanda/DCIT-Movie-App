@@ -5,6 +5,10 @@
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
+    // Third-party .d.ts files (e.g. @supabase/storage-js) reference Node globals
+    // this browser app deliberately does not declare. Standard in modern Angular
+    // scaffolds; it skips checking declaration files, not our own code.
+    "skipLibCheck": true,
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,

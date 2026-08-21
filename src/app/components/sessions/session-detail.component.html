@@ -1,0 +1,333 @@
+@if (loading()) {
+  <div class="session-page">
+    <div class="page-inner loading-state">
+      <mat-spinner diameter="36"></mat-spinner>
+    </div>
+  </div>
+} @else if (loadError()) {
+  <div class="session-page">
+    <div class="page-inner">
+      <div class="empty-state">
+        <mat-icon>search_off</mat-icon>
+        <h3>{{ loadError() }}</h3>
+        <p>Double-check the code, or ask the host to share the link again.</p>
+        <a class="btn btn-outline" routerLink="/sessions">
+          <mat-icon>arrow_back</mat-icon>
+          Back to sessions
+        </a>
+      </div>
+    </div>
+  </div>
+} @else {
+  @if (session(); as s) {
+  <div class="session-page">
+    <div class="page-inner">
+
+      <!-- Header -->
+      <header class="session-header">
+        <a class="back-link" routerLink="/sessions">
+          <mat-icon>arrow_back</mat-icon>
+          All sessions
+        </a>
+
+        <div class="header-row">
+          <div class="header-main">
+            <h1 class="session-title">{{ s.title }}</h1>
+            <p class="session-sub">
+              Hosted by {{ s.host_email }}
+              @if (s.closes_at && isOpen()) {
+                <span class="dot">·</span>
+                <span>Voting closes {{ s.closes_at | date:'MMM d, h:mm a' }}</span>
+              }
+            </p>
+          </div>
+
+          <div class="header-side">
+            <button class="code-chip" (click)="copyCode()" matTooltip="Copy the invite link">
+              <span class="code-label">CODE</span>
+              <span class="code-value">{{ s.code }}</span>
+              <mat-icon>{{ copied() ? 'check' : 'content_copy' }}</mat-icon>
+            </button>
+            @if (copied()) {
+              <span class="copied-hint" role="status">Link copied</span>
+            }
+          </div>
+        </div>
+
+        @if (!isOpen()) {
+          <div class="status-banner closed">
+            <mat-icon>lock</mat-icon>
+            <span>Voting is closed.</span>
+          </div>
+        }
+      </header>
+
+      @if (actionError()) {
+        <p class="form-error" role="alert">
+          <mat-icon>error_outline</mat-icon>
+          {{ actionError() }}
+        </p>
+      }
+
+      <!-- Winner -->
+      @if (!isOpen() && winner(); as w) {
+        <section class="winner-card">
+          <div class="winner-poster">
+            <img [src]="w.image_url || 'assets/no-image.png'" [alt]="w.title">
+          </div>
+          <div class="winner-body">
+            <span class="winner-eyebrow">
+              <mat-icon>emoji_events</mat-icon>
+              Tonight's pick
+            </span>
+            <h2 class="winner-title">{{ w.title }}</h2>
+            <p class="winner-meta">
+              <span class="type-badge" [class.game]="w.media_type === 'game'">
+                {{ w.media_type === 'movie' ? 'Movie' : 'Game' }}
+              </span>
+              @if (w.year) { <span>{{ w.year }}</span> }
+              <span class="dot">·</span>
+              <span>{{ w.votes }} of {{ totalVotes() }} votes</span>
+            </p>
+            <a class="btn btn-outline" [routerLink]="detailLink(w)">
+              <mat-icon>info</mat-icon>
+              View details
+            </a>
+          </div>
+        </section>
+      }
+
+      <!-- Tally -->
+      <section class="tally-section">
+        <div class="section-head">
+          <h2 class="section-title">
+            On the table
+            <span class="count-pill">{{ candidates().length }}</span>
+          </h2>
+          <span class="vote-count">
+            {{ totalVotes() }} {{ totalVotes() === 1 ? 'vote' : 'votes' }} cast
+          </span>
+        </div>
+
+        @if (isOpen() && totalVotes() > 0 && leader(); as top) {
+          <p class="leader-note">
+            @if (isTied()) {
+              <mat-icon>balance</mat-icon>
+              <span>It's a tie at {{ top.votes }} {{ top.votes === 1 ? 'vote' : 'votes' }} — someone break the deadlock.</span>
+            } @else {
+              <mat-icon>trending_up</mat-icon>
+              <span><strong>{{ top.title }}</strong> is ahead with {{ top.votes }} of {{ totalVotes() }}.</span>
+            }
+          </p>
+        }
+
+        @if (candidates().length === 0) {
+          <div class="empty-state small">
+            <mat-icon>playlist_add</mat-icon>
+            <h3>Nothing on the list yet</h3>
+            <p>Add a few options and share the code so people can vote.</p>
+          </div>
+        } @else {
+          <ul class="candidate-list">
+            @for (c of tally(); track c.id) {
+              <li class="candidate"
+                  [class.is-mine]="c.votedByMe"
+                  [class.is-winner]="!isOpen() && winner()?.id === c.id">
+                <div class="candidate-thumb">
+                  <img [src]="c.image_url || 'assets/no-image.png'" [alt]="c.title" loading="lazy">
+                </div>
+
+                <div class="candidate-body">
+                  <div class="candidate-head">
+                    <a class="candidate-title" [routerLink]="detailLink(c)">{{ c.title }}</a>
+                    <span class="type-badge" [class.game]="c.media_type === 'game'">
+                      {{ c.media_type === 'movie' ? 'Movie' : 'Game' }}
+                    </span>
+                    @if (c.year) { <span class="candidate-year">{{ c.year }}</span> }
+                  </div>
+
+                  <div class="bar-row">
+                    <div class="bar-track">
+                      <div class="bar-fill" [style.width.%]="c.share"></div>
+                    </div>
+                    <span class="bar-value">
+                      {{ c.votes }} {{ c.votes === 1 ? 'vote' : 'votes' }}
+                      @if (totalVotes() > 0) { <span class="bar-share">({{ c.share }}%)</span> }
+                    </span>
+                  </div>
+
+                  @if (c.voters.length > 0) {
+                    <p class="voters">{{ c.voters.join(', ') }}</p>
+                  }
+                </div>
+
+                <div class="candidate-actions">
+                  @if (isOpen()) {
+                    <button class="vote-btn"
+                            [class.voted]="c.votedByMe"
+                            (click)="vote(c)"
+                            [matTooltip]="c.votedByMe ? 'Withdraw your vote' : 'Vote for this'">
+                      <mat-icon>{{ c.votedByMe ? 'how_to_vote' : 'radio_button_unchecked' }}</mat-icon>
+                      <span>{{ c.votedByMe ? 'Your pick' : 'Vote' }}</span>
+                    </button>
+                  }
+                  @if (canRemove(c)) {
+                    <button class="remove-btn"
+                            (click)="removeCandidate(c, $event)"
+                            matTooltip="Remove from the list">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  }
+                </div>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+
+      <!-- Host controls -->
+      @if (isHost()) {
+        <section class="host-bar">
+          <mat-icon>shield</mat-icon>
+          <span class="host-label">Host controls</span>
+          @if (isOpen()) {
+            <button class="btn btn-primary" (click)="closeVoting()" [disabled]="totalVotes() === 0">
+              <mat-icon>gavel</mat-icon>
+              Close voting &amp; lock the pick
+            </button>
+            @if (totalVotes() === 0) {
+              <span class="host-hint">Nobody has voted yet.</span>
+            }
+          } @else {
+            <button class="btn btn-outline" (click)="reopenVoting()">
+              <mat-icon>lock_open</mat-icon>
+              Reopen voting
+            </button>
+          }
+        </section>
+      }
+
+      <!-- Add picks -->
+      @if (isOpen() && auth.isAuthenticated()) {
+        <section class="picker-section">
+          <button class="picker-toggle" (click)="togglePicker()">
+            <mat-icon>{{ pickerOpen() ? 'expand_less' : 'add' }}</mat-icon>
+            {{ pickerOpen() ? 'Done adding' : 'Add something to the list' }}
+          </button>
+
+          @if (pickerOpen()) {
+            <div class="picker-panel">
+              <div class="picker-tabs">
+                <button class="picker-tab"
+                        [class.active]="searchTab() === 'movie'"
+                        (click)="setSearchTab('movie')">
+                  <mat-icon>movie</mat-icon> Movies
+                </button>
+                <button class="picker-tab"
+                        [class.active]="searchTab() === 'game'"
+                        (click)="setSearchTab('game')">
+                  <mat-icon>sports_esports</mat-icon> Games
+                </button>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Search the catalog</mat-label>
+                <input matInput
+                       [ngModel]="searchQuery()"
+                       (ngModelChange)="searchQuery.set($event)"
+                       (keyup.enter)="search()"
+                       placeholder="Type a title, then press Enter">
+                <button matSuffix class="search-icon-btn" (click)="search()" aria-label="Search">
+                  <mat-icon>search</mat-icon>
+                </button>
+              </mat-form-field>
+
+              @if (searching()) {
+                <div class="picker-loading"><mat-spinner diameter="26"></mat-spinner></div>
+              } @else if (searchResults().length > 0) {
+                <ul class="result-list">
+                  @for (r of searchResults(); track r.media_type + '-' + r.media_id) {
+                    <li class="result">
+                      <img [src]="r.image_url || 'assets/no-image.png'" [alt]="r.title" loading="lazy">
+                      <div class="result-body">
+                        <span class="result-title">{{ r.title }}</span>
+                        @if (r.year) { <span class="result-year">{{ r.year }}</span> }
+                      </div>
+                      @if (alreadyAdded(r.media_type, r.media_id)) {
+                        <span class="added-flag"><mat-icon>check</mat-icon> Added</span>
+                      } @else {
+                        <button class="add-btn" (click)="addPick(r)">
+                          <mat-icon>add</mat-icon> Add
+                        </button>
+                      }
+                    </li>
+                  }
+                </ul>
+              }
+            </div>
+          }
+        </section>
+      }
+
+      <!-- Cross-media suggestions -->
+      @if (isOpen() && (suggestions().length > 0 || loadingSuggestions())) {
+        <section class="suggestions-section">
+          <div class="section-head">
+            <h2 class="section-title">In the same mood</h2>
+          </div>
+          <p class="suggestions-hint">
+            Matched against what's already on the list — films and games that share its mood.
+          </p>
+
+          @if (loadingSuggestions()) {
+            <div class="picker-loading"><mat-spinner diameter="26"></mat-spinner></div>
+          } @else {
+            <div class="suggestion-grid">
+              @for (sug of suggestions(); track sug.media_type + '-' + sug.media_id) {
+                <div class="suggestion-card">
+                  <a class="suggestion-art" [routerLink]="detailLink(sug)">
+                    <img [src]="sug.image_url || 'assets/no-image.png'" [alt]="sug.title" loading="lazy">
+                    <span class="match-badge">{{ sug.similarity }}% match</span>
+                  </a>
+                  <div class="suggestion-body">
+                    <a class="suggestion-title" [routerLink]="detailLink(sug)">{{ sug.title }}</a>
+                    <div class="suggestion-meta">
+                      <span class="type-badge" [class.game]="sug.media_type === 'game'">
+                        {{ sug.media_type === 'movie' ? 'Movie' : 'Game' }}
+                      </span>
+                      @if (sug.year) { <span>{{ sug.year }}</span> }
+                    </div>
+                    @if (sug.sharedMoods.length > 0) {
+                      <div class="mood-tags">
+                        @for (mood of sug.sharedMoods.slice(0, 2); track mood) {
+                          <span class="mood-tag">{{ moodLabel(mood) }}</span>
+                        }
+                      </div>
+                    }
+                    @if (auth.isAuthenticated() && !alreadyAdded(sug.media_type, sug.media_id)) {
+                      <button class="add-btn full" (click)="addPick(sug)">
+                        <mat-icon>add</mat-icon> Add to list
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </section>
+      }
+
+      @if (!auth.isAuthenticated()) {
+        <div class="login-prompt">
+          <mat-icon>how_to_vote</mat-icon>
+          <p>
+            <a routerLink="/login" [queryParams]="{returnUrl: '/sessions/' + s.code}">Sign in</a>
+            to cast your vote.
+          </p>
+        </div>
+      }
+
+    </div>
+  </div>
+  }
+}

@@ -16,6 +16,10 @@
             <mat-icon>favorite</mat-icon>
             <span>My List</span>
           </a>
+          <a routerLink="/sessions" routerLinkActive="active" class="nav-link">
+            <mat-icon>how_to_vote</mat-icon>
+            <span>Movie Night</span>
+          </a>
         }
       </div>
     </div>
@@ -35,6 +39,10 @@
           <button mat-menu-item routerLink="/favorites">
             <mat-icon>favorite</mat-icon>
             <span>My Favorites</span>
+          </button>
+          <button mat-menu-item routerLink="/sessions">
+            <mat-icon>how_to_vote</mat-icon>
+            <span>Movie Night</span>
           </button>
           <mat-divider></mat-divider>
           <button mat-menu-item (click)="onSignOut()">

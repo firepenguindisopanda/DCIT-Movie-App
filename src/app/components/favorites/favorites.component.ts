@@ -20,19 +20,18 @@ interface FavoriteItem {
 }
 
 @Component({
-  selector: 'app-favorites',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatTabsModule
-  ],
-  templateUrl: './favorites.component.html',
-  styleUrls: ['./favorites.component.scss']
+    selector: 'app-favorites',
+    imports: [
+        CommonModule,
+        RouterLink,
+        MatCardModule,
+        MatButtonModule,
+        MatIconModule,
+        MatProgressSpinnerModule,
+        MatTabsModule
+    ],
+    templateUrl: './favorites.component.html',
+    styleUrls: ['./favorites.component.scss']
 })
 export class FavoritesComponent implements OnInit, OnDestroy {
   private supabase = inject(SupabaseService);
