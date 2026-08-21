@@ -140,11 +140,12 @@ The included GitHub Action workflow reads them and injects them via `scripts/rep
    ```
    (On Windows use `set` or `$env:` in PowerShell.)
 
-4. Build and deploy:
+4. Build and deploy. Note the `/browser` suffix: the Angular `application`
+   builder emits the browser bundle into a `browser/` subdirectory.
    ```bash
    npm ci
    npm run build
-   wrangler pages deploy dist/movie-viewer --project-name movie-game-viewer
+   wrangler pages deploy dist/movie-viewer/browser --project-name movie-game-viewer
    ```
 
 ---

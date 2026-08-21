@@ -490,3 +490,45 @@
     border-color: var(--accent-blue)
     color: var(--accent-blue)
     background: rgba(0, 51, 102, 0.05)
+
+// --- Grid footer / paging ---
+.grid-footer
+  display: flex
+  flex-direction: column
+  align-items: center
+  gap: 16px
+  padding: 40px 0 8px
+
+.grid-count
+  margin: 0
+  font-size: 14px
+  color: var(--text-secondary)
+
+  strong
+    color: var(--text-primary)
+    font-weight: 700
+
+.show-more-btn
+  display: inline-flex
+  align-items: center
+  gap: 8px
+  padding: 12px 28px
+  border: 2px solid rgba(0, 51, 102, 0.3)
+  border-radius: var(--radius-full)
+  background: transparent
+  color: var(--text-primary)
+  font-family: var(--font-primary)
+  font-size: 14px
+  font-weight: 600
+  cursor: pointer
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast)
+
+  mat-icon
+    font-size: 20px
+    width: 20px
+    height: 20px
+
+  &:hover
+    border-color: var(--accent-blue)
+    background: rgba(0, 51, 102, 0.07)
+    transform: translateY(-1px)

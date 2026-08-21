@@ -73,6 +73,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   activeTab = signal<number>(0);
 
   sortBy = signal<'popularity' | 'rating' | 'release_date' | 'title'>('popularity');
+
+  /**
+   * The catalog is ~950 movies and ~2000 games. Rendering every card at once
+   * produced a 75,000px page and thousands of DOM nodes, so the grid grows in
+   * pages instead. Counts are per-tab so switching tabs preserves your place.
+   */
+  readonly pageSize = 60;
+  visibleMovieCount = signal<number>(60);
+  visibleGameCount = signal<number>(60);
   yearFrom = signal<number | null>(null);
   yearTo = signal<number | null>(null);
   minRating = signal<number | null>(null);
@@ -172,6 +181,63 @@ export class HomeComponent implements OnInit, OnDestroy {
     return items[0];
   });
 
+  // What the grid actually renders.
+  pagedMovies = computed(() => this.filteredMovies().slice(0, this.visibleMovieCount()));
+  pagedGames = computed(() => this.filteredGames().slice(0, this.visibleGameCount()));
+
+  totalInTab = computed(() =>
+    this.activeTab() === 0 ? this.filteredMovies().length : this.filteredGames().length
+  );
+  shownInTab = computed(() =>
+    this.activeTab() === 0 ? this.pagedMovies().length : this.pagedGames().length
+  );
+  hasMore = computed(() => this.shownInTab() < this.totalInTab());
+
+  // The template drives these through setters rather than signal.set() so that
+  // re-sorting or re-filtering also restarts paging.
+  setSortBy(value: 'popularity' | 'rating' | 'release_date' | 'title'): void {
+    this.sortBy.set(value);
+    this.resetPaging();
+  }
+
+  setYearFrom(value: number | null): void {
+    this.yearFrom.set(value);
+    this.resetPaging();
+  }
+
+  setYearTo(value: number | null): void {
+    this.yearTo.set(value);
+    this.resetPaging();
+  }
+
+  setMinRating(value: number | null): void {
+    this.minRating.set(value);
+    this.resetPaging();
+  }
+
+  /**
+   * Cards fade in staggered by index. Uncapped, a card at index 200 would wait
+   * 8 seconds to appear; the delay is only decorative, so cap it at one page's
+   * worth and let anything beyond that show immediately.
+   */
+  staggerDelay(index: number): string {
+    return `${Math.min(index, 24) * 0.04}s`;
+  }
+
+  showMore(): void {
+    if (this.activeTab() === 0) {
+      this.visibleMovieCount.update(n => n + this.pageSize);
+    } else {
+      this.visibleGameCount.update(n => n + this.pageSize);
+    }
+  }
+
+  /** Any change to the result set restarts paging, or you'd page into stale offsets. */
+  private resetPaging(): void {
+    this.visibleMovieCount.set(this.pageSize);
+    this.visibleGameCount.set(this.pageSize);
+  }
+
   myControl = new FormControl();
   filteredOptions!: Observable<MediaItem[]>;
 
@@ -218,6 +284,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   async loadData() {
     this.loading.set(true);
+    this.resetPaging();
     
     try {
       const [moviesData, gamesData] = await Promise.all([
@@ -241,6 +308,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   async filterByGenre(genre: string) {
     this.loading.set(true);
     this.selectedGenre.set(genre);
+    this.resetPaging();
     
     if (this.activeTab() === 0) {
       const result = await this.supabase.getMoviesByGenre(genre);
@@ -261,6 +329,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     
     this.loading.set(true);
     this.searchQuery.set(query);
+    this.resetPaging();
     
     if (this.activeTab() === 0) {
       const result = await this.supabase.searchMovies(query);
@@ -277,6 +346,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.activeTab.set(index);
     this.selectedGenre.set(null);
     this.myControl.setValue('');
+    this.resetPaging();
   }
 
   displayFn(item: MediaItem): string {
@@ -327,6 +397,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.yearTo.set(null);
     this.minRating.set(null);
     this.loadData();
+    this.resetPaging();
   }
 
   onFilterChange(): void {

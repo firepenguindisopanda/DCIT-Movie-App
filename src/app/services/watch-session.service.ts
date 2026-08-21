@@ -57,6 +57,23 @@ export class WatchSessionService {
     return this.supabase.client;
   }
 
+  /**
+   * Postgres and PostgREST error text ("relation does not exist", schema cache
+   * misses, constraint names) means nothing to a user and leaks internals.
+   * Log the real error, surface something actionable.
+   */
+  private friendlyError(error: any, fallback: string): string {
+    console.error('[watch-session]', error);
+    if (error?.code === '23505') return 'That already exists.';
+    if (error?.code === '42P01' || /schema cache|does not exist/i.test(error?.message ?? '')) {
+      return 'Movie Night is not set up on this database yet. Run supabase-schema-v4.sql.';
+    }
+    if (error?.code === '42501' || /row-level security/i.test(error?.message ?? '')) {
+      return 'You do not have permission to do that.';
+    }
+    return fallback;
+  }
+
   private generateCode(): string {
     const bytes = new Uint32Array(CODE_LENGTH);
     crypto.getRandomValues(bytes);
@@ -91,7 +108,9 @@ export class WatchSessionService {
       if (!error) return { data: data as WatchSession, error: null };
 
       // 23505 = unique_violation. Only a code clash is worth retrying.
-      if (error.code !== '23505') return { data: null, error: error.message };
+      if (error.code !== '23505') {
+        return { data: null, error: this.friendlyError(error, 'Could not create the session.') };
+      }
     }
     return { data: null, error: 'Could not generate a unique session code. Please try again.' };
   }
@@ -104,10 +123,7 @@ export class WatchSessionService {
       .maybeSingle();
 
     if (error) {
-      // Postgres/PostgREST wording ("relation does not exist", schema cache
-      // misses) is noise to a person holding an invite link.
-      console.error('Session lookup failed:', error);
-      return { data: null, error: 'Could not load that session. Please try again.' };
+      return { data: null, error: this.friendlyError(error, 'Could not load that session.') };
     }
     if (!data) return { data: null, error: 'No session found with that code.' };
     return { data: data as WatchSession, error: null };
@@ -184,7 +200,7 @@ export class WatchSessionService {
 
     if (!error) return { error: null };
     if (error.code === '23505') return { error: 'That pick is already on the list.' };
-    return { error: error.message };
+    return { error: this.friendlyError(error, 'Could not add that pick.') };
   }
 
   async removeCandidate(candidateId: string) {
@@ -219,7 +235,7 @@ export class WatchSessionService {
         },
         { onConflict: 'session_id,user_id' }
       );
-    return { error: error ? error.message : null };
+    return { error: error ? this.friendlyError(error, 'Could not record your vote.') : null };
   }
 
   async withdrawVote(sessionId: string, userId: string) {

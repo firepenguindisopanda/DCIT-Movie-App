@@ -132,7 +132,7 @@
     <div class="filter-row">
       <mat-form-field appearance="outline" subscriptSizing="dynamic" class="sort-select">
         <mat-label>Sort by</mat-label>
-        <mat-select [value]="sortBy()" (valueChange)="sortBy.set($event)">
+        <mat-select [value]="sortBy()" (valueChange)="setSortBy($event)">
           <mat-option value="popularity">Popularity</mat-option>
           <mat-option value="rating">Rating</mat-option>
           <mat-option value="release_date">Release Date</mat-option>
@@ -144,7 +144,7 @@
         <mat-label>Year from</mat-label>
         <input matInput type="number" placeholder="e.g. 1990"
                [value]="yearFrom() ?? ''"
-               (input)="yearFrom.set(parseNum($any($event.target).value))"
+               (input)="setYearFrom(parseNum($any($event.target).value))"
                min="1900" max="2030">
       </mat-form-field>
 
@@ -152,7 +152,7 @@
         <mat-label>Year to</mat-label>
         <input matInput type="number" placeholder="e.g. 2024"
                [value]="yearTo() ?? ''"
-               (input)="yearTo.set(parseNum($any($event.target).value))"
+               (input)="setYearTo(parseNum($any($event.target).value))"
                min="1900" max="2030">
       </mat-form-field>
 
@@ -164,7 +164,7 @@
                [min]="activeTab() === 0 ? 0 : 0"
                [max]="activeTab() === 0 ? 10 : 100"
                [value]="minRating() ?? ''"
-               (input)="minRating.set(parseNum($any($event.target).value))">
+               (input)="setMinRating(parseNum($any($event.target).value))">
       </mat-form-field>
     </div>
 
@@ -185,8 +185,8 @@
       <!-- Movies Grid -->
       @if (activeTab() === 0) {
         <div class="media-grid">
-          @for (movie of filteredMovies(); track movie.id; let i = $index) {
-            <div class="media-card stagger-in" [style.animation-delay]="(i * 0.04) + 's'" (click)="openDetails(getMediaId(movie))">
+          @for (movie of pagedMovies(); track movie.id; let i = $index) {
+            <div class="media-card stagger-in" [style.animation-delay]="staggerDelay(i)" (click)="openDetails(getMediaId(movie))">
               <div class="card-image">
                 <img [src]="movie.poster_url" 
                      (error)="onImageError($event)"
@@ -221,8 +221,8 @@
       <!-- Games Grid -->
       @if (activeTab() === 1) {
         <div class="media-grid games-grid">
-          @for (game of filteredGames(); track game.id; let i = $index) {
-            <div class="media-card game-card stagger-in" [style.animation-delay]="(i * 0.04) + 's'" (click)="openDetails(game.id)">
+          @for (game of pagedGames(); track game.id; let i = $index) {
+            <div class="media-card game-card stagger-in" [style.animation-delay]="staggerDelay(i)" (click)="openDetails(game.id)">
               <div class="card-image landscape">
                 <img [src]="game.background_image" 
                      (error)="onImageError($event)"
@@ -253,6 +253,23 @@
               <p>No games found</p>
               <button class="clear-btn" (click)="clearFilter()">Clear filters</button>
             </div>
+          }
+        </div>
+      }
+
+      <!-- Load more -->
+      @if (totalInTab() > 0) {
+        <div class="grid-footer">
+          <p class="grid-count">
+            Showing <strong>{{ shownInTab() | number }}</strong> of
+            <strong>{{ totalInTab() | number }}</strong>
+            {{ activeTab() === 0 ? 'movies' : 'games' }}
+          </p>
+          @if (hasMore()) {
+            <button class="show-more-btn" (click)="showMore()">
+              <mat-icon>expand_more</mat-icon>
+              Show more
+            </button>
           }
         </div>
       }

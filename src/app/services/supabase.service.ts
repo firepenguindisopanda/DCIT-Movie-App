@@ -47,8 +47,33 @@ export class SupabaseService {
   authStateChanges(callback: (event: string, session: any) => void) {
     return this.supabase.auth.onAuthStateChange(callback);
   }
+  /**
+   * PostgREST caps an unbounded select at 1000 rows and gives no indication it
+   * truncated. The games table is larger than that, so list queries page
+   * explicitly rather than silently losing everything past row 1000.
+   */
+  private async fetchAll<T>(
+    page: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: any }>
+  ): Promise<{ data: T[]; error: any }> {
+    const PAGE_SIZE = 1000;
+    const rows: T[] = [];
+
+    for (let from = 0; ; from += PAGE_SIZE) {
+      const { data, error } = await page(from, from + PAGE_SIZE - 1);
+      if (error) return { data: rows, error };
+      if (!data || data.length === 0) break;
+      rows.push(...data);
+      // A short page means we reached the end.
+      if (data.length < PAGE_SIZE) break;
+    }
+
+    return { data: rows, error: null };
+  }
+
   async getMovies() {
-    return this.supabase.from('movies').select('*');
+    return this.fetchAll((from, to) =>
+      this.supabase.from('movies').select('*').range(from, to)
+    );
   }
 
   async getMovieById(id: number) {
@@ -56,18 +81,24 @@ export class SupabaseService {
   }
 
   async getMoviesByGenre(genre: string) {
-    return this.supabase.from('movies').select('*').contains('genres', [genre]);
+    return this.fetchAll((from, to) =>
+      this.supabase.from('movies').select('*').contains('genres', [genre]).range(from, to)
+    );
   }
 
   async searchMovies(query: string) {
-    return this.supabase.from('movies').select('*').ilike('title', `%${query}%`);
+    return this.fetchAll((from, to) =>
+      this.supabase.from('movies').select('*').ilike('title', `%${query}%`).range(from, to)
+    );
   }
 
   async getGenres() {
     return this.supabase.from('movie_genres').select('*').order('name');
   }
   async getGames() {
-    return this.supabase.from('games').select('*');
+    return this.fetchAll((from, to) =>
+      this.supabase.from('games').select('*').range(from, to)
+    );
   }
 
   async getGameById(id: number) {
@@ -75,11 +106,15 @@ export class SupabaseService {
   }
 
   async getGamesByGenre(genre: string) {
-    return this.supabase.from('games').select('*').contains('genres', [genre]);
+    return this.fetchAll((from, to) =>
+      this.supabase.from('games').select('*').contains('genres', [genre]).range(from, to)
+    );
   }
 
   async searchGames(query: string) {
-    return this.supabase.from('games').select('*').ilike('name', `%${query}%`);
+    return this.fetchAll((from, to) =>
+      this.supabase.from('games').select('*').ilike('name', `%${query}%`).range(from, to)
+    );
   }
 
   async getGameGenres() {
