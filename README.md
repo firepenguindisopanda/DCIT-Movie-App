@@ -140,12 +140,17 @@ The included GitHub Action workflow reads them and injects them via `scripts/rep
    ```
    (On Windows use `set` or `$env:` in PowerShell.)
 
-4. Build and deploy. Note the `/browser` suffix: the Angular `application`
-   builder emits the browser bundle into a `browser/` subdirectory.
+4. Build and deploy. Two things to know:
+   - The `/browser` suffix: the Angular `application` builder emits the browser
+     bundle into a `browser/` subdirectory.
+   - Pages only treats a deploy as **production** if its branch matches the
+     project's configured production branch, which is `main`. Deploying from any
+     other branch creates a preview at `https://<branch>.movie-game-viewer.pages.dev`
+     and leaves the live site untouched.
    ```bash
    npm ci
    npm run build
-   wrangler pages deploy dist/movie-viewer/browser --project-name movie-game-viewer
+   wrangler pages deploy dist/movie-viewer/browser --project-name movie-game-viewer --branch main
    ```
 
 ---

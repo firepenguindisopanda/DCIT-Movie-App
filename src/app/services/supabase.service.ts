@@ -27,7 +27,18 @@ export class SupabaseService {
     return this.supabase;
   }
   async signUp(email: string, password: string) {
-    return this.supabase.auth.signUp({ email, password });
+    return this.supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        // Without this the confirmation link always uses the project's Site URL,
+        // so a signup on localhost would email a link to production. Sending it
+        // back to the origin the user actually signed up from keeps local and
+        // deployed environments self-contained. Each origin must be present in
+        // Supabase's Redirect URLs allow list.
+        emailRedirectTo: window.location.origin
+      }
+    });
   }
 
   async signIn(email: string, password: string) {
