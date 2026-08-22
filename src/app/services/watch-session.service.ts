@@ -273,8 +273,18 @@ export class WatchSessionService {
 
   // --- Realtime ---------------------------------------------------------------
 
-  /** Live updates for one session. Caller must unsubscribe via unsubscribe(). */
-  subscribeToSession(sessionId: string, onChange: () => void): RealtimeChannel {
+  /**
+   * Live updates for one session. Caller must unsubscribe via unsubscribe().
+   *
+   * Three tables matter, not two: watch_sessions carries status and the winner,
+   * so without it a host closing the vote never reaches anyone else's screen --
+   * they keep seeing live vote buttons that the RLS policy will reject.
+   */
+  subscribeToSession(
+    sessionId: string,
+    onChange: () => void,
+    onSessionChange?: (session: WatchSession) => void
+  ): RealtimeChannel {
     return this.db
       .channel(`session:${sessionId}`)
       .on(
@@ -286,6 +296,15 @@ export class WatchSessionService {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'session_candidates', filter: `session_id=eq.${sessionId}` },
         () => onChange()
+      )
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'watch_sessions', filter: `id=eq.${sessionId}` },
+        payload => {
+          const updated = payload.new as WatchSession;
+          if (updated?.id) onSessionChange?.(updated);
+          onChange();
+        }
       )
       .subscribe();
   }

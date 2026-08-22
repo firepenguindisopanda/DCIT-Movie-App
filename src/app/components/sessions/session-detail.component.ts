@@ -133,7 +133,12 @@ export class SessionDetailComponent implements OnInit, OnDestroy {
 
     // Live tally: re-pull on any vote or candidate change in this session.
     if (this.channel) await this.sessionsService.unsubscribe(this.channel);
-    this.channel = this.sessionsService.subscribeToSession(data.id, () => this.refresh());
+    this.channel = this.sessionsService.subscribeToSession(
+      data.id,
+      () => this.refresh(),
+      // Host closed or reopened the vote: reflect it without a page reload.
+      updated => this.session.set(updated)
+    );
 
     this.loadSuggestions();
   }

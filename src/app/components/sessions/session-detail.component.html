@@ -143,6 +143,12 @@
                     <span class="type-badge" [class.game]="c.media_type === 'game'">
                       {{ c.media_type === 'movie' ? 'Movie' : 'Game' }}
                     </span>
+                    @if (!isOpen() && winner()?.id === c.id) {
+                      <span class="winner-chip">
+                        <mat-icon>emoji_events</mat-icon>
+                        Winner
+                      </span>
+                    }
                     @if (c.year) { <span class="candidate-year">{{ c.year }}</span> }
                   </div>
 

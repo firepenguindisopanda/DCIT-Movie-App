@@ -37,9 +37,9 @@
             </div>
           } @else {
             <div class="favorites-grid">
-              @for (fav of movieFavorites(); track fav.id; let i = $index) {
+              @for (fav of resolvedMovieFavorites(); track fav.id; let i = $index) {
                 <div class="fav-card stagger-in" [style.animation-delay]="(i * 0.05) + 's'">
-                  <div class="fav-image" [routerLink]="['/details', 'movie', fav.movie?.id]">
+                  <div class="fav-image" [routerLink]="['/details', 'movie', fav.movie.tmdb_id]">
                     <img [src]="fav.movie?.poster_url || 'assets/no-image.png'" 
                          [alt]="fav.movie?.title">
                     <div class="fav-overlay">
@@ -58,7 +58,7 @@
                     <span class="fav-year">{{ fav.movie?.year }}</span>
                   </div>
                   <div class="fav-actions">
-                    <a [routerLink]="['/details', 'movie', fav.movie?.id]" class="action-btn view-btn">
+                    <a [routerLink]="['/details', 'movie', fav.movie.tmdb_id]" class="action-btn view-btn">
                       <mat-icon>info</mat-icon>
                       Details
                     </a>
@@ -93,7 +93,7 @@
             </div>
           } @else {
             <div class="favorites-grid games-grid">
-              @for (fav of gameFavorites(); track fav.id; let i = $index) {
+              @for (fav of resolvedGameFavorites(); track fav.id; let i = $index) {
                 <div class="fav-card game-card stagger-in" [style.animation-delay]="(i * 0.05) + 's'">
                   <div class="fav-image landscape" [routerLink]="['/details', 'game', fav.game?.id]">
                     <img [src]="fav.game?.background_image || 'assets/no-image.png'" 
@@ -133,5 +133,33 @@
         </ng-template>
       </mat-tab>
     </mat-tab-group>
+
+    <!-- Favourites whose catalog entry no longer exists. Shown explicitly so the
+         count matches what is on screen and the row can actually be cleared. -->
+    @if (orphanedFavorites().length > 0) {
+      <section class="orphan-section">
+        <h2 class="orphan-title">
+          <mat-icon>link_off</mat-icon>
+          No longer in the catalog
+        </h2>
+        <p class="orphan-hint">
+          These were saved before the title left the library. They can't be opened, only removed.
+        </p>
+        <ul class="orphan-list">
+          @for (fav of orphanedFavorites(); track fav.id) {
+            <li class="orphan-row">
+              <mat-icon class="orphan-icon">{{ fav.media_type === 'movie' ? 'movie_filter' : 'videogame_asset_off' }}</mat-icon>
+              <span class="orphan-label">
+                {{ fav.media_type === 'movie' ? 'Movie' : 'Game' }} #{{ fav.media_id }}
+              </span>
+              <button class="action-btn remove-btn" (click)="removeFavorite(fav)">
+                <mat-icon>delete_outline</mat-icon>
+                Remove
+              </button>
+            </li>
+          }
+        </ul>
+      </section>
+    }
   }
 </div>

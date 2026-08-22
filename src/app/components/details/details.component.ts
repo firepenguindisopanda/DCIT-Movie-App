@@ -234,6 +234,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // Favourites key off the route id alone, so without this an unknown id could
+    // be saved and would then show up in My List as an unopenable entry.
+    if (!this.media()) return;
+
     try {
       if (this.isFavorite()) {
         await this.supabase.removeFavorite(this.currentUserId!, this.mediaType(), this.mediaId());

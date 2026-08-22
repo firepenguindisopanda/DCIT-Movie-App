@@ -99,6 +99,9 @@
           <div class="session-list">
             @for (session of openSessions(); track session.id) {
               <a class="session-card" [routerLink]="['/sessions', session.code]">
+                <span class="session-status" aria-hidden="true">
+                  <mat-icon>how_to_vote</mat-icon>
+                </span>
                 <div class="session-main">
                   <span class="session-name">{{ session.title }}</span>
                   <span class="session-meta">
@@ -130,7 +133,10 @@
           <h2 class="group-title">Decided</h2>
           <div class="session-list">
             @for (session of closedSessions(); track session.id) {
-              <a class="session-card is-closed" [routerLink]="['/sessions', session.code]">
+              <a class="session-card" [routerLink]="['/sessions', session.code]">
+                <span class="session-status closed" aria-hidden="true">
+                  <mat-icon>lock</mat-icon>
+                </span>
                 <div class="session-main">
                   <span class="session-name">{{ session.title }}</span>
                   <span class="session-meta">

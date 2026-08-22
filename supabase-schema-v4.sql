@@ -146,7 +146,15 @@ CREATE POLICY "Users can change their own vote" ON session_votes
 
 DROP POLICY IF EXISTS "Users can withdraw their own vote" ON session_votes;
 CREATE POLICY "Users can withdraw their own vote" ON session_votes
-  FOR DELETE USING (auth.uid() = user_id);
+  FOR DELETE USING (
+    auth.uid() = user_id
+    -- Without the status check you could withdraw from a closed session but
+    -- never vote again, because INSERT/UPDATE both require it to be open.
+    AND EXISTS (
+      SELECT 1 FROM watch_sessions s
+      WHERE s.id = session_id AND s.status = 'open'
+    )
+  );
 
 -- --- Realtime -----------------------------------------------------------------
 -- Live tallies: the app subscribes to vote and candidate changes per session.
@@ -166,5 +174,14 @@ BEGIN
     WHERE pubname = 'supabase_realtime' AND schemaname = 'public' AND tablename = 'session_candidates'
   ) THEN
     ALTER PUBLICATION supabase_realtime ADD TABLE session_candidates;
+  END IF;
+
+  -- status and winner_candidate_id live here; without this, closing a session
+  -- never reaches anyone else's screen.
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_publication_tables
+    WHERE pubname = 'supabase_realtime' AND schemaname = 'public' AND tablename = 'watch_sessions'
+  ) THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE watch_sessions;
   END IF;
 END $$;

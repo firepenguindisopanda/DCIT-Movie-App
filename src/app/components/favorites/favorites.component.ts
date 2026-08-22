@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -43,6 +43,19 @@ export class FavoritesComponent implements OnInit, OnDestroy {
   gameFavorites = signal<FavoriteItem[]>([]);
   loading = signal<boolean>(true);
   activeTab = signal<number>(0);
+
+  /**
+   * A favourite stores only media_type + media_id, so it outlives the catalog
+   * row it points at. When the row is gone the lookup yields null, which used
+   * to render a blank card linking to /details/movie/null. Split them out so
+   * each group can be rendered honestly.
+   */
+  resolvedMovieFavorites = computed(() => this.movieFavorites().filter(f => !!f.movie));
+  resolvedGameFavorites = computed(() => this.gameFavorites().filter(f => !!f.game));
+  orphanedFavorites = computed(() => [
+    ...this.movieFavorites().filter(f => !f.movie),
+    ...this.gameFavorites().filter(f => !f.game)
+  ]);
 
   async ngOnInit(): Promise<void> {
     if (!this.authService.isAuthenticated()) {
