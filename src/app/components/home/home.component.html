@@ -186,28 +186,37 @@
       @if (activeTab() === 0) {
         <div class="media-grid">
           @for (movie of pagedMovies(); track movie.id; let i = $index) {
-            <div class="media-card stagger-in" [style.animation-delay]="staggerDelay(i)" (click)="openDetails(getMediaId(movie))">
+            <a class="media-card stagger-in"
+               [style.animation-delay]="staggerDelay(i)"
+               [routerLink]="['/details', 'movie', getMediaId(movie)]">
               <div class="card-image">
-                <img [src]="movie.poster_url" 
+                <!-- alt is empty on purpose: the title below is inside the same
+                     link, so alt text would announce it twice. -->
+                <img [src]="movie.poster_url"
                      (error)="onImageError($event)"
-                     [alt]="movie.title"
+                     alt=""
                      loading="lazy">
-                <div class="card-overlay">
-                  <button class="card-play-btn">
+                <div class="card-overlay" aria-hidden="true">
+                  <span class="card-play-btn">
                     <mat-icon>play_arrow</mat-icon>
-                  </button>
+                  </span>
                 </div>
-                @if (movie.imdb_rating) {
-                  <div class="card-rating" [style.color]="getRatingColor(movie.imdb_rating * 10)">
-                    <mat-icon>star</mat-icon> {{ movie.imdb_rating }}
+                <!-- getRating() resolves vote_average (TMDB) with an imdb_rating
+                     fallback. The template used to read movie.imdb_rating
+                     directly, a column that no longer exists, so this badge
+                     never rendered. -->
+                @if (getRating(movie); as rating) {
+                  <div class="card-rating" [style.color]="getRatingColor(rating * 10)">
+                    <mat-icon aria-hidden="true">star</mat-icon>
+                    <span class="sr-only">Rating </span>{{ rating | number:'1.1-1' }}
                   </div>
                 }
               </div>
               <div class="card-info">
-                <h3 class="card-title">{{ movie.title }}</h3>
+                <span class="card-title">{{ movie.title }}</span>
                 <span class="card-year">{{ movie.year }}</span>
               </div>
-            </div>
+            </a>
           } @empty {
             <div class="no-results">
               <mat-icon>search_off</mat-icon>
@@ -222,31 +231,33 @@
       @if (activeTab() === 1) {
         <div class="media-grid games-grid">
           @for (game of pagedGames(); track game.id; let i = $index) {
-            <div class="media-card game-card stagger-in" [style.animation-delay]="staggerDelay(i)" (click)="openDetails(game.id)">
+            <a class="media-card game-card stagger-in"
+               [style.animation-delay]="staggerDelay(i)"
+               [routerLink]="['/details', 'game', game.id]">
               <div class="card-image landscape">
-                <img [src]="game.background_image" 
+                <img [src]="game.background_image"
                      (error)="onImageError($event)"
-                     [alt]="game.name"
+                     alt=""
                      loading="lazy">
-                <div class="card-overlay">
-                  <button class="card-play-btn">
+                <div class="card-overlay" aria-hidden="true">
+                  <span class="card-play-btn">
                     <mat-icon>play_arrow</mat-icon>
-                  </button>
+                  </span>
                 </div>
                 @if (game.metacritic) {
                   <div class="card-metacritic" 
                        [class.high]="game.metacritic >= 75"
                        [class.medium]="game.metacritic >= 50 && game.metacritic < 75"
                        [class.low]="game.metacritic < 50">
-                    {{ game.metacritic }}
+                    <span class="sr-only">Metacritic score </span>{{ game.metacritic }}
                   </div>
                 }
               </div>
               <div class="card-info">
-                <h3 class="card-title">{{ game.name }}</h3>
+                <span class="card-title">{{ game.name }}</span>
                 <span class="card-year">{{ game.released | date:'yyyy' }}</span>
               </div>
-            </div>
+            </a>
           } @empty {
             <div class="no-results">
               <mat-icon>search_off</mat-icon>

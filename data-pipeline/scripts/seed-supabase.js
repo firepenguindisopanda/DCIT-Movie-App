@@ -15,15 +15,22 @@ require('dotenv').config({ path: path.join(__dirname, '../.env') });
 // Configuration - Update these or use environment variables
 const TRANSFORMED_DIR = path.join(__dirname, '../data/transformed');
 
-// Get Supabase credentials from environment or use defaults
+// Seeding writes to RLS-protected tables that only expose a public SELECT
+// policy, so the anon key cannot insert. Prefer the service key, matching
+// seed-tmdb-supabase.js; fall back to anon only so the failure is explicit.
 const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY || process.env.SUPABASE_ANON_KEY || '';
+const supabaseKey =
+  process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_KEY || process.env.SUPABASE_ANON_KEY || '';
 
 if (!supabaseKey) {
-  console.error('Error: SUPABASE_KEY environment variable is required');
-  console.log('   Set it with: export SUPABASE_KEY=your_anon_key');
-  console.log('   Or edit data-pipeline/.env');
+  console.error('Error: SUPABASE_SERVICE_KEY (preferred) or SUPABASE_KEY is required');
+  console.log('   Set it in data-pipeline/.env');
   process.exit(1);
+}
+
+if (!process.env.SUPABASE_SERVICE_KEY) {
+  console.warn('Warning: falling back to the anon key. Row Level Security will');
+  console.warn('         reject inserts, so nothing will actually be written.');
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey);

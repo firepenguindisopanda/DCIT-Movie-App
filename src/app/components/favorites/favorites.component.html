@@ -22,10 +22,10 @@
       <mat-tab>
         <ng-template mat-tab-label>
           <mat-icon>movie</mat-icon>
-          <span class="tab-label">Movies ({{ movieFavorites().length }})</span>
+          <span class="tab-label">Movies ({{ resolvedMovieFavorites().length }})</span>
         </ng-template>
         <ng-template matTabContent>
-          @if (movieFavorites().length === 0) {
+          @if (resolvedMovieFavorites().length === 0) {
             <div class="empty-state">
               <mat-icon>favorite_border</mat-icon>
               <h3>No favorite movies yet</h3>
@@ -39,22 +39,25 @@
             <div class="favorites-grid">
               @for (fav of resolvedMovieFavorites(); track fav.id; let i = $index) {
                 <div class="fav-card stagger-in" [style.animation-delay]="(i * 0.05) + 's'">
-                  <div class="fav-image" [routerLink]="['/details', 'movie', fav.movie.tmdb_id]">
-                    <img [src]="fav.movie?.poster_url || 'assets/no-image.png'" 
-                         [alt]="fav.movie?.title">
-                    <div class="fav-overlay">
-                      <button class="play-btn">
+                  <a class="fav-image" [routerLink]="['/details', 'movie', fav.movie.tmdb_id]"
+                     [attr.aria-label]="'View details for ' + fav.movie.title">
+                    <!-- alt empty: the aria-label on the link already names the title -->
+                    <img [src]="fav.movie?.poster_url || 'assets/no-image.png'" alt="">
+                    <div class="fav-overlay" aria-hidden="true">
+                      <span class="play-btn">
                         <mat-icon>play_arrow</mat-icon>
-                      </button>
+                      </span>
                     </div>
-                    @if (fav.movie?.imdb_rating) {
-                      <div class="fav-rating" [style.color]="getRatingColor(fav.movie.imdb_rating * 10)">
-                        <mat-icon>star</mat-icon> {{ fav.movie.imdb_rating }}
+                    <!-- imdb_rating is not a column on this table; TMDB data uses vote_average -->
+                    @if (fav.movie?.vote_average) {
+                      <div class="fav-rating" [style.color]="getRatingColor(fav.movie.vote_average * 10)">
+                        <mat-icon aria-hidden="true">star</mat-icon>
+                        <span class="sr-only">Rating </span>{{ fav.movie.vote_average | number:'1.1-1' }}
                       </div>
                     }
-                  </div>
+                  </a>
                   <div class="fav-info">
-                    <h3>{{ fav.movie?.title }}</h3>
+                    <span class="fav-name">{{ fav.movie?.title }}</span>
                     <span class="fav-year">{{ fav.movie?.year }}</span>
                   </div>
                   <div class="fav-actions">
@@ -78,10 +81,10 @@
       <mat-tab>
         <ng-template mat-tab-label>
           <mat-icon>sports_esports</mat-icon>
-          <span class="tab-label">Games ({{ gameFavorites().length }})</span>
+          <span class="tab-label">Games ({{ resolvedGameFavorites().length }})</span>
         </ng-template>
         <ng-template matTabContent>
-          @if (gameFavorites().length === 0) {
+          @if (resolvedGameFavorites().length === 0) {
             <div class="empty-state">
               <mat-icon>sports_esports</mat-icon>
               <h3>No favorite games yet</h3>
@@ -95,25 +98,25 @@
             <div class="favorites-grid games-grid">
               @for (fav of resolvedGameFavorites(); track fav.id; let i = $index) {
                 <div class="fav-card game-card stagger-in" [style.animation-delay]="(i * 0.05) + 's'">
-                  <div class="fav-image landscape" [routerLink]="['/details', 'game', fav.game?.id]">
-                    <img [src]="fav.game?.background_image || 'assets/no-image.png'" 
-                         [alt]="fav.game?.name">
-                    <div class="fav-overlay">
-                      <button class="play-btn">
+                  <a class="fav-image landscape" [routerLink]="['/details', 'game', fav.game.id]"
+                     [attr.aria-label]="'View details for ' + fav.game.name">
+                    <img [src]="fav.game?.background_image || 'assets/no-image.png'" alt="">
+                    <div class="fav-overlay" aria-hidden="true">
+                      <span class="play-btn">
                         <mat-icon>play_arrow</mat-icon>
-                      </button>
+                      </span>
                     </div>
                     @if (fav.game?.metacritic) {
-                      <div class="fav-metacritic" 
+                      <div class="fav-metacritic"
                            [class.high]="fav.game.metacritic >= 75"
                            [class.medium]="fav.game.metacritic >= 50 && fav.game.metacritic < 75"
                            [class.low]="fav.game.metacritic < 50">
-                        {{ fav.game.metacritic }}
+                        <span class="sr-only">Metacritic score </span>{{ fav.game.metacritic }}
                       </div>
                     }
-                  </div>
+                  </a>
                   <div class="fav-info">
-                    <h3>{{ fav.game?.name }}</h3>
+                    <span class="fav-name">{{ fav.game?.name }}</span>
                     <span class="fav-year">{{ fav.game?.released | date:'yyyy' }}</span>
                   </div>
                   <div class="fav-actions">

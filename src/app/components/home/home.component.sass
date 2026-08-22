@@ -332,20 +332,41 @@
 
 // --- Media Card ---
 .media-card
+  display: block
   cursor: pointer
   border-radius: var(--radius-md)
   overflow: hidden
+  text-decoration: none
+  color: inherit
   transition: transform var(--transition-base), box-shadow var(--transition-base)
 
+  // Was translateY(-6px) + scale(1.02) + a large shadow + an image zoom, four
+  // effects firing at once. One lift plus the image zoom reads as intentional
+  // rather than restless.
   &:hover
-    transform: translateY(-6px) scale(1.02)
-    box-shadow: var(--shadow-lg)
+    transform: translateY(-4px)
+    box-shadow: var(--shadow-md)
 
     .card-overlay
       opacity: 1
 
     .card-image img
-      transform: scale(1.05)
+      transform: scale(1.04)
+
+  // These are links now, so keyboard users need to see where they are.
+  &:focus-visible
+    outline: 2px solid var(--accent-blue)
+    outline-offset: 3px
+    border-radius: var(--radius-md)
+
+  @media (prefers-reduced-motion: reduce)
+    transition: none
+
+    &:hover
+      transform: none
+
+      .card-image img
+        transform: none
 
 .card-image
   position: relative
@@ -439,6 +460,7 @@
   padding: 10px 4px 4px
 
 .card-title
+  display: block
   font-size: 14px
   font-weight: 600
   color: var(--text-primary)

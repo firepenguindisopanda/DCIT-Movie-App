@@ -86,7 +86,7 @@
             <!-- Overview / Description -->
             @if (media()!.overview) {
               <div class="overview-section">
-                <h3 class="section-label">Overview</h3>
+                <h2 class="section-label">Overview</h2>
                 <p class="overview-text">{{ media()!.overview }}</p>
               </div>
             }
@@ -94,7 +94,7 @@
             <!-- Movie Cast (from TMDB) -->
             @if (isMovie && media()!.cast && media()!.cast!.length > 0) {
               <div class="cast-section">
-                <h3 class="section-label">Cast</h3>
+                <h2 class="section-label">Cast</h2>
                 <div class="cast-grid">
                   @for (actor of media()!.cast!.slice(0, 10); track actor.id) {
                     <div class="cast-item">
@@ -120,7 +120,7 @@
             <!-- Movie Crew (from TMDB) -->
             @if (isMovie && media()!.crew && media()!.crew!.length > 0) {
               <div class="crew-section">
-                <h3 class="section-label">Crew</h3>
+                <h2 class="section-label">Crew</h2>
                 <div class="crew-grid">
                   @for (member of getKeyCrew(); track member.id + member.job) {
                     <div class="crew-item">
@@ -205,7 +205,7 @@
             <!-- Platforms (Games) -->
             @if (!isMovie && media()!.platforms?.length) {
               <div class="platforms-section">
-                <h3 class="section-label">Available On</h3>
+                <h2 class="section-label">Available On</h2>
                 <div class="platform-badges">
                   @for (platform of media()!.platforms; track platform) {
                     <div class="platform-badge">
@@ -221,7 +221,7 @@
 
         <!-- Ratings Row -->
         <div class="ratings-section">
-          <h3 class="section-label">Ratings</h3>
+          <h2 class="section-label">Ratings</h2>
           <div class="ratings-grid">
             @if (media()!.vote_average || media()!.imdb_rating) {
               <div class="rating-card tmdb">
@@ -262,7 +262,7 @@
         <!-- Game Description (from RAWG) -->
         @if (!isMovie && media()!.description) {
           <div class="overview-section">
-            <h3 class="section-label">About</h3>
+            <h2 class="section-label">About</h2>
             <p class="overview-text" [innerHTML]="media()!.description"></p>
           </div>
         }
@@ -270,11 +270,11 @@
         <!-- Game Screenshots -->
         @if (!isMovie && media()!.screenshots && media()!.screenshots!.length > 0) {
           <div class="screenshots-section">
-            <h3 class="section-label">Screenshots</h3>
+            <h2 class="section-label">Screenshots</h2>
             <div class="screenshots-grid">
               @for (screenshot of media()!.screenshots; track $index) {
                 <div class="screenshot-item">
-                  <img [src]="screenshot.image" [alt]="'Screenshot'" loading="lazy">
+                  <img [src]="screenshot.image" alt="" loading="lazy">
                 </div>
               }
             </div>
@@ -284,11 +284,14 @@
         <!-- Game Trailers -->
         @if (!isMovie && media()!.trailers && media()!.trailers!.length > 0) {
           <div class="trailers-section">
-            <h3 class="section-label">Trailers & Videos</h3>
+            <h2 class="section-label">Trailers & Videos</h2>
             <div class="trailers-grid">
               @for (trailer of media()!.trailers; track trailer.id) {
                 <div class="trailer-item">
-                  <div class="trailer-thumbnail" (click)="playingTrailerId.set(trailer.id)">
+                  <button type="button"
+                          class="trailer-thumbnail"
+                          (click)="playingTrailerId.set(trailer.id)"
+                          [attr.aria-label]="'Play trailer: ' + trailer.name">
                     @if (playingTrailerId() === trailer.id) {
                       <video controls autoplay class="trailer-video" (ended)="playingTrailerId.set(null)">
                         <source [src]="trailer.data.max" type="video/mp4">
@@ -299,7 +302,7 @@
                         <mat-icon>play_circle</mat-icon>
                       </div>
                     }
-                  </div>
+                  </button>
                   <span class="trailer-name">{{ trailer.name }}</span>
                 </div>
               }
@@ -342,10 +345,10 @@
 
         <!-- Comments Section -->
         <div class="comments-section">
-          <h3 class="section-label">
+          <h2 class="section-label">
             Discussion
             <span class="comment-count">{{ comments().length }}</span>
-          </h3>
+          </h2>
           
           <!-- Add Comment Form -->
           @if (isAuthenticated) {
@@ -415,6 +418,28 @@
           </div>
         </div>
 
+      </div>
+    </div>
+  </div>
+} @else {
+  <!-- The catalog is a periodically reseeded snapshot, so a saved link or an
+       old bookmark can outlive its row. Say so instead of rendering nothing. -->
+  <div class="not-found-page">
+    <div class="not-found-inner">
+      <mat-icon>search_off</mat-icon>
+      <h1>We couldn't find that title</h1>
+      <p>
+        It may have been removed from the library, or the link may be wrong.
+      </p>
+      <div class="not-found-actions">
+        <button class="btn-back" (click)="goBack()">
+          <mat-icon>arrow_back</mat-icon>
+          Go back
+        </button>
+        <a class="btn-browse" routerLink="/">
+          <mat-icon>explore</mat-icon>
+          Browse the catalog
+        </a>
       </div>
     </div>
   </div>

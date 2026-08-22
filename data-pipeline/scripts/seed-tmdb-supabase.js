@@ -75,11 +75,13 @@ async function seedMovies() {
   let movies = JSON.parse(fs.readFileSync(moviesFile, 'utf-8'));
   console.log(`  Found ${movies.length} movies to insert`);
   
-  // Clear existing movies
-  const { error: deleteError } = await supabase.from('movies').delete().neq('tmdb_id', 0);
-  if (deleteError) {
-    console.error('  Error clearing movies:', deleteError.message);
-  }
+  // NOTE: this used to wipe the whole table before re-inserting:
+  //   await supabase.from('movies').delete().neq('tmdb_id', 0);
+  // favorites and comments store a bare media_id with no foreign key, so every
+  // title missing from a later fetch became an unreachable orphan. The upsert
+  // below already handles conflicts on tmdb_id, so the delete was never needed
+  // for correctness. Trade-off: the table only grows and stale rows are never
+  // pruned, which is far cheaper than breaking saved user data.
   
   // Deduplicate by tmdb_id
   const seen = new Set();

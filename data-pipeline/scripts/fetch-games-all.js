@@ -2,7 +2,12 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 
-const API_KEY = 'a6cb5debb5624c94b7828c86caa1c6f9';
+require('dotenv').config();
+const API_KEY = process.env.RAWG_API_KEY;
+if (!API_KEY) {
+  console.error('RAWG_API_KEY is required. Set it in data-pipeline/.env');
+  process.exit(1);
+}
 const BASE_URL = 'https://api.rawg.io/api/games';
 const OUTPUT_DIR = path.join(__dirname, '../data/raw');
 const PAGE_SIZE = 40;

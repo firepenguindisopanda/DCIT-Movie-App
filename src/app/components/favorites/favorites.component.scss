@@ -176,10 +176,16 @@
 
 .fav-image {
   position: relative;
+  display: block;
   overflow: hidden;
   border-radius: var(--radius-md);
   aspect-ratio: 2/3;
   cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 3px;
+  }
 
   &.landscape {
     aspect-ratio: 16/10;
@@ -266,6 +272,10 @@
     background: rgba(239, 70, 85, 0.85);
     color: #fff;
   }
+}
+
+.fav-name {
+  display: block;
 }
 
 .fav-info {

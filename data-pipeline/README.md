@@ -12,7 +12,7 @@ This data pipeline fetches movies and games from external APIs, transforms them 
 
 ### Games API (RAWG)
 - **Source**: https://api.rawg.io/api/games
-- **API Key**: `a6cb5debb5624c94b7828c86caa1c6f9`
+- **API Key**: set `RAWG_API_KEY` in `data-pipeline/.env` (get one at https://rawg.io/apidocs)
 - **Pages**: 10 pages × 40 games = 400 games
 - **Fields**: rawg_id, slug, name, released, background_image, rating, metacritic, genres, platforms
 

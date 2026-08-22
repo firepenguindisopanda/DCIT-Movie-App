@@ -97,3 +97,13 @@
     font-size: 13px;
   }
 }
+
+// Re-levelled from h4 to h2 for heading order; visual size is unchanged.
+.footer-col-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-primary);
+  margin: 0 0 12px;
+}

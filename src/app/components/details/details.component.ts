@@ -144,7 +144,16 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   async loadMedia(): Promise<void> {
     this.loading.set(true);
-    
+
+    // Route params can change without Angular recreating the component, and the
+    // branches below only assign on success. Without clearing first, navigating
+    // to a missing id would keep rendering the previous title under the new id
+    // (with the new id's comments beneath it) and the not-found state would
+    // never show.
+    this.media.set(null);
+    this.isFavorite.set(false);
+    this.playingTrailerId.set(null);
+
     try {
       let result;
       if (this.mediaType() === 'movie') {

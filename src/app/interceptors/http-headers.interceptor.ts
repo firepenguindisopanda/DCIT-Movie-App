@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class HttpHeadersInterceptor implements HttpInterceptor {
@@ -10,7 +11,7 @@ export class HttpHeadersInterceptor implements HttpInterceptor {
     if (url.includes('rawg-video-games-database.p.rapidapi.com')) {
       request = request.clone({
         setHeaders: {
-          'x-rapidapi-key': 'a6cb5debb5624c94b7828c86caa1c6f9',
+          'x-rapidapi-key': environment.RAWG_API_KEY,
           'x-rapidapi-host': 'rawg-video-games-database.p.rapidapi.com',
         }
       });
@@ -18,7 +19,7 @@ export class HttpHeadersInterceptor implements HttpInterceptor {
 
     if (url.includes('rawg.io') && !request.params.has('key')) {
       request = request.clone({
-        setParams: { key: 'a6cb5debb5624c94b7828c86caa1c6f9' }
+        setParams: { key: environment.RAWG_API_KEY }
       });
     }
 

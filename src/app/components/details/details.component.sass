@@ -1,21 +1,4 @@
 // --- Loading / Skeleton ---
-.loading-container
-  display: flex
-  justify-content: center
-  align-items: center
-  min-height: 100vh
-
-  .loading-pulse
-    display: flex
-    flex-direction: column
-    align-items: center
-    gap: 16px
-    animation: fadeIn 0.5s ease
-
-    p
-      color: var(--text-muted)
-      font-size: 14px
-
 .skeleton-detail
   animation: fadeIn 0.3s ease
 
@@ -456,14 +439,6 @@
   border-radius: var(--radius-xs)
   display: inline-block
 
-  .imdb &
-    background: #F5C518
-    color: #000
-
-  .rt &
-    background: #FA320A
-    color: #fff
-
   .metacritic &
     background: #FFcc34
     color: #000
@@ -752,6 +727,18 @@
   border-radius: var(--radius-lg)
   overflow: hidden
   aspect-ratio: 16/9
+  // Now a <button> so it can be reached and activated by keyboard; strip the
+  // native chrome and restore the block layout it had as a div.
+  display: block
+  width: 100%
+  padding: 0
+  border: none
+  background: none
+  cursor: pointer
+
+  &:focus-visible
+    outline: 2px solid var(--accent-blue)
+    outline-offset: 3px
 
   img
     width: 100%
@@ -856,3 +843,76 @@
   -webkit-line-clamp: 2
   -webkit-box-orient: vertical
   overflow: hidden
+
+// --- Not found (unknown or removed media id) ---
+.not-found-page
+  min-height: 70vh
+  display: flex
+  align-items: center
+  justify-content: center
+  padding: calc(var(--header-height) + 40px) 24px 80px
+
+.not-found-inner
+  text-align: center
+  max-width: 440px
+
+  mat-icon
+    font-size: 52px
+    width: 52px
+    height: 52px
+    color: var(--text-secondary)
+    margin-bottom: 16px
+
+  h1
+    font-size: 24px
+    font-weight: 800
+    color: var(--text-primary)
+    margin: 0 0 10px
+
+  p
+    color: var(--text-secondary)
+    font-size: 15px
+    margin: 0 0 24px
+
+.not-found-actions
+  display: flex
+  gap: 12px
+  justify-content: center
+  flex-wrap: wrap
+
+.btn-back, .btn-browse
+  display: inline-flex
+  align-items: center
+  gap: 8px
+  padding: 11px 20px
+  border-radius: var(--radius-sm)
+  font-family: var(--font-primary)
+  font-size: 14px
+  font-weight: 600
+  cursor: pointer
+  text-decoration: none
+  border: 2px solid transparent
+  transition: background-color var(--transition-fast), border-color var(--transition-fast)
+
+  mat-icon
+    font-size: 19px
+    width: 19px
+    height: 19px
+    margin: 0
+    color: inherit
+
+.btn-back
+  background: transparent
+  border-color: rgba(0, 51, 102, 0.3)
+  color: var(--text-primary)
+
+  &:hover
+    border-color: var(--accent-blue)
+    background: rgba(0, 51, 102, 0.07)
+
+.btn-browse
+  background: var(--accent-blue)
+  color: #fff
+
+  &:hover
+    background: var(--accent-blue-hover)
