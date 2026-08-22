@@ -1,5 +1,5 @@
 import { Component, inject, HostListener, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,16 +12,15 @@ import { AuthService } from '../../services/auth.service';
 @Component({
     selector: 'app-header',
     imports: [
-        CommonModule,
-        RouterLink,
-        RouterLinkActive,
-        MatToolbarModule,
-        MatButtonModule,
-        MatIconModule,
-        MatMenuModule,
-        MatDividerModule,
-        MatProgressSpinnerModule
-    ],
+    RouterLink,
+    RouterLinkActive,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    MatDividerModule,
+    MatProgressSpinnerModule
+],
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss']
 })

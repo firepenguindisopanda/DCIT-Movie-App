@@ -1,32 +1,27 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
-    // Third-party .d.ts files (e.g. @supabase/storage-js) reference Node globals
-    // this browser app deliberately does not declare. Standard in modern Angular
-    // scaffolds; it skips checking declaration files, not our own code.
-    "skipLibCheck": true,
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "sourceMap": true,
-    "declaration": false,
+    // Third-party .d.ts files (e.g. @supabase/storage-js) reference Node globals
+    // this browser app deliberately does not declare. It skips checking
+    // declaration files, not our own code.
+    "skipLibCheck": true,
+    // Guarantees every file can be transpiled independently, which is what the
+    // esbuild-based builder actually does. Catches unsafe type-only re-exports.
+    "isolatedModules": true,
+    "esModuleInterop": true,
     "experimentalDecorators": true,
-    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "useDefineForClassFields": false,
-    "module": "ES2022",
-    "lib": [
-      "es2020",
-      "dom"
-    ]
+    // "preserve" lets the bundler own module emit and implies bundler-style
+    // resolution, replacing the separate module/moduleResolution pair.
+    "module": "preserve"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

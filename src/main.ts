@@ -1,4 +1,9 @@
-import { enableProdMode, importProvidersFrom } from '@angular/core';
+import {
+  enableProdMode,
+  importProvidersFrom,
+  provideZoneChangeDetection,
+  provideBrowserGlobalErrorListeners
+} from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
@@ -21,6 +26,11 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
   providers: [
+    // Routes uncaught errors and unhandled rejections through Angular's
+    // ErrorHandler rather than letting them vanish on window.
+    provideBrowserGlobalErrorListeners(),
+    // v21 no longer assumes zone.js; zone-based change detection is now opt-in.
+    provideZoneChangeDetection(),
     provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'top' })),
     // withInterceptorsFromDi keeps the two existing class-based interceptors
     // working without rewriting them as functional interceptors.
