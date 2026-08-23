@@ -72,21 +72,13 @@
   }
 
   <div class="content-container">
-    <!-- Tabs -->
-    <mat-tab-group [selectedIndex]="activeTab()" (selectedIndexChange)="onTabChange($event)" class="media-tabs">
-      <mat-tab>
-        <ng-template mat-tab-label>
-          <mat-icon>movie</mat-icon>
-          <span class="tab-label">Movies</span>
-        </ng-template>
-      </mat-tab>
-      <mat-tab>
-        <ng-template mat-tab-label>
-          <mat-icon>sports_esports</mat-icon>
-          <span class="tab-label">Games</span>
-        </ng-template>
-      </mat-tab>
-    </mat-tab-group>
+    <!-- The double feature board -->
+    <div class="board-row">
+      <app-double-feature-toggle
+        label="Catalog"
+        [active]="activeTab()"
+        (activeChange)="onTabChange($event)" />
+    </div>
 
     <!-- Toolbar: Search -->
     <div class="toolbar-row">

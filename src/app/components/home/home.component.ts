@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
-import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,6 +13,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Observable, map, startWith, Subject, takeUntil } from 'rxjs';
 import { SupabaseService } from '../../services/supabase.service';
+import { DoubleFeatureToggleComponent } from '../../shared/double-feature-toggle.component';
 
 interface MediaItem {
   id: number;
@@ -43,7 +43,7 @@ interface MediaItem {
         RouterLink,
         ReactiveFormsModule,
         FormsModule,
-        MatTabsModule,
+        DoubleFeatureToggleComponent,
         MatCardModule,
         MatButtonModule,
         MatIconModule,

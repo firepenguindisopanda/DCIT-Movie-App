@@ -8,7 +8,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatTabsModule } from '@angular/material/tabs';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
@@ -44,7 +43,6 @@ interface SearchResult {
         MatInputModule,
         MatProgressSpinnerModule,
         MatTooltipModule,
-        MatTabsModule
     ],
     templateUrl: './session-detail.component.html',
     styleUrls: ['./session-detail.component.scss']

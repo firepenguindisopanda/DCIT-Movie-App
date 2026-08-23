@@ -1,6 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, ViewChild, inject, signal } from '@angular/core';
 
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormGroupDirective, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -37,6 +37,8 @@ export class RegisterComponent {
     confirmPassword: ['', [Validators.required]]
   }, { validators: this.passwordMatchValidator });
 
+  @ViewChild(FormGroupDirective) private formDirective?: FormGroupDirective;
+
   hidePassword = signal(true);
   hideConfirmPassword = signal(true);
   returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
@@ -67,7 +69,10 @@ export class RegisterComponent {
       if (result.error?.includes('SUCCESS')) {
         // Email confirmation required
         this.successMessage.set(result.error);
-        this.registerForm.reset();
+        // resetForm (not registerForm.reset) also clears the directive's
+        // submitted flag; a bare reset leaves every mat-error showing
+        // "required" right under the success banner.
+        this.formDirective?.resetForm();
       } else {
         // Auto-login successful
         this.router.navigate([this.returnUrl]);

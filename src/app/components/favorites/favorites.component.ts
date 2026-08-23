@@ -5,8 +5,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatTabsModule } from '@angular/material/tabs';
 import { Subject, takeUntil } from 'rxjs';
+import { DoubleFeatureToggleComponent } from '../../shared/double-feature-toggle.component';
 import { SupabaseService } from '../../services/supabase.service';
 import { AuthService } from '../../services/auth.service';
 
@@ -28,7 +28,7 @@ interface FavoriteItem {
         MatButtonModule,
         MatIconModule,
         MatProgressSpinnerModule,
-        MatTabsModule
+        DoubleFeatureToggleComponent
     ],
     templateUrl: './favorites.component.html',
     styleUrls: ['./favorites.component.scss']

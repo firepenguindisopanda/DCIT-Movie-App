@@ -4,7 +4,7 @@
     <h1 class="display">My List</h1>
     <p class="favorites-subtitle">The movies and games you've set aside.</p>
   </div>
-  
+
   @if (loading()) {
     <div class="skeleton-grid">
       @for (i of [1,2,3,4,5,6]; track i) {
@@ -18,121 +18,116 @@
       }
     </div>
   } @else {
-    <mat-tab-group [selectedIndex]="activeTab()" (selectedIndexChange)="onTabChange($event)">
-      <!-- Movies Tab -->
-      <mat-tab>
-        <ng-template mat-tab-label>
-          <mat-icon>movie</mat-icon>
-          <span class="tab-label">Movies ({{ resolvedMovieFavorites().length }})</span>
-        </ng-template>
-        <ng-template matTabContent>
-          @if (resolvedMovieFavorites().length === 0) {
-            <div class="empty-state">
-              <mat-icon>favorite_border</mat-icon>
-              <h3>No favorite movies yet</h3>
-              <p>Browse and add movies to your list</p>
-              <a routerLink="/" class="browse-btn">
-                <mat-icon>explore</mat-icon>
-                Browse Movies
-              </a>
-            </div>
-          } @else {
-            <div class="favorites-grid">
-              @for (fav of resolvedMovieFavorites(); track fav.id; let i = $index) {
-                <div class="fav-card stagger-in" [style.animation-delay]="(i * 0.05) + 's'">
-                  <a class="fav-image" [routerLink]="['/details', 'movie', fav.movie.tmdb_id]"
-                     [attr.aria-label]="'View details for ' + fav.movie.title">
-                    <!-- alt empty: the aria-label on the link already names the title -->
-                    <img [src]="fav.movie?.poster_url || 'assets/no-image.png'" alt="">
-                    <div class="fav-overlay" aria-hidden="true">
-                      <span class="card-cta">Details</span>
-                    </div>
-                    <!-- imdb_rating is not a column on this table; TMDB data uses vote_average -->
-                    @if (fav.movie?.vote_average) {
-                      <div class="fav-rating" [style.color]="getRatingColor(fav.movie.vote_average * 10)">
-                        <mat-icon aria-hidden="true">star</mat-icon>
-                        <span class="sr-only">Rating </span>{{ fav.movie.vote_average | number:'1.1-1' }}
-                      </div>
-                    }
-                  </a>
-                  <div class="fav-info">
-                    <span class="fav-name">{{ fav.movie?.title }}</span>
-                    <span class="fav-year">{{ fav.movie?.year }}</span>
-                  </div>
-                  <div class="fav-actions">
-                    <a [routerLink]="['/details', 'movie', fav.movie.tmdb_id]" class="action-btn view-btn">
-                      <mat-icon>info</mat-icon>
-                      Details
-                    </a>
-                    <button class="action-btn remove-btn" (click)="removeFavorite(fav)">
-                      <mat-icon>delete_outline</mat-icon>
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              }
-            </div>
-          }
-        </ng-template>
-      </mat-tab>
+    <div class="board-row">
+      <app-double-feature-toggle
+        label="My List"
+        [active]="activeTab()"
+        [movieCount]="resolvedMovieFavorites().length"
+        [gameCount]="resolvedGameFavorites().length"
+        (activeChange)="onTabChange($event)" />
+    </div>
 
-      <!-- Games Tab -->
-      <mat-tab>
-        <ng-template mat-tab-label>
-          <mat-icon>sports_esports</mat-icon>
-          <span class="tab-label">Games ({{ resolvedGameFavorites().length }})</span>
-        </ng-template>
-        <ng-template matTabContent>
-          @if (resolvedGameFavorites().length === 0) {
-            <div class="empty-state">
-              <mat-icon>sports_esports</mat-icon>
-              <h3>No favorite games yet</h3>
-              <p>Browse and add games to your list</p>
-              <a routerLink="/" class="browse-btn">
-                <mat-icon>explore</mat-icon>
-                Browse Games
-              </a>
-            </div>
-          } @else {
-            <div class="favorites-grid games-grid">
-              @for (fav of resolvedGameFavorites(); track fav.id; let i = $index) {
-                <div class="fav-card game-card stagger-in" [style.animation-delay]="(i * 0.05) + 's'">
-                  <a class="fav-image landscape" [routerLink]="['/details', 'game', fav.game.id]"
-                     [attr.aria-label]="'View details for ' + fav.game.name">
-                    <img [src]="fav.game?.background_image || 'assets/no-image.png'" alt="">
-                    <div class="fav-overlay" aria-hidden="true">
-                      <span class="card-cta">Details</span>
-                    </div>
-                    @if (fav.game?.metacritic) {
-                      <div class="fav-metacritic"
-                           [class.high]="fav.game.metacritic >= 75"
-                           [class.medium]="fav.game.metacritic >= 50 && fav.game.metacritic < 75"
-                           [class.low]="fav.game.metacritic < 50">
-                        <span class="sr-only">Metacritic score </span>{{ fav.game.metacritic }}
-                      </div>
-                    }
-                  </a>
-                  <div class="fav-info">
-                    <span class="fav-name">{{ fav.game?.name }}</span>
-                    <span class="fav-year">{{ fav.game?.released | date:'yyyy' }}</span>
-                  </div>
-                  <div class="fav-actions">
-                    <a [routerLink]="['/details', 'game', fav.game?.id]" class="action-btn view-btn">
-                      <mat-icon>info</mat-icon>
-                      Details
-                    </a>
-                    <button class="action-btn remove-btn" (click)="removeFavorite(fav)">
-                      <mat-icon>delete_outline</mat-icon>
-                      Remove
-                    </button>
-                  </div>
+    <!-- Movies -->
+    @if (activeTab() === 0) {
+      @if (resolvedMovieFavorites().length === 0) {
+        <div class="empty-state">
+          <mat-icon>favorite_border</mat-icon>
+          <h3>No favorite movies yet</h3>
+          <p>Browse and add movies to your list</p>
+          <a routerLink="/" class="browse-btn">
+            <mat-icon>explore</mat-icon>
+            Browse movies
+          </a>
+        </div>
+      } @else {
+        <div class="favorites-grid">
+          @for (fav of resolvedMovieFavorites(); track fav.id; let i = $index) {
+            <div class="fav-card stagger-in" [style.animation-delay]="(i * 0.05) + 's'">
+              <a class="fav-image" [routerLink]="['/details', 'movie', fav.movie.tmdb_id]"
+                 [attr.aria-label]="'View details for ' + fav.movie.title">
+                <!-- alt empty: the aria-label on the link already names the title -->
+                <img [src]="fav.movie?.poster_url || 'assets/no-image.png'" alt="">
+                <div class="fav-overlay" aria-hidden="true">
+                  <span class="card-cta">Details</span>
                 </div>
-              }
+                <!-- imdb_rating is not a column on this table; TMDB data uses vote_average -->
+                @if (fav.movie?.vote_average) {
+                  <div class="fav-rating" [style.color]="getRatingColor(fav.movie.vote_average * 10)">
+                    <mat-icon aria-hidden="true">star</mat-icon>
+                    <span class="sr-only">Rating </span>{{ fav.movie.vote_average | number:'1.1-1' }}
+                  </div>
+                }
+              </a>
+              <div class="fav-info">
+                <span class="fav-name">{{ fav.movie?.title }}</span>
+                <span class="fav-year">{{ fav.movie?.year }}</span>
+              </div>
+              <div class="fav-actions">
+                <a [routerLink]="['/details', 'movie', fav.movie.tmdb_id]" class="action-btn view-btn">
+                  <mat-icon>info</mat-icon>
+                  Details
+                </a>
+                <button class="action-btn remove-btn" (click)="removeFavorite(fav)">
+                  <mat-icon>delete_outline</mat-icon>
+                  Remove
+                </button>
+              </div>
             </div>
           }
-        </ng-template>
-      </mat-tab>
-    </mat-tab-group>
+        </div>
+      }
+    }
+
+    <!-- Games -->
+    @if (activeTab() === 1) {
+      @if (resolvedGameFavorites().length === 0) {
+        <div class="empty-state">
+          <mat-icon>sports_esports</mat-icon>
+          <h3>No favorite games yet</h3>
+          <p>Browse and add games to your list</p>
+          <a routerLink="/" class="browse-btn">
+            <mat-icon>explore</mat-icon>
+            Browse games
+          </a>
+        </div>
+      } @else {
+        <div class="favorites-grid games-grid">
+          @for (fav of resolvedGameFavorites(); track fav.id; let i = $index) {
+            <div class="fav-card game-card stagger-in" [style.animation-delay]="(i * 0.05) + 's'">
+              <a class="fav-image landscape" [routerLink]="['/details', 'game', fav.game.id]"
+                 [attr.aria-label]="'View details for ' + fav.game.name">
+                <img [src]="fav.game?.background_image || 'assets/no-image.png'" alt="">
+                <div class="fav-overlay" aria-hidden="true">
+                  <span class="card-cta">Details</span>
+                </div>
+                @if (fav.game?.metacritic) {
+                  <div class="fav-metacritic"
+                       [class.high]="fav.game.metacritic >= 75"
+                       [class.medium]="fav.game.metacritic >= 50 && fav.game.metacritic < 75"
+                       [class.low]="fav.game.metacritic < 50">
+                    <span class="sr-only">Metacritic score </span>{{ fav.game.metacritic }}
+                  </div>
+                }
+              </a>
+              <div class="fav-info">
+                <span class="fav-name">{{ fav.game?.name }}</span>
+                <span class="fav-year">{{ fav.game?.released | date:'yyyy' }}</span>
+              </div>
+              <div class="fav-actions">
+                <a [routerLink]="['/details', 'game', fav.game?.id]" class="action-btn view-btn">
+                  <mat-icon>info</mat-icon>
+                  Details
+                </a>
+                <button class="action-btn remove-btn" (click)="removeFavorite(fav)">
+                  <mat-icon>delete_outline</mat-icon>
+                  Remove
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
 
     <!-- Favourites whose catalog entry no longer exists. Shown explicitly so the
          count matches what is on screen and the row can actually be cleared. -->
