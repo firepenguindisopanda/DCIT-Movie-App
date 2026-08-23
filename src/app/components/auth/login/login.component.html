@@ -1,9 +1,12 @@
 <div class="auth-page">
   <div class="auth-card">
     <div class="auth-header">
-      <mat-icon class="auth-logo">theaters</mat-icon>
-      <h1>Welcome Back</h1>
-      <p>Sign in to your DCIT Entertainment account</p>
+      <div class="auth-logo" aria-hidden="true">
+        <span class="logo-mark">DCIT</span>
+        <span class="logo-sub">Entertainment</span>
+      </div>
+      <h1 class="display">Welcome back</h1>
+      <p>Sign in to vote, save titles, and join movie nights.</p>
     </div>
 
     @if (authService.error()) {

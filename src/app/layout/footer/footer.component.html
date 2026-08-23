@@ -2,10 +2,10 @@
   <div class="footer-content">
     <div class="footer-brand">
       <div class="footer-logo">
-        <mat-icon>theaters</mat-icon>
-        <span class="footer-title">DCIT Entertainment</span>
+        <span class="footer-mark">DCIT</span>
+        <span class="footer-sub">Entertainment</span>
       </div>
-      <p class="footer-tagline">Your destination for movies and games</p>
+      <p class="footer-tagline">Movies and games, decided together.</p>
     </div>
 
     <div class="footer-links">
@@ -16,13 +16,15 @@
       </div>
       <div class="footer-section">
         <h2 class="footer-col-title">Account</h2>
-        <a routerLink="/favorites">Favorites</a>
-        <a routerLink="/login">Sign In</a>
+        <a routerLink="/favorites">My List</a>
+        <a routerLink="/sessions">Movie Night</a>
+        <a routerLink="/login">Sign in</a>
       </div>
     </div>
   </div>
 
   <div class="footer-bottom">
-    <span>&copy; {{ currentYear }} DCIT Entertainment. All rights reserved.</span>
+    <span class="footer-legal">&copy; {{ currentYear }} DCIT Entertainment</span>
+    <span class="footer-credit">Data from TMDB &amp; RAWG</span>
   </div>
 </footer>

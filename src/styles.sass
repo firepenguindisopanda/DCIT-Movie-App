@@ -1,63 +1,66 @@
 // ============================================
-// DCIT Entertainment - Global Theme
-// Streaming-platform inspired dark theme
+// DCIT Entertainment — "House Lights Down"
+// A movie palace after dark: velvet blue-black
+// auditorium, tungsten marquee gold, curtain
+// crimson. Type: Big Shoulders (poster display),
+// Instrument Sans (body), Spline Sans Mono
+// (the ticket-stub data layer).
 // ============================================
 
 @use '@angular/material' as mat
 
-// --- UWI Brand Color Palettes ---
-$_navy-map: (50: #eef2f7, 100: #d5deeb, 200: #b9c9dd, 300: #9db3cf, 400: #88a3c5, 500: #003366, 600: #002e5e, 700: #002753, 800: #002049, 900: #001438, contrast: (50: rgba(0,0,0,0.87), 100: rgba(0,0,0,0.87), 200: rgba(0,0,0,0.87), 300: rgba(0,0,0,0.87), 400: white, 500: white, 600: white, 700: white, 800: white, 900: white))
+// --- Brand palettes (UWI colors, recast for a dark house) ---
 $_gold-map: (50: #fffbea, 100: #fff5c5, 200: #ffef8b, 300: #ffe84d, 400: #ffc72c, 500: #ffc72c, 600: #f5b800, 700: #e0a800, 800: #cc9400, 900: #b38000, contrast: (50: rgba(0,0,0,0.87), 100: rgba(0,0,0,0.87), 200: rgba(0,0,0,0.87), 300: rgba(0,0,0,0.87), 400: rgba(0,0,0,0.87), 500: rgba(0,0,0,0.87), 600: rgba(0,0,0,0.87), 700: rgba(0,0,0,0.87), 800: white, 900: white))
 $_crimson-map: (50: #fde8eb, 100: #f9c5cd, 200: #f49eab, 300: #ef7789, 400: #eb5a70, 500: #c8102e, 600: #b00e28, 700: #960c22, 800: #7d0a1d, 900: #550614, contrast: (50: rgba(0,0,0,0.87), 100: rgba(0,0,0,0.87), 200: rgba(0,0,0,0.87), 300: white, 400: white, 500: white, 600: white, 700: white, 800: white, 900: white))
 
-$uwi-navy: mat.m2-define-palette($_navy-map)
-$uwi-gold: mat.m2-define-palette($_gold-map)
-$uwi-crimson: mat.m2-define-palette($_crimson-map)
+$uwi-gold: mat.m2-define-palette($_gold-map, 400)
+$uwi-crimson: mat.m2-define-palette($_crimson-map, 500)
 
-// --- Light Academic Theme ---
-$_theme-config: (color: (primary: $uwi-navy, accent: $uwi-gold, warn: $uwi-crimson), density: 0)
-$dcit-theme: mat.m2-define-light-theme($_theme-config)
+$_theme-config: (color: (primary: $uwi-gold, accent: $uwi-crimson, warn: $uwi-crimson), density: 0)
+$dcit-theme: mat.m2-define-dark-theme($_theme-config)
 
 @include mat.core()
 @include mat.all-component-themes($dcit-theme)
 
-// --- CSS Custom Properties (Design Tokens) ---
+// --- Design tokens ---
 \:root
-  // Backgrounds
-  --bg-primary: #F8F9FA
-  --bg-surface: #FFFFFF
-  --bg-elevated: #FFFFFF
-  --bg-card: #FFFFFF
-  --bg-card-hover: #F1F1F1
-  --bg-overlay: rgba(0, 51, 102, 0.6)
+  // The house: deep velvet blue-black, never flat #000
+  --bg-primary: #0B101E
+  --bg-surface: #111726
+  --bg-elevated: #1A2133
+  --bg-card-hover: rgba(169, 183, 214, 0.06)
+  --bg-overlay: rgba(7, 10, 19, 0.72)
 
-  // Accent Colors (UWI Brand)
-  --accent-red: #C8102E
-  --accent-red-hover: #a00d25
+  // Accents: tungsten marquee gold + curtain crimson
   --accent-gold: #FFC72C
-  --accent-gold-hover: #f5b800
-  --accent-blue: #003366
-  --accent-blue-hover: #002753
-  --accent-green: #10b981
-  --accent-orange: #f59e0b
+  --accent-gold-hover: #FFD75E
+  --accent-gold-dim: rgba(255, 199, 44, 0.14)
+  --accent-red: #C8102E
+  --accent-red-hover: #E01533
+  --accent-red-bright: #FF5C72
+  --accent-blue: #8FB4E3
+  --accent-blue-hover: #A9C6EC
+  --accent-green: #46D369
+  --accent-orange: #F5A623
 
   // Text
-  --text-primary: #003366
-  --text-secondary: #53565A
-  --text-muted: #6B7280
-  --text-accent: #C8102E
+  --text-primary: #EEF1F8
+  --text-secondary: #A9B1C4
+  --text-muted: #7A8299
+  --text-accent: #FF5C72
   --text-white: #FFFFFF
+  --text-on-gold: #191307
 
   // Borders
-  --border-subtle: #E5E7EB
-  --border-light: #D1D5DB
-  --border-focus: #003366
+  --border-subtle: rgba(163, 177, 210, 0.14)
+  --border-light: rgba(163, 177, 210, 0.26)
+  --border-focus: #FFC72C
 
-  // Shadows
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1)
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1)
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1)
-  --shadow-glow: 0 0 20px rgba(0, 51, 102, 0.1)
+  // Shadows (a dark room throws deep shadows)
+  --shadow-sm: 0 1px 4px rgba(2, 4, 10, 0.5)
+  --shadow-md: 0 6px 18px rgba(2, 4, 10, 0.5)
+  --shadow-lg: 0 18px 44px rgba(2, 4, 10, 0.6)
+  --shadow-glow: 0 0 32px rgba(255, 199, 44, 0.12)
 
   // Radius
   --radius-xs: 4px
@@ -67,18 +70,20 @@ $dcit-theme: mat.m2-define-light-theme($_theme-config)
   --radius-xl: 16px
   --radius-full: 9999px
 
-  // Transitions
+  // Motion
   --transition-fast: 150ms ease
   --transition-base: 250ms ease
   --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1)
 
-  // Spacing
+  // Layout
   --header-height: 64px
 
-  // Font
-  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif
+  // Type
+  --font-display: 'Big Shoulders', 'Arial Narrow', sans-serif
+  --font-primary: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif
+  --font-mono: 'Spline Sans Mono', 'SF Mono', Consolas, monospace
 
-// --- Global Reset & Base ---
+// --- Reset & base ---
 *
   margin: 0
   padding: 0
@@ -87,30 +92,78 @@ $dcit-theme: mat.m2-define-light-theme($_theme-config)
 html
   scroll-behavior: smooth
 
+  @media (prefers-reduced-motion: reduce)
+    scroll-behavior: auto
+
 body
   font-family: var(--font-primary)
   background-color: var(--bg-primary)
   color: var(--text-secondary)
-  line-height: 1.5
+  line-height: 1.55
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
   overflow-x: hidden
+  color-scheme: dark
 
-// --- Scrollbar Styling ---
+// Native pickers (datetime-local etc.) match the dark room
+input, textarea, select
+  color-scheme: dark
+
+// --- Type roles ---
+// Marquee display: condensed, tall, always uppercase.
+.display, h1.display
+  font-family: var(--font-display)
+  font-weight: 700
+  text-transform: uppercase
+  letter-spacing: 0.01em
+  color: var(--text-primary)
+
+// Ticket-stub data: years, codes, counts, scores.
+.data
+  font-family: var(--font-mono)
+
+// Eyebrow: the small mono label that names a section's job.
+.eyebrow
+  display: inline-flex
+  align-items: center
+  gap: 10px
+  font-family: var(--font-mono)
+  font-size: 12px
+  font-weight: 600
+  text-transform: uppercase
+  letter-spacing: 0.22em
+  color: var(--accent-gold)
+
+// --- Marquee bulb rail ---
+// A row of tungsten bulbs. Used once per page at most.
+.bulb-rail
+  height: 5px
+  background-image: radial-gradient(circle at 2.5px 2.5px, rgba(255, 199, 44, 0.85) 1.3px, rgba(255, 199, 44, 0.12) 1.9px, transparent 2.4px)
+  background-size: 13px 5px
+  background-repeat: repeat-x
+
+// --- Scrollbar ---
 \::-webkit-scrollbar
-  width: 8px
+  width: 10px
 
 \::-webkit-scrollbar-track
   background: var(--bg-primary)
 
 \::-webkit-scrollbar-thumb
-  background: #333
+  background: #2A3245
   border-radius: var(--radius-full)
+  border: 2px solid var(--bg-primary)
 
   &:hover
-    background: #555
+    background: #3A445C
 
-// --- Angular Material Overrides (Light Academic Theme) ---
+// --- Focus (keyboard) ---
+a:focus-visible, button:focus-visible
+  outline: 2px solid var(--accent-gold)
+  outline-offset: 2px
+  border-radius: var(--radius-xs)
+
+// --- Angular Material overrides (dark house) ---
 
 // Form fields
 .mat-mdc-form-field
@@ -124,29 +177,31 @@ body
     .mdc-notched-outline__leading,
     .mdc-notched-outline__notch,
     .mdc-notched-outline__trailing
-      border-color: var(--text-secondary) !important
+      border-color: var(--text-muted) !important
 
   .mdc-text-field--outlined.mdc-text-field--focused
     .mdc-notched-outline__leading,
     .mdc-notched-outline__notch,
     .mdc-notched-outline__trailing
-      border-color: var(--accent-blue) !important
+      border-color: var(--accent-gold) !important
 
   .mdc-floating-label
     color: var(--text-muted) !important
+    font-family: var(--font-primary)
 
   .mdc-text-field__input
     color: var(--text-primary) !important
-    caret-color: var(--accent-blue) !important
+    caret-color: var(--accent-gold) !important
+    font-family: var(--font-primary)
 
 // Cards
 .mat-mdc-card
-  background-color: var(--bg-card) !important
+  background-color: var(--bg-surface) !important
   border: 1px solid var(--border-subtle)
   border-radius: var(--radius-lg) !important
   color: var(--text-primary) !important
 
-// Tab group styling
+// Tabs
 .mat-mdc-tab-group
   .mat-mdc-tab
     color: var(--text-muted)
@@ -155,11 +210,15 @@ body
     letter-spacing: 0.02em
     min-width: 120px
 
+    .mdc-tab__text-label
+      color: var(--text-muted)
+
     &.mdc-tab--active
-      color: var(--text-primary) !important
+      .mdc-tab__text-label
+        color: var(--text-primary) !important
 
   .mdc-tab-indicator__content--underline
-    border-color: var(--accent-blue) !important
+    border-color: var(--accent-gold) !important
     border-width: 3px !important
     border-radius: 3px 3px 0 0
 
@@ -172,65 +231,57 @@ body
   font-size: 13px !important
   font-weight: 500 !important
 
-// Primary buttons (Navy)
+// Buttons
 .mat-mdc-raised-button.mat-primary
-  background-color: var(--accent-blue) !important
-  color: white !important
+  background-color: var(--accent-gold) !important
+  color: var(--text-on-gold) !important
   border-radius: var(--radius-sm) !important
   font-weight: 600 !important
   letter-spacing: 0.02em
   transition: background-color var(--transition-fast), transform var(--transition-fast)
 
   &:hover
-    background-color: var(--accent-blue-hover) !important
+    background-color: var(--accent-gold-hover) !important
     transform: translateY(-1px)
 
-// Accent buttons (Gold)
 .mat-mdc-raised-button.mat-accent
-  background-color: var(--accent-gold) !important
-  color: #000 !important
+  background-color: var(--accent-red) !important
+  color: white !important
   border-radius: var(--radius-sm) !important
   font-weight: 600 !important
 
-  &:hover
-    background-color: var(--accent-gold-hover) !important
-
-// Warn buttons (Crimson)
 .mat-mdc-raised-button.mat-warn
   background-color: var(--accent-red) !important
   color: white !important
 
-  &:hover
-    background-color: var(--accent-red-hover) !important
-
-// Toolbar
-.mat-toolbar.mat-primary
-  background-color: transparent !important
-  color: var(--text-white)
-
-// Menu (light)
+// Menus
 .mat-mdc-menu-panel
-  background-color: var(--bg-surface) !important
+  background-color: var(--bg-elevated) !important
   border: 1px solid var(--border-subtle)
   border-radius: var(--radius-md) !important
+  box-shadow: var(--shadow-lg) !important
 
   .mat-mdc-menu-item
     color: var(--text-secondary) !important
+
+    .mat-icon
+      color: var(--text-muted)
 
     &:hover
       background-color: var(--bg-card-hover) !important
 
 // Spinner
 .mat-mdc-progress-spinner circle
-  stroke: var(--accent-blue) !important
+  stroke: var(--accent-gold) !important
 
 .cdk-overlay-dark-backdrop
-  background: rgba(0, 0, 0, 0.5)
+  background: rgba(4, 6, 12, 0.6)
 
-// Autocomplete panel (light)
+// Autocomplete
 .mat-mdc-autocomplete-panel
-  background-color: var(--bg-surface) !important
+  background-color: var(--bg-elevated) !important
   border: 1px solid var(--border-subtle)
+  box-shadow: var(--shadow-lg) !important
 
   .mat-mdc-option
     color: var(--text-secondary) !important
@@ -238,9 +289,15 @@ body
     &:hover, &.mat-mdc-option-active
       background-color: var(--bg-card-hover) !important
 
-// --- Utility Classes ---
-// Visible to assistive tech, not on screen. Used to give bare numeric badges
-// (ratings, scores) the context a sighted user gets from position and icon.
+// Tooltip
+.mat-mdc-tooltip .mdc-tooltip__surface
+  background-color: var(--bg-elevated) !important
+  color: var(--text-primary) !important
+  border: 1px solid var(--border-subtle)
+  font-family: var(--font-primary)
+
+// --- Utilities ---
+// Visible to assistive tech, not on screen.
 .sr-only
   position: absolute
   width: 1px
@@ -253,7 +310,7 @@ body
   border: 0
 
 .text-accent
-  color: var(--accent-red)
+  color: var(--accent-red-bright)
 
 .text-gold
   color: var(--accent-gold)
@@ -293,7 +350,7 @@ body
 .animate-scale-in
   animation: scaleIn 0.3s ease forwards
 
-// --- Skeleton / Shimmer ---
+// --- Skeleton / shimmer (projector flicker, kept subtle) ---
 @keyframes shimmer
   0%
     background-position: -400px 0
@@ -301,7 +358,7 @@ body
     background-position: 400px 0
 
 .shimmer
-  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%)
+  background: linear-gradient(90deg, #161D2E 25%, #1E2639 50%, #161D2E 75%)
   background-size: 800px 100%
   animation: shimmer 1.5s infinite linear
 
@@ -317,3 +374,11 @@ body
 .stagger-in
   opacity: 0
   animation: cardFadeIn 0.4s ease forwards
+
+@media (prefers-reduced-motion: reduce)
+  .stagger-in, .animate-fade-in-up, .animate-fade-in, .animate-scale-in
+    animation-duration: 0.01ms !important
+    animation-delay: 0s !important
+
+  .shimmer
+    animation: none

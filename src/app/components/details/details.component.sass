@@ -1,11 +1,12 @@
-// --- Loading / Skeleton ---
+// --- Loading / skeleton ---
 .skeleton-detail
   animation: fadeIn 0.3s ease
 
 .skeleton-hero
-  height: 65vh
+  height: 62vh
   min-height: 400px
   max-height: 600px
+  margin-top: calc(var(--header-height) * -1)
 
 .skeleton-content
   max-width: 1100px
@@ -40,7 +41,7 @@
   min-width: 0
 
 .skeleton-title-block
-  height: 44px
+  height: 52px
   width: 70%
   border-radius: var(--radius-sm)
   margin-bottom: 16px
@@ -70,12 +71,13 @@
   &.short
     width: 65%
 
-// --- Hero Banner ---
+// --- Hero backdrop ---
 .hero-banner
   position: relative
-  height: 65vh
+  height: 62vh
   min-height: 400px
   max-height: 600px
+  margin-top: calc(var(--header-height) * -1)
   overflow: hidden
   animation: fadeIn 0.5s ease
 
@@ -85,10 +87,11 @@
     object-fit: cover
     object-position: center 20%
 
+  // The backdrop dissolves into the dark house, no seam.
   .hero-gradient
     position: absolute
     inset: 0
-    background: linear-gradient(to top, var(--bg-surface) 0%, rgba(0, 51, 102, 0.75) 30%, rgba(0, 51, 102, 0.35) 60%, rgba(0, 51, 102, 0.15) 100%)
+    background: linear-gradient(to top, var(--bg-primary) 4%, rgba(11, 16, 30, 0.72) 38%, rgba(11, 16, 30, 0.28) 68%, rgba(11, 16, 30, 0.45) 100%)
 
 .back-btn
   position: absolute
@@ -98,12 +101,13 @@
   align-items: center
   gap: 6px
   padding: 8px 16px 8px 10px
-  background: rgba(0, 0, 0, 0.6)
+  background: rgba(7, 10, 19, 0.6)
   backdrop-filter: blur(10px)
   -webkit-backdrop-filter: blur(10px)
   border: 1px solid rgba(255, 255, 255, 0.15)
   border-radius: var(--radius-full)
   color: #FFFFFF
+  font-family: var(--font-primary)
   font-size: 14px
   font-weight: 500
   cursor: pointer
@@ -116,7 +120,7 @@
     height: 20px
 
   &:hover
-    background: rgba(255, 255, 255, 0.15)
+    background: rgba(255, 255, 255, 0.12)
     border-color: rgba(255, 255, 255, 0.3)
 
   @media (min-width: 1024px)
@@ -125,7 +129,7 @@
 // --- Content ---
 .content-wrapper
   position: relative
-  margin-top: -200px
+  margin-top: -190px
   padding: 0 16px
   z-index: 5
   animation: fadeInUp 0.5s ease 0.2s both
@@ -133,20 +137,16 @@
 .content-inner
   max-width: 1100px
   margin: 0 auto
-  padding: 32px 24px 60px
-  background: var(--bg-surface)
-  border: 1px solid var(--border-subtle)
-  border-radius: var(--radius-xl)
-  box-shadow: var(--shadow-lg)
+  padding: 0 8px 72px
 
   @media (min-width: 1024px)
-    padding: 40px 48px 80px
+    padding: 0 24px 96px
 
-// --- Detail Layout (Two Column) ---
+// --- Two-column layout ---
 .detail-layout
   display: flex
-  gap: 40px
-  margin-bottom: 48px
+  gap: 44px
+  margin-bottom: 56px
 
   @media (max-width: 768px)
     flex-direction: column
@@ -160,11 +160,12 @@
     width: 180px
     margin: 0 auto
 
+// One-sheet in a frame, standing out of the backdrop.
 .poster-card
   border-radius: var(--radius-lg)
   overflow: hidden
   box-shadow: var(--shadow-lg)
-  border: 1px solid var(--border-subtle)
+  border: 1px solid var(--border-light)
 
   .poster-img
     width: 100%
@@ -176,46 +177,48 @@
   flex: 1
   min-width: 0
 
-// --- Title Section ---
+// --- Title ---
 .title-section
   margin-bottom: 28px
 
 .media-title
-  font-size: 36px
+  font-family: var(--font-display)
+  font-size: clamp(40px, 5.5vw, 68px)
   font-weight: 800
+  text-transform: uppercase
   color: var(--text-primary)
-  line-height: 1.15
-  margin: 0 0 12px
-  letter-spacing: -0.02em
-
-  @media (min-width: 768px)
-    font-size: 44px
+  line-height: 0.95
+  margin: 0 0 16px
+  letter-spacing: 0.015em
+  text-wrap: balance
+  text-shadow: 0 2px 24px rgba(2, 4, 10, 0.55)
 
 .meta-row
   display: flex
   align-items: center
   flex-wrap: wrap
-  gap: 12px
+  gap: 14px
   margin-bottom: 16px
 
 .meta-item
   color: var(--text-secondary)
-  font-size: 15px
+  font-family: var(--font-mono)
+  font-size: 14px
   font-weight: 500
-
-  & + .meta-item::before
-    content: none
 
 .meta-badge
   display: inline-flex
   align-items: center
   padding: 2px 10px
-  background: rgba(0, 51, 102, 0.06)
-  border: 1px solid rgba(0, 51, 102, 0.18)
+  background: var(--accent-gold-dim)
+  border: 1px solid rgba(255, 199, 44, 0.35)
   border-radius: var(--radius-xs)
-  color: var(--text-primary)
-  font-size: 13px
+  color: var(--accent-gold)
+  font-family: var(--font-mono)
+  font-size: 12px
   font-weight: 600
+  text-transform: uppercase
+  letter-spacing: 0.08em
 
 .genre-pills
   display: flex
@@ -224,21 +227,64 @@
 
 .genre-pill
   display: inline-flex
-  padding: 6px 14px
-  background: rgba(200, 16, 46, 0.1)
-  border: 1px solid rgba(200, 16, 46, 0.2)
+  padding: 5px 14px
+  border: 1px solid var(--border-light)
   border-radius: var(--radius-full)
-  color: var(--accent-red)
+  color: var(--text-secondary)
   font-size: 13px
   font-weight: 500
   letter-spacing: 0.01em
 
-// --- Action Row ---
+// --- Section labels: mono eyebrows ---
+.section-label
+  font-family: var(--font-mono)
+  font-size: 12px
+  font-weight: 600
+  text-transform: uppercase
+  letter-spacing: 0.22em
+  color: var(--accent-gold)
+  margin-bottom: 18px
+  display: flex
+  align-items: center
+  gap: 12px
+
+  // A hairline that carries the label across the column.
+  &::after
+    content: ''
+    flex: 1
+    height: 1px
+    background: var(--border-subtle)
+
+  .comment-count
+    display: inline-flex
+    align-items: center
+    justify-content: center
+    min-width: 26px
+    height: 22px
+    padding: 0 8px
+    background: var(--bg-elevated)
+    border-radius: var(--radius-full)
+    font-size: 12px
+    font-weight: 600
+    color: var(--text-secondary)
+    letter-spacing: 0
+
+// --- Overview ---
+.overview-section
+  margin-bottom: 40px
+
+.overview-text
+  color: var(--text-secondary)
+  font-size: 16px
+  line-height: 1.75
+  max-width: 720px
+
+// --- Action row (gauge + favorite) ---
 .action-row
   display: flex
   align-items: center
   gap: 24px
-  margin-bottom: 28px
+  margin-bottom: 32px
   flex-wrap: wrap
 
 .gauge-container
@@ -256,6 +302,7 @@
     display: block
 
     .dial
+      stroke: rgba(163, 177, 210, 0.18)
       stroke-width: 8
     .value
       stroke-dasharray: none
@@ -270,8 +317,9 @@
   flex-direction: column
 
   .gauge-value
+    font-family: var(--font-mono)
     font-size: 28px
-    font-weight: 800
+    font-weight: 700
     line-height: 1
     color: var(--text-primary)
 
@@ -284,11 +332,12 @@
   display: flex
   align-items: center
   gap: 8px
-  padding: 10px 24px
-  border: 2px solid rgba(0, 51, 102, 0.3)
+  padding: 11px 24px
+  border: 1px solid var(--border-light)
   border-radius: var(--radius-sm)
   background: transparent
   color: var(--text-primary)
+  font-family: var(--font-primary)
   font-size: 14px
   font-weight: 600
   cursor: pointer
@@ -300,18 +349,18 @@
     height: 22px
 
   &:hover
-    border-color: var(--accent-blue)
-    background: rgba(0, 51, 102, 0.07)
+    border-color: var(--accent-red-bright)
+    background: rgba(200, 16, 46, 0.12)
 
   &.is-favorite
-    border-color: var(--accent-red)
-    background: rgba(200, 16, 46, 0.15)
-    color: var(--accent-red)
+    border-color: rgba(255, 92, 114, 0.5)
+    background: rgba(200, 16, 46, 0.18)
+    color: var(--accent-red-bright)
 
     &:hover
-      background: rgba(200, 16, 46, 0.25)
+      background: rgba(200, 16, 46, 0.28)
 
-// --- Info Cards ---
+// --- Info cards ---
 .info-cards
   display: flex
   gap: 16px
@@ -323,7 +372,7 @@
   align-items: center
   gap: 12px
   padding: 14px 18px
-  background: var(--bg-elevated)
+  background: var(--bg-surface)
   border: 1px solid var(--border-subtle)
   border-radius: var(--radius-md)
 
@@ -335,10 +384,11 @@
 
   .info-label
     display: block
-    font-size: 11px
+    font-family: var(--font-mono)
+    font-size: 10px
     color: var(--text-muted)
     text-transform: uppercase
-    letter-spacing: 0.06em
+    letter-spacing: 0.14em
     font-weight: 600
 
   .info-value
@@ -347,7 +397,7 @@
     color: var(--text-primary)
     font-weight: 600
 
-// --- Platforms Section ---
+// --- Platforms ---
 .platforms-section
   margin-bottom: 24px
 
@@ -362,7 +412,7 @@
   align-items: center
   gap: 6px
   padding: 8px 14px
-  background: var(--bg-elevated)
+  background: var(--bg-surface)
   border: 1px solid var(--border-subtle)
   border-radius: var(--radius-sm)
   color: var(--text-secondary)
@@ -373,53 +423,20 @@
     font-size: 18px
     width: 18px
     height: 18px
-    color: var(--accent-blue)
+    color: var(--accent-gold)
 
-// --- Overview Section ---
-.overview-section
-  margin-bottom: 32px
-
-.overview-text
-  color: var(--text-secondary)
-  font-size: 15px
-  line-height: 1.7
-  max-width: 800px
-
-// --- Section Label ---
-.section-label
-  color: var(--text-primary)
-  font-size: 20px
-  font-weight: 700
-  margin-bottom: 16px
-  display: flex
-  align-items: center
-  gap: 10px
-
-  .comment-count
-    display: inline-flex
-    align-items: center
-    justify-content: center
-    min-width: 28px
-    height: 28px
-    padding: 0 8px
-    background: var(--bg-elevated)
-    border-radius: var(--radius-full)
-    font-size: 13px
-    font-weight: 600
-    color: var(--text-secondary)
-
-// --- Ratings Section ---
+// --- Ratings ---
 .ratings-section
-  margin-bottom: 48px
+  margin-bottom: 56px
 
 .ratings-grid
   display: grid
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))
+  grid-template-columns: repeat(auto-fit, minmax(200px, 280px))
   gap: 16px
 
 .rating-card
   padding: 20px
-  background: var(--bg-elevated)
+  background: var(--bg-surface)
   border: 1px solid var(--border-subtle)
   border-radius: var(--radius-lg)
   transition: border-color var(--transition-fast)
@@ -431,17 +448,20 @@
   margin-bottom: 12px
 
 .rating-logo
-  font-size: 14px
-  font-weight: 800
+  font-family: var(--font-mono)
+  font-size: 12px
+  font-weight: 700
   text-transform: uppercase
-  letter-spacing: 0.05em
+  letter-spacing: 0.08em
   padding: 4px 10px
   border-radius: var(--radius-xs)
   display: inline-block
+  background: var(--bg-elevated)
+  color: var(--text-secondary)
 
   .metacritic &
-    background: #FFcc34
-    color: #000
+    background: #FFCC34
+    color: #1A1403
 
 .rating-score
   display: flex
@@ -450,18 +470,20 @@
   margin-bottom: 12px
 
   .score-value
+    font-family: var(--font-mono)
     font-size: 32px
-    font-weight: 800
+    font-weight: 700
     color: var(--text-primary)
 
   .score-max
-    font-size: 16px
-    color: var(--text-secondary)
+    font-family: var(--font-mono)
+    font-size: 15px
+    color: var(--text-muted)
     font-weight: 500
 
 .score-bar
   height: 4px
-  background: rgba(0, 51, 102, 0.12)
+  background: rgba(163, 177, 210, 0.15)
   border-radius: var(--radius-full)
   overflow: hidden
 
@@ -470,12 +492,18 @@
     border-radius: var(--radius-full)
     transition: width 1s cubic-bezier(0.4, 0, 0.2, 1)
 
-// --- Comments Section ---
+.vote-count
+  display: block
+  margin-top: 10px
+  font-family: var(--font-mono)
+  font-size: 12px
+  color: var(--text-muted)
+
+// --- Comments ---
 .comments-section
   border-top: 1px solid var(--border-subtle)
-  padding-top: 32px
+  padding-top: 40px
 
-// Comment Form
 .comment-form
   display: flex
   gap: 12px
@@ -485,7 +513,7 @@
   width: 40px
   height: 40px
   border-radius: 50%
-  background: linear-gradient(135deg, var(--accent-blue), #001a33)
+  background: var(--accent-red)
   display: flex
   align-items: center
   justify-content: center
@@ -511,11 +539,12 @@
   display: flex
   align-items: center
   gap: 6px
-  padding: 8px 20px
+  padding: 9px 20px
   background: var(--accent-gold)
-  color: #003366
+  color: var(--text-on-gold)
   border: none
   border-radius: var(--radius-sm)
+  font-family: var(--font-primary)
   font-size: 14px
   font-weight: 600
   cursor: pointer
@@ -534,13 +563,13 @@
     opacity: 0.4
     cursor: not-allowed
 
-// Login Prompt
+// Login prompt
 .login-prompt
   display: flex
   align-items: center
   gap: 12px
   padding: 20px
-  background: var(--bg-elevated)
+  background: var(--bg-surface)
   border: 1px solid var(--border-subtle)
   border-radius: var(--radius-md)
   margin-bottom: 32px
@@ -557,15 +586,15 @@
     font-size: 14px
 
   a
-    color: var(--accent-blue)
+    color: var(--accent-gold)
     text-decoration: none
     font-weight: 600
 
     &:hover
-      color: var(--accent-blue-hover)
+      color: var(--accent-gold-hover)
       text-decoration: underline
 
-// Comment Items
+// Comment items
 .comments-list
   display: flex
   flex-direction: column
@@ -589,7 +618,7 @@
   width: 36px
   height: 36px
   border-radius: 50%
-  background: var(--bg-card-hover)
+  background: var(--bg-elevated)
   display: flex
   align-items: center
   justify-content: center
@@ -614,7 +643,8 @@
   color: var(--text-primary)
 
 .comment-date
-  font-size: 12px
+  font-family: var(--font-mono)
+  font-size: 11px
   color: var(--text-muted)
 
 .comment-text
@@ -646,8 +676,8 @@
     height: 18px
 
   &:hover
-    background: rgba(200, 16, 46, 0.1)
-    color: var(--accent-red)
+    background: rgba(200, 16, 46, 0.18)
+    color: var(--accent-red-bright)
 
 .no-comments
   display: flex
@@ -668,25 +698,26 @@
     font-size: 14px
     margin: 0
 
-// Global gauge override for this component
+// Gauge inherits the dark dial
 ::ng-deep mwl-gauge
   width: 80px
   height: 80px
   display: block
 
   .dial
+    stroke: rgba(163, 177, 210, 0.18)
     stroke-width: 8
   .value
     stroke-dasharray: none
     stroke-width: 10
   .value-text
-    fill: #fff
+    fill: var(--text-primary)
     font-weight: 700
     font-size: 18px
 
-// --- Screenshots Section ---
+// --- Screenshots ---
 .screenshots-section
-  margin-bottom: 48px
+  margin-bottom: 56px
 
 .screenshots-grid
   display: grid
@@ -697,64 +728,56 @@
   border-radius: var(--radius-lg)
   overflow: hidden
   aspect-ratio: 16/9
+  border: 1px solid var(--border-subtle)
   cursor: pointer
-  transition: transform var(--transition-fast)
+  transition: transform var(--transition-fast), border-color var(--transition-fast)
 
   &:hover
     transform: scale(1.02)
+    border-color: var(--border-light)
 
   img
     width: 100%
     height: 100%
     object-fit: cover
 
-// --- Trailers Section ---
+// --- Trailers ---
 .trailers-section
-  margin-bottom: 48px
+  margin-bottom: 56px
 
 .trailers-grid
   display: grid
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))
   gap: 20px
 
-.trailer-item
-  a
-    text-decoration: none
-    color: inherit
-
 .trailer-thumbnail
   position: relative
   border-radius: var(--radius-lg)
   overflow: hidden
   aspect-ratio: 16/9
-  // Now a <button> so it can be reached and activated by keyboard; strip the
-  // native chrome and restore the block layout it had as a div.
   display: block
   width: 100%
   padding: 0
-  border: none
+  border: 1px solid var(--border-subtle)
   background: none
   cursor: pointer
 
   &:focus-visible
-    outline: 2px solid var(--accent-blue)
+    outline: 2px solid var(--accent-gold)
     outline-offset: 3px
 
-  img
+  img, .trailer-video
     width: 100%
     height: 100%
     object-fit: cover
 
   .play-overlay
     position: absolute
-    top: 0
-    left: 0
-    right: 0
-    bottom: 0
+    inset: 0
     display: flex
     align-items: center
     justify-content: center
-    background: rgba(0, 0, 0, 0.4)
+    background: rgba(7, 10, 19, 0.45)
     opacity: 0
     transition: opacity var(--transition-fast)
 
@@ -762,7 +785,7 @@
       font-size: 48px
       width: 48px
       height: 48px
-      color: white
+      color: var(--accent-gold)
 
   &:hover .play-overlay
     opacity: 1
@@ -773,34 +796,35 @@
   font-size: 14px
   color: var(--text-secondary)
 
-// --- Info Link ---
+// --- Info link ---
 .info-link
-  color: var(--accent-blue)
+  color: var(--accent-gold)
   text-decoration: none
   font-size: 14px
 
   &:hover
     text-decoration: underline
 
-// --- Cast Section ---
+// --- Cast & crew ---
 .cast-section, .crew-section
-  margin-bottom: 48px
+  margin-bottom: 56px
 
 .cast-grid, .crew-grid
   display: grid
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr))
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr))
   gap: 16px
 
 .cast-item, .crew-item
-  text-align: center
+  text-align: left
 
 .cast-photo, .crew-photo
   width: 100%
   aspect-ratio: 2/3
-  border-radius: var(--radius-lg)
+  border-radius: var(--radius-md)
   overflow: hidden
   margin-bottom: 8px
-  background: var(--bg-elevated)
+  background: var(--bg-surface)
+  border: 1px solid var(--border-subtle)
 
   img
     width: 100%
@@ -813,7 +837,7 @@
   display: flex
   align-items: center
   justify-content: center
-  background: var(--bg-elevated)
+  background: var(--bg-surface)
 
   mat-icon
     font-size: 40px
@@ -844,13 +868,13 @@
   -webkit-box-orient: vertical
   overflow: hidden
 
-// --- Not found (unknown or removed media id) ---
+// --- Not found ---
 .not-found-page
   min-height: 70vh
   display: flex
   align-items: center
   justify-content: center
-  padding: calc(var(--header-height) + 40px) 24px 80px
+  padding: 40px 24px 80px
 
 .not-found-inner
   text-align: center
@@ -860,12 +884,15 @@
     font-size: 52px
     width: 52px
     height: 52px
-    color: var(--text-secondary)
+    color: var(--text-muted)
     margin-bottom: 16px
 
   h1
-    font-size: 24px
-    font-weight: 800
+    font-family: var(--font-display)
+    font-size: 32px
+    font-weight: 700
+    text-transform: uppercase
+    letter-spacing: 0.02em
     color: var(--text-primary)
     margin: 0 0 10px
 
@@ -891,7 +918,7 @@
   font-weight: 600
   cursor: pointer
   text-decoration: none
-  border: 2px solid transparent
+  border: 1px solid transparent
   transition: background-color var(--transition-fast), border-color var(--transition-fast)
 
   mat-icon
@@ -903,16 +930,16 @@
 
 .btn-back
   background: transparent
-  border-color: rgba(0, 51, 102, 0.3)
+  border-color: var(--border-light)
   color: var(--text-primary)
 
   &:hover
-    border-color: var(--accent-blue)
-    background: rgba(0, 51, 102, 0.07)
+    border-color: var(--accent-gold)
+    background: var(--accent-gold-dim)
 
 .btn-browse
-  background: var(--accent-blue)
-  color: #fff
+  background: var(--accent-gold)
+  color: var(--text-on-gold)
 
   &:hover
-    background: var(--accent-blue-hover)
+    background: var(--accent-gold-hover)

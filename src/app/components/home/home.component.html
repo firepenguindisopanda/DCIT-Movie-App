@@ -8,9 +8,10 @@
              class="hero-bg">
         <div class="hero-gradient"></div>
         <div class="hero-content">
-          <span class="hero-badge">
-            <mat-icon>star</mat-icon> Featured Movie
-          </span>
+          <div class="hero-marquee">
+            <span class="bulb-rail" aria-hidden="true"></span>
+            <span class="eyebrow">Now showing</span>
+          </div>
           <h1 class="hero-title">{{ featured.title }}</h1>
           <div class="hero-meta">
             @if (featured.year) {
@@ -28,8 +29,8 @@
             }
           </div>
           <button class="hero-cta" (click)="openFeaturedDetails()">
-            <mat-icon>play_arrow</mat-icon>
-            View Details
+            View details
+            <mat-icon>arrow_forward</mat-icon>
           </button>
         </div>
       </div>
@@ -41,9 +42,10 @@
              class="hero-bg">
         <div class="hero-gradient"></div>
         <div class="hero-content">
-          <span class="hero-badge">
-            <mat-icon>sports_esports</mat-icon> Featured Game
-          </span>
+          <div class="hero-marquee">
+            <span class="bulb-rail" aria-hidden="true"></span>
+            <span class="eyebrow">Now playing</span>
+          </div>
           <h1 class="hero-title">{{ featured.name }}</h1>
           <div class="hero-meta">
             @if (featured.released) {
@@ -61,8 +63,8 @@
             }
           </div>
           <button class="hero-cta" (click)="openFeaturedDetails()">
-            <mat-icon>play_arrow</mat-icon>
-            View Details
+            View details
+            <mat-icon>arrow_forward</mat-icon>
           </button>
         </div>
       </div>
@@ -90,10 +92,12 @@
     <div class="toolbar-row">
       <form class="search-form" (submit)="$event.preventDefault(); searchMedia(myControl.value || '')">
         <mat-icon class="search-icon">search</mat-icon>
-        <input [formControl]="myControl" 
+        <input [formControl]="myControl"
                [matAutocomplete]="auto"
                (keyup.enter)="searchMedia(myControl.value || '')"
                class="search-input"
+               name="catalog-search"
+               [attr.aria-label]="'Search ' + (activeTab() === 0 ? 'movies' : 'games')"
                [placeholder]="'Search ' + (activeTab() === 0 ? 'movies' : 'games') + '...'">
         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" class="search-autocomplete">
           @for (option of filteredOptions | async; track option) {
@@ -197,9 +201,7 @@
                      alt=""
                      loading="lazy">
                 <div class="card-overlay" aria-hidden="true">
-                  <span class="card-play-btn">
-                    <mat-icon>play_arrow</mat-icon>
-                  </span>
+                  <span class="card-cta">Details</span>
                 </div>
                 <!-- getRating() resolves vote_average (TMDB) with an imdb_rating
                      fallback. The template used to read movie.imdb_rating
@@ -240,9 +242,7 @@
                      alt=""
                      loading="lazy">
                 <div class="card-overlay" aria-hidden="true">
-                  <span class="card-play-btn">
-                    <mat-icon>play_arrow</mat-icon>
-                  </span>
+                  <span class="card-cta">Details</span>
                 </div>
                 @if (game.metacritic) {
                   <div class="card-metacritic" 

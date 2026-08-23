@@ -1,29 +1,26 @@
 <header class="header" [class.scrolled]="isScrolled()">
   <nav class="nav-container">
     <div class="nav-left">
-      <a routerLink="/" class="logo-link">
-        <mat-icon class="logo-icon">theaters</mat-icon>
-        <span class="logo-text">DCIT</span>
+      <a routerLink="/" class="logo-link" aria-label="DCIT Entertainment — home">
+        <span class="logo-mark">DCIT</span>
+        <span class="logo-sub">Entertainment</span>
       </a>
 
       <div class="nav-links">
         <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">
-          <mat-icon>home</mat-icon>
-          <span>Home</span>
+          Browse
         </a>
         @if (authService.isAuthenticated()) {
           <a routerLink="/favorites" routerLinkActive="active" class="nav-link">
-            <mat-icon>favorite</mat-icon>
-            <span>My List</span>
+            My List
           </a>
           <a routerLink="/sessions" routerLinkActive="active" class="nav-link">
-            <mat-icon>how_to_vote</mat-icon>
-            <span>Movie Night</span>
+            Movie Night
           </a>
         }
       </div>
     </div>
-    
+
     <div class="nav-right">
       @if (authService.loading()) {
         <mat-spinner diameter="24"></mat-spinner>
@@ -38,7 +35,7 @@
         <mat-menu #userMenu="matMenu" class="user-menu">
           <button mat-menu-item routerLink="/favorites">
             <mat-icon>favorite</mat-icon>
-            <span>My Favorites</span>
+            <span>My List</span>
           </button>
           <button mat-menu-item routerLink="/sessions">
             <mat-icon>how_to_vote</mat-icon>
@@ -47,12 +44,12 @@
           <mat-divider></mat-divider>
           <button mat-menu-item (click)="onSignOut()">
             <mat-icon>logout</mat-icon>
-            <span>Sign Out</span>
+            <span>Sign out</span>
           </button>
         </mat-menu>
       } @else {
-        <a routerLink="/login" class="auth-btn auth-btn-ghost">Sign In</a>
-        <a routerLink="/register" class="auth-btn auth-btn-primary">Sign Up</a>
+        <a routerLink="/login" class="auth-btn auth-btn-ghost">Sign in</a>
+        <a routerLink="/register" class="auth-btn auth-btn-primary">Sign up</a>
       }
     </div>
   </nav>

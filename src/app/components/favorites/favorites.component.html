@@ -1,7 +1,8 @@
 <div class="favorites-page">
   <div class="favorites-header">
-    <h1>My List</h1>
-    <p class="favorites-subtitle">Your saved movies and games</p>
+    <span class="eyebrow">Saved for later</span>
+    <h1 class="display">My List</h1>
+    <p class="favorites-subtitle">The movies and games you've set aside.</p>
   </div>
   
   @if (loading()) {
@@ -44,9 +45,7 @@
                     <!-- alt empty: the aria-label on the link already names the title -->
                     <img [src]="fav.movie?.poster_url || 'assets/no-image.png'" alt="">
                     <div class="fav-overlay" aria-hidden="true">
-                      <span class="play-btn">
-                        <mat-icon>play_arrow</mat-icon>
-                      </span>
+                      <span class="card-cta">Details</span>
                     </div>
                     <!-- imdb_rating is not a column on this table; TMDB data uses vote_average -->
                     @if (fav.movie?.vote_average) {
@@ -102,9 +101,7 @@
                      [attr.aria-label]="'View details for ' + fav.game.name">
                     <img [src]="fav.game?.background_image || 'assets/no-image.png'" alt="">
                     <div class="fav-overlay" aria-hidden="true">
-                      <span class="play-btn">
-                        <mat-icon>play_arrow</mat-icon>
-                      </span>
+                      <span class="card-cta">Details</span>
                     </div>
                     @if (fav.game?.metacritic) {
                       <div class="fav-metacritic"

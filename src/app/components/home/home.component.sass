@@ -1,9 +1,9 @@
-// --- Hero Banner ---
+// --- Hero: the marquee ---
 .hero
   position: relative
-  height: 70vh
-  min-height: 450px
-  max-height: 650px
+  height: 74vh
+  min-height: 480px
+  max-height: 700px
   margin-top: calc(var(--header-height) * -1)
   cursor: pointer
   overflow: hidden
@@ -15,101 +15,103 @@
     object-fit: cover
     object-position: center 20%
     transition: transform 8s ease
-  
+
   &:hover .hero-bg
     transform: scale(1.03)
 
+  @media (prefers-reduced-motion: reduce)
+    .hero-bg, &:hover .hero-bg
+      transition: none
+      transform: none
+
+  // Letterbox the image into the house: dark left panel for the copy,
+  // and a floor gradient that dissolves into the page background.
   .hero-gradient
     position: absolute
     inset: 0
-    background: linear-gradient(to right, rgba(0, 51, 102, 0.92) 0%, rgba(0, 51, 102, 0.55) 40%, rgba(0, 51, 102, 0.1) 70%), linear-gradient(to top, var(--bg-surface) 0%, rgba(0, 51, 102, 0.35) 40%, transparent 100%)
+    background: linear-gradient(to right, rgba(11, 16, 30, 0.94) 0%, rgba(11, 16, 30, 0.62) 42%, rgba(11, 16, 30, 0.08) 75%), linear-gradient(to top, var(--bg-primary) 0%, rgba(11, 16, 30, 0.42) 34%, transparent 65%)
 
   .hero-content
     position: absolute
-    bottom: 15%
+    bottom: 13%
     left: 24px
-    max-width: 550px
+    right: 24px
+    max-width: 620px
     z-index: 2
 
     @media (min-width: 1024px)
       left: 48px
-      bottom: 20%
+      bottom: 17%
 
-.hero-badge
-  display: inline-flex
-  align-items: center
-  gap: 6px
-  padding: 4px 12px
-  background: rgba(200, 16, 46, 0.15)
-  border: 1px solid rgba(255, 199, 44, 0.4)
-  border-radius: var(--radius-full)
-  color: #FFC72C
-  font-size: 12px
-  font-weight: 600
-  text-transform: uppercase
-  letter-spacing: 0.06em
-  margin-bottom: 12px
+.hero-marquee
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+  gap: 10px
+  margin-bottom: 14px
 
-  mat-icon
-    font-size: 16px
-    width: 16px
-    height: 16px
+  .bulb-rail
+    width: 128px
 
 .hero-title
-  font-size: 36px
+  font-family: var(--font-display)
+  font-size: clamp(44px, 7vw, 84px)
   font-weight: 800
-  color: #FFFFFF
-  line-height: 1.1
-  margin: 0 0 12px
-  letter-spacing: -0.02em
-
-  @media (min-width: 768px)
-    font-size: 48px
+  text-transform: uppercase
+  color: var(--text-white)
+  line-height: 0.95
+  margin: 0 0 14px
+  letter-spacing: 0.015em
+  text-wrap: balance
+  text-shadow: 0 2px 24px rgba(2, 4, 10, 0.6)
 
 .hero-meta
   display: flex
   align-items: center
-  gap: 16px
-  margin-bottom: 12px
-  color: rgba(255, 255, 255, 0.8)
-  font-size: 15px
+  gap: 18px
+  margin-bottom: 14px
+  color: var(--text-secondary)
+  font-family: var(--font-mono)
+  font-size: 14px
   font-weight: 500
 
 .hero-rating
   display: inline-flex
   align-items: center
-  gap: 4px
+  gap: 5px
   color: var(--accent-gold)
-  font-weight: 700
+  font-weight: 600
 
   mat-icon
-    font-size: 18px
-    width: 18px
-    height: 18px
+    font-size: 17px
+    width: 17px
+    height: 17px
 
 .hero-genres
   display: flex
   flex-wrap: wrap
   gap: 8px
-  margin-bottom: 20px
+  margin-bottom: 24px
 
 .hero-genre
   padding: 4px 12px
-  background: rgba(255, 255, 255, 0.12)
+  border: 1px solid rgba(255, 255, 255, 0.22)
   border-radius: var(--radius-full)
-  color: rgba(255, 255, 255, 0.8)
+  color: rgba(255, 255, 255, 0.85)
   font-size: 13px
   font-weight: 500
+  backdrop-filter: blur(4px)
 
 .hero-cta
   display: inline-flex
   align-items: center
   gap: 8px
-  padding: 12px 28px
+  padding: 13px 28px
   background: var(--accent-gold)
-  color: #003366
+  color: var(--text-on-gold)
   border: none
   border-radius: var(--radius-sm)
+  font-family: var(--font-primary)
   font-size: 15px
   font-weight: 700
   cursor: pointer
@@ -117,16 +119,19 @@
   letter-spacing: 0.01em
 
   mat-icon
-    font-size: 22px
-    width: 22px
-    height: 22px
+    font-size: 20px
+    width: 20px
+    height: 20px
+    transition: transform var(--transition-fast)
 
   &:hover
     background: var(--accent-gold-hover)
-    transform: translateY(-2px)
-    box-shadow: 0 8px 24px rgba(255, 199, 44, 0.35)
+    box-shadow: 0 8px 28px rgba(255, 199, 44, 0.28)
 
-// --- Content Container ---
+    mat-icon
+      transform: translateX(3px)
+
+// --- Content container ---
 .content-container
   max-width: 1400px
   margin: 0 auto
@@ -135,28 +140,33 @@
   @media (min-width: 1024px)
     padding: 0 48px 80px
 
-// --- Tabs ---
+// --- Tabs: the double feature ---
 .media-tabs
   margin-bottom: 24px
 
   .tab-label
     margin-left: 8px
-    font-size: 14px
 
   ::ng-deep
     .mat-mdc-tab
-      min-width: 140px
+      min-width: 150px
 
+    // Tab titles set like lines on the letterboard.
     .mat-mdc-tab .mdc-tab__text-label
       display: flex
       align-items: center
+      font-family: var(--font-display)
+      font-size: 19px
+      font-weight: 700
+      text-transform: uppercase
+      letter-spacing: 0.06em
 
       mat-icon
         font-size: 20px
         width: 20px
         height: 20px
 
-// --- Toolbar Row ---
+// --- Search ---
 .toolbar-row
   display: flex
   align-items: center
@@ -169,15 +179,15 @@
   align-items: center
   width: 100%
   max-width: 480px
-  background: var(--bg-elevated)
+  background: var(--bg-surface)
   border: 1px solid var(--border-subtle)
   border-radius: var(--radius-full)
   padding: 0 16px
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast)
 
   &:focus-within
-    border-color: var(--accent-blue)
-    box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1)
+    border-color: var(--accent-gold)
+    box-shadow: 0 0 0 3px var(--accent-gold-dim)
 
 .search-icon
   color: var(--text-muted)
@@ -220,10 +230,11 @@
 
   .autocomplete-year
     display: block
+    font-family: var(--font-mono)
     font-size: 12px
     color: var(--text-muted)
 
-// --- Genre Row ---
+// --- Genre chips ---
 .genre-row
   display: flex
   flex-wrap: wrap
@@ -234,7 +245,7 @@
 .genre-chip
   padding: 6px 16px
   background: transparent
-  border: 1px solid var(--border-light)
+  border: 1px solid var(--border-subtle)
   border-radius: var(--radius-full)
   color: var(--text-secondary)
   font-family: var(--font-primary)
@@ -245,16 +256,17 @@
   white-space: nowrap
 
   &:hover
-    border-color: var(--accent-blue)
-    color: var(--accent-blue)
-    background: rgba(0, 51, 102, 0.05)
+    border-color: var(--accent-gold)
+    color: var(--text-primary)
+    background: var(--accent-gold-dim)
 
   &.active
-    background: var(--accent-blue)
-    border-color: var(--accent-blue)
-    color: white
+    background: var(--accent-gold)
+    border-color: var(--accent-gold)
+    color: var(--text-on-gold)
+    font-weight: 600
 
-// --- Filter Row ---
+// --- Filter row ---
 .filter-row
   display: flex
   flex-wrap: wrap
@@ -275,14 +287,7 @@
   .rating-input
     width: 120px
 
-// --- Loading ---
-.loading-container
-  display: flex
-  justify-content: center
-  align-items: center
-  padding: 80px
-
-// --- Skeleton Grid ---
+// --- Skeleton grid ---
 .skeleton-grid
   display: grid
   grid-template-columns: repeat(auto-fill, minmax(170px, 1fr))
@@ -314,7 +319,7 @@
   width: 40%
   border-radius: var(--radius-xs)
 
-// --- Media Grid ---
+// --- Media grid ---
 .media-grid
   display: grid
   grid-template-columns: repeat(auto-fill, minmax(170px, 1fr))
@@ -330,7 +335,7 @@
   @media (min-width: 768px)
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
 
-// --- Media Card ---
+// --- Media card ---
 .media-card
   display: block
   cursor: pointer
@@ -338,14 +343,10 @@
   overflow: hidden
   text-decoration: none
   color: inherit
-  transition: transform var(--transition-base), box-shadow var(--transition-base)
+  transition: transform var(--transition-base)
 
-  // Was translateY(-6px) + scale(1.02) + a large shadow + an image zoom, four
-  // effects firing at once. One lift plus the image zoom reads as intentional
-  // rather than restless.
   &:hover
     transform: translateY(-4px)
-    box-shadow: var(--shadow-md)
 
     .card-overlay
       opacity: 1
@@ -353,9 +354,11 @@
     .card-image img
       transform: scale(1.04)
 
-  // These are links now, so keyboard users need to see where they are.
+    .card-image
+      border-color: var(--border-light)
+
   &:focus-visible
-    outline: 2px solid var(--accent-blue)
+    outline: 2px solid var(--accent-gold)
     outline-offset: 3px
     border-radius: var(--radius-md)
 
@@ -372,7 +375,10 @@
   position: relative
   overflow: hidden
   border-radius: var(--radius-md)
+  border: 1px solid var(--border-subtle)
   aspect-ratio: 2/3
+  background: var(--bg-surface)
+  transition: border-color var(--transition-base)
 
   &.landscape
     aspect-ratio: 16/10
@@ -386,34 +392,26 @@
 .card-overlay
   position: absolute
   inset: 0
-  background: rgba(0, 0, 0, 0.5)
+  background: linear-gradient(to top, rgba(7, 10, 19, 0.85) 0%, rgba(7, 10, 19, 0.25) 50%, transparent 100%)
   display: flex
-  align-items: center
-  justify-content: center
+  align-items: flex-end
+  justify-content: flex-start
+  padding: 12px
   opacity: 0
   transition: opacity var(--transition-base)
 
-.card-play-btn
-  width: 48px
-  height: 48px
-  border-radius: 50%
-  background: var(--accent-gold)
-  border: 2px solid white
-  color: #003366
-  display: flex
-  align-items: center
-  justify-content: center
-  cursor: pointer
-  transition: all var(--transition-fast)
-
-  mat-icon
-    font-size: 28px
-    width: 28px
-    height: 28px
-
-  &:hover
-    transform: scale(1.1)
-    background: var(--accent-gold-hover)
+.card-cta
+  font-family: var(--font-mono)
+  font-size: 11px
+  font-weight: 600
+  text-transform: uppercase
+  letter-spacing: 0.18em
+  color: var(--accent-gold)
+  padding: 6px 12px
+  border: 1px solid rgba(255, 199, 44, 0.5)
+  border-radius: var(--radius-full)
+  background: rgba(7, 10, 19, 0.55)
+  backdrop-filter: blur(4px)
 
 .card-rating
   position: absolute
@@ -423,11 +421,12 @@
   align-items: center
   gap: 3px
   padding: 4px 8px
-  background: rgba(0, 0, 0, 0.7)
+  background: rgba(7, 10, 19, 0.78)
   backdrop-filter: blur(4px)
   border-radius: var(--radius-sm)
-  font-size: 13px
-  font-weight: 700
+  font-family: var(--font-mono)
+  font-size: 12px
+  font-weight: 600
 
   mat-icon
     font-size: 14px
@@ -440,20 +439,21 @@
   right: 8px
   padding: 4px 8px
   border-radius: var(--radius-sm)
-  font-size: 13px
-  font-weight: 800
+  font-family: var(--font-mono)
+  font-size: 12px
+  font-weight: 700
   backdrop-filter: blur(4px)
 
   &.high
-    background: rgba(70, 211, 105, 0.85)
-    color: #000
+    background: rgba(70, 211, 105, 0.9)
+    color: #04170A
 
   &.medium
-    background: rgba(255, 193, 7, 0.85)
-    color: #000
+    background: rgba(255, 193, 7, 0.9)
+    color: #1A1403
 
   &.low
-    background: rgba(239, 70, 85, 0.85)
+    background: rgba(239, 70, 85, 0.9)
     color: #fff
 
 .card-info
@@ -464,18 +464,18 @@
   font-size: 14px
   font-weight: 600
   color: var(--text-primary)
-  margin: 0 0 2px
+  margin: 0 0 3px
   overflow: hidden
   text-overflow: ellipsis
   white-space: nowrap
   line-height: 1.3
 
 .card-year
-  font-size: 13px
+  font-family: var(--font-mono)
+  font-size: 12px
   color: var(--text-muted)
-  font-weight: 400
 
-// --- No Results ---
+// --- No results ---
 .no-results
   grid-column: 1 / -1
   display: flex
@@ -509,9 +509,9 @@
   transition: all var(--transition-fast)
 
   &:hover
-    border-color: var(--accent-blue)
-    color: var(--accent-blue)
-    background: rgba(0, 51, 102, 0.05)
+    border-color: var(--accent-gold)
+    color: var(--text-primary)
+    background: var(--accent-gold-dim)
 
 // --- Grid footer / paging ---
 .grid-footer
@@ -523,19 +523,20 @@
 
 .grid-count
   margin: 0
-  font-size: 14px
-  color: var(--text-secondary)
+  font-family: var(--font-mono)
+  font-size: 13px
+  color: var(--text-muted)
 
   strong
     color: var(--text-primary)
-    font-weight: 700
+    font-weight: 600
 
 .show-more-btn
   display: inline-flex
   align-items: center
   gap: 8px
   padding: 12px 28px
-  border: 2px solid rgba(0, 51, 102, 0.3)
+  border: 1px solid var(--border-light)
   border-radius: var(--radius-full)
   background: transparent
   color: var(--text-primary)
@@ -551,6 +552,6 @@
     height: 20px
 
   &:hover
-    border-color: var(--accent-blue)
-    background: rgba(0, 51, 102, 0.07)
+    border-color: var(--accent-gold)
+    background: var(--accent-gold-dim)
     transform: translateY(-1px)
